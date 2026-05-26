@@ -1,6 +1,6 @@
 ---
 name: "market intelligence"
-description: "Monitor a customer's external environment and produce a weekly Warning Card (预警卡) with six layers — Signal → Impact → Opportunity → Urgency → Psychology → Action — plus a Public Speech Summary. Designed so a seller can decide in 15 minutes whether to move this week and how. Use when the user asks about customer news, compelling events, market signals, competitor moves, external monitoring, or wants a 预警卡/warning card for any named customer. Triggers on: 'monitor customer', 'what\'s changed at {customer}', '研究客户', '客户预警', '做个预警卡', '看看{客户}最近怎么样'."
+description: "Monitor a customer's external environment and produce a weekly Warning Card (预警卡) with six layers — Signal → Impact → Opportunity → Urgency → Psychology → Action — plus a Public Speech Summary. Designed so a seller can decide in 15 minutes whether to move this week and how. Use when the user asks about customer news, compelling events, market signals, competitor moves, external monitoring, or wants a 预警卡/warning card for any named customer. Triggers on: 'monitor customer', 'what's changed at {customer}', '研究客户', '客户预警', '做个预警卡', '看看{客户}最近怎么样'."
 ---
 
 # Customer Strategy Change Early Warning System (客户策略变化预警器)
