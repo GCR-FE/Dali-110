@@ -1,446 +1,412 @@
 <!DOCTYPE html>
+<!--
+================================================================================
+  BUSINESS INSIGHT · REFERENCE TEMPLATE
+================================================================================
+  This template is the GOLD-STANDARD example for every BI render.
+  The body retains a fully-worked Anker Innovations example (2026-05-25) so the
+  citation density and structure are visible and copy-pasteable.
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  MANDATORY CITATION PATTERN — every render MUST replicate this density   │
+  ├──────────────────────────────────────────────────────────────────────────┤
+  │  • Factual claim (number / dated event / named product / partnership /   │
+  │    lawsuit / filing) → append:                                           │
+  │       <sup class="cite"><a href="#src-N">[N]</a></sup>                   │
+  │    Multi-source: <a href="#src-1">[1]</a><a href="#src-2">[2]</a>        │
+  │                                                                          │
+  │  • Analyst synthesis (TOWS strategies, Top 3 ranking rationale, Porter   │
+  │    weighted scores, SWOT cross-framework derivations) → tag ONCE per     │
+  │    cell/card with:                                                       │
+  │       <span class="synth-tag">[分析师综合]</span>                          │
+  │                                                                          │
+  │  • Each Sources <li> MUST carry id="src-N" matching its inline anchor.   │
+  │  • DO NOT fabricate citations. If no source exists, use the synth-tag.   │
+  │  • DO NOT cite framing/transition prose. One cite per claim is enough.   │
+  │  • Reference baseline: 46 cites + 14 synth-tags across full document.    │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+  PLACEHOLDERS (replace at render time):
+    {{COMPANY_NAME}}     — English/legal entity name (e.g. "Anker Innovations")
+    {{COMPANY_NAME_CN}}  — Chinese name (e.g. "安克创新")
+    {{TICKER}}           — stock ticker (e.g. "300866.SZ")
+    {{DATE}}             — render date YYYY-MM-DD
+    {{FILING_BASELINE}}  — financial baseline (e.g. "2025 FY + 2026 Q1")
+
+  Render flow: markdown record → fill placeholders → swap body → re-anchor
+  Sources <ol> → run weasyprint → ship PDF.
+================================================================================
+-->
 <html lang="zh-Hans">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Business Insight · Haier</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="_shared.css" />
+<title>Business Insight · {{COMPANY_NAME}} · {{DATE}}</title>
 <style>
-  /* === Top 3 Initiatives === */
-  .initiative-row {
-    display: grid; grid-template-columns: 50px 1fr; gap: 14px;
-    align-items: flex-start; padding: 16px 0;
-    border-bottom: 1px solid var(--line-soft);
-  }
-  .initiative-row:last-child { border-bottom: 0; }
-  .initiative-row .rank {
-    width: 44px; height: 44px; border-radius: 10px;
-    background: var(--accent-soft); color: var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; font-weight: 700; font-style: italic;
-  }
-  .initiative-row .rank.gold { background: #fef3c7; color: #92400e; }
-  .initiative-row .rank.silver { background: #f1f5f9; color: #475569; }
-  .initiative-row .rank.bronze { background: #fce7f3; color: #9d174d; }
-  .initiative-row .body h4 { margin: 0 0 4px; font-size: 14px; color: var(--ink); }
-  .initiative-row .body p { margin: 0 0 6px; font-size: 12.5px; color: var(--ink-2); line-height: 1.6; }
-  .initiative-row .body .tag {
-    display: inline-block; font-size: 10px; color: var(--muted);
-    background: var(--accent-softer); padding: 2px 7px; border-radius: 4px; margin-right: 4px;
-  }
-  .initiative-row .body .evidence {
-    margin-top: 6px; font-size: 11px; color: var(--muted); line-height: 1.5;
-    border-left: 2px solid var(--accent-soft); padding-left: 10px;
-  }
-</style>
-<style>
-  /* === BMC Mini Grid === */
-  .bmc-mini { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: auto auto; gap: 6px; }
-  .bmc-mini .tile {
-    background: var(--paper); border-radius: 8px; padding: 10px 12px;
-    border-top: 2px solid var(--accent-soft);
-  }
-  .bmc-mini .tile .lab {
-    font-size: 9px; letter-spacing: 1.2px; color: var(--muted);
-    font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
-  }
-  .bmc-mini .tile .val { font-size: 11px; color: var(--ink-2); line-height: 1.45; }
-  .bmc-mini .tile .val strong { color: var(--ink); }
-  .bmc-mini .tile.span2 { grid-column: span 2; }
-  .bmc-mini .tile.bottom { grid-column: span 5; border-top-color: var(--warn-soft); }
-  .bmc-mini .tile.bottom-half { grid-column: span 2; border-top-color: var(--ok); }
-  .bmc-mini .tile.bottom-half2 { grid-column: span 3; border-top-color: var(--warn); }
+@page {
+  size: A4;
+  margin: 14mm 12mm 14mm 12mm;
+  @bottom-right { content: counter(page) " / " counter(pages); font-family: 'Inter', sans-serif; font-size: 8pt; color: #94a3b8; }
+  @bottom-left { content: "Dali · Business Insight · {{COMPANY_NAME}} · {{DATE}}"; font-family: 'Inter', sans-serif; font-size: 8pt; color: #94a3b8; }
+}
+@page bmc-page {
+  size: A4 landscape;
+  margin: 12mm 12mm 12mm 12mm;
+}
+.card.bmc-card { page: bmc-page; page-break-before: always; page-break-after: always; }
+.bmc-mini .tile { min-height: 48px; overflow: hidden; }
+:root {
+  --paper:#ffffff; --bg:#f8fafc; --ink:#0f172a; --ink-2:#334155; --muted:#64748b; --muted-2:#cbd5e1;
+  --line:#e2e8f0; --line-soft:#f1f5f9;
+  --accent:#0066cc; --accent-soft:#dbeafe; --accent-softer:#eff6ff;
+  --ok:#16a34a; --ok-soft:#dcfce7;
+  --warn:#d97706; --warn-soft:#fef3c7;
+  --bad:#dc2626; --bad-soft:#fee2e2;
+}
+* { box-sizing: border-box; }
+body { font-family: 'Inter', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--ink); margin:0; padding:0; font-size: 11.5px; line-height: 1.55; }
+.sheet { background: var(--bg); padding: 6mm 0; }
+.head { display:flex; justify-content:space-between; align-items:flex-end; padding: 0 4mm 12px; border-bottom: 2px solid var(--ink); margin-bottom: 14px; }
+.head .kicker { font-size: 10px; letter-spacing: 2px; color: var(--accent); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+.head h1 { margin: 0; font-size: 22px; font-weight: 700; color: var(--ink); }
+.head .sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.head .pill { background: var(--accent); color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.card { background: var(--paper); border-radius: 12px; padding: 14px 16px; margin: 0 4mm 12px; box-shadow: 0 1px 2px rgba(15,23,42,0.04); border: 1px solid var(--line); page-break-inside: avoid; }
+.card h2 { font-size: 14px; margin: 0 0 10px; color: var(--ink); font-weight: 700; padding-bottom: 8px; border-bottom: 1px solid var(--line-soft); display:flex; align-items:center; gap:8px; }
+.card h2::before { content:""; display:inline-block; width:4px; height:16px; background: var(--accent); border-radius:2px; }
+.sub-card { background: var(--bg); border-radius: 10px; padding: 12px; }
+.reason-note { background: var(--accent-softer); border-left: 3px solid var(--accent); padding: 10px 12px; border-radius: 6px; font-size: 11px; color: var(--ink-2); line-height: 1.6; }
+.reason-note.on-white { background: var(--bg); }
+.reason-note strong { color: var(--ink); }
 
-  /* === Porter's 5 Radar-style summary === */
-  .p5-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-  .p5-cell {
-    background: var(--paper); border-radius: 10px; padding: 12px;
-    text-align: center; position: relative;
-  }
-  .p5-cell .ico { font-size: 22px; color: var(--accent); margin-bottom: 4px; }
-  .p5-cell .lab { font-size: 9.5px; letter-spacing: 1px; color: var(--muted); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; }
-  .p5-cell .score-ring {
-    width: 42px; height: 42px; border-radius: 50%; margin: 0 auto 6px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: 700; border: 3px solid var(--line);
-  }
-  .p5-cell .score-ring.high { border-color: var(--bad); color: var(--bad); }
-  .p5-cell .score-ring.mid { border-color: var(--warn); color: var(--warn); }
-  .p5-cell .score-ring.low { border-color: var(--ok); color: var(--ok); }
-  .p5-cell .note { font-size: 10.5px; color: var(--ink-2); line-height: 1.4; }
-</style>
-<style>
-  /* === PESTLE Heatmap === */
-  .pestle-bar { display: grid; grid-template-columns: 90px 1fr 50px; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line-soft); }
-  .pestle-bar:last-child { border-bottom: 0; }
-  .pestle-bar .lab { font-size: 11px; font-weight: 600; color: var(--ink); }
-  .pestle-bar .bar-track { height: 8px; background: var(--line-soft); border-radius: 4px; overflow: hidden; position: relative; }
-  .pestle-bar .bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
-  .pestle-bar .bar-fill.critical { background: var(--bad); }
-  .pestle-bar .bar-fill.high { background: var(--warn); }
-  .pestle-bar .bar-fill.moderate { background: #eab308; }
-  .pestle-bar .bar-fill.low { background: var(--ok); }
-  .pestle-bar .score-val { font-size: 12px; font-weight: 700; text-align: right; }
-  .pestle-bar .score-val.critical { color: var(--bad); }
-  .pestle-bar .score-val.high { color: var(--warn); }
-  .pestle-bar .score-val.moderate { color: #a16207; }
-  .pestle-bar .score-val.low { color: var(--ok); }
+/* Citation superscripts */
+sup.cite { font-size: 8.5px; color: var(--accent); font-weight: 600; margin: 0 1px; }
+sup.cite a { color: var(--accent); text-decoration: none; }
+sup.cite a:hover { text-decoration: underline; }
+.synth-tag { font-size: 8.5px; color: var(--muted); font-style: italic; margin-left: 3px; }
 
-  /* === SWOT Grid === */
-  .swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .swot-tile {
-    background: var(--paper); border-radius: 10px; padding: 14px 16px;
-    border-top: 3px solid var(--muted-2);
-  }
-  .swot-tile.S { border-top-color: var(--ok); }
-  .swot-tile.W { border-top-color: var(--warn); }
-  .swot-tile.O { border-top-color: var(--accent); }
-  .swot-tile.T { border-top-color: var(--bad); }
-  .swot-tile .hd {
-    font-size: 10px; letter-spacing: 1.5px; font-weight: 700; text-transform: uppercase;
-    margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
-  }
-  .swot-tile .letter {
-    width: 22px; height: 22px; border-radius: 4px;
-    display: inline-flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700; color: #fff;
-  }
-  .swot-tile.S .letter { background: var(--ok); }
-  .swot-tile.S .hd { color: var(--ok); }
-  .swot-tile.W .letter { background: var(--warn); }
-  .swot-tile.W .hd { color: var(--warn); }
-  .swot-tile.O .letter { background: var(--accent); }
-  .swot-tile.O .hd { color: var(--accent); }
-  .swot-tile.T .letter { background: var(--bad); }
-  .swot-tile.T .hd { color: var(--bad); }
-  .swot-tile ul { list-style: none; padding: 0; margin: 0; }
-  .swot-tile ul li {
-    padding: 5px 0; border-bottom: 1px solid var(--line-soft);
-    font-size: 11.5px; color: var(--ink-2); line-height: 1.5;
-  }
-  .swot-tile ul li:last-child { border-bottom: 0; }
-</style>
-<style>
-  /* === TOWS Compact === */
-  .tows-compact { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .tows-cell {
-    background: var(--paper); border-radius: 10px; padding: 12px 14px;
-    border-top: 3px solid var(--accent);
-  }
-  .tows-cell.SO { border-top-color: var(--ok); }
-  .tows-cell.WO { border-top-color: var(--accent); }
-  .tows-cell.ST { border-top-color: var(--warn); }
-  .tows-cell.WT { border-top-color: var(--bad); }
-  .tows-cell .lab {
-    font-size: 10px; letter-spacing: 1.5px; font-weight: 700; text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-  .tows-cell.SO .lab { color: var(--ok); }
-  .tows-cell.WO .lab { color: var(--accent); }
-  .tows-cell.ST .lab { color: var(--warn); }
-  .tows-cell.WT .lab { color: var(--bad); }
-  .tows-cell .body { font-size: 11.5px; color: var(--ink-2); line-height: 1.5; }
+/* Top 3 Initiatives */
+.initiative-row { display: grid; grid-template-columns: 50px 1fr; gap: 14px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
+.initiative-row:last-child { border-bottom: 0; }
+.initiative-row .rank { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; font-style: italic; }
+.initiative-row .rank.gold { background: #fef3c7; color: #92400e; }
+.initiative-row .rank.silver { background: #f1f5f9; color: #475569; }
+.initiative-row .rank.bronze { background: #fce7f3; color: #9d174d; }
+.initiative-row .body h4 { margin: 0 0 4px; font-size: 13px; color: var(--ink); }
+.initiative-row .body p { margin: 0 0 6px; font-size: 11.5px; color: var(--ink-2); line-height: 1.6; }
+.initiative-row .body .tag { display: inline-block; font-size: 9.5px; color: var(--muted); background: var(--accent-softer); padding: 2px 7px; border-radius: 4px; margin-right: 4px; margin-bottom: 2px; }
+.initiative-row .body .evidence { margin-top: 6px; font-size: 10.5px; color: var(--muted); line-height: 1.5; border-left: 2px solid var(--accent-soft); padding-left: 10px; }
+.initiative-row .body .evidence strong { color: var(--ink-2); }
+
+/* BMC mini */
+.bmc-mini { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: 1fr 1fr auto; gap: 6px; }
+.bmc-mini .tile { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; border-top: 2px solid var(--accent-soft); }
+.bmc-mini .tile .lab { font-size: 8.5px; letter-spacing: 1.2px; color: var(--muted); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+.bmc-mini .tile .val { font-size: 10.5px; color: var(--ink-2); line-height: 1.45; }
+.bmc-mini .tile .val strong { color: var(--ink); }
+.bmc-mini .tile.kp { grid-column: 1; grid-row: 1 / span 2; }
+.bmc-mini .tile.ka { grid-column: 2; grid-row: 1; }
+.bmc-mini .tile.kr { grid-column: 2; grid-row: 2; }
+.bmc-mini .tile.vp { grid-column: 3; grid-row: 1 / span 2; }
+.bmc-mini .tile.cr { grid-column: 4; grid-row: 1; }
+.bmc-mini .tile.ch { grid-column: 4; grid-row: 2; }
+.bmc-mini .tile.cs { grid-column: 5; grid-row: 1 / span 2; }
+.bmc-mini .tile.cost { grid-column: 1 / span 3; grid-row: 3; border-top-color: var(--ok); }
+.bmc-mini .tile.rs { grid-column: 4 / span 2; grid-row: 3; border-top-color: var(--warn); }
+
+/* Porter 5 */
+.p5-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.p5-cell { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 12px 8px; text-align: center; }
+.p5-cell .lab { font-size: 9.5px; letter-spacing: 1px; color: var(--muted); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; }
+.p5-cell .score-ring { width: 42px; height: 42px; border-radius: 50%; margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; border: 3px solid var(--line); }
+.p5-cell .score-ring.high { border-color: var(--bad); color: var(--bad); }
+.p5-cell .score-ring.mid { border-color: var(--warn); color: var(--warn); }
+.p5-cell .score-ring.low { border-color: var(--ok); color: var(--ok); }
+.p5-cell .note { font-size: 10px; color: var(--ink-2); line-height: 1.4; }
+
+/* PESTLE bar */
+.pestle-bar { display: grid; grid-template-columns: 110px 1fr 50px; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--line-soft); }
+.pestle-bar:last-child { border-bottom: 0; }
+.pestle-bar .lab { font-size: 11px; font-weight: 600; color: var(--ink); }
+.pestle-bar .lab small { font-weight: 400; color: var(--muted); display: block; font-size: 9px; }
+.pestle-bar .bar-track { height: 8px; background: var(--line-soft); border-radius: 4px; overflow: hidden; }
+.pestle-bar .bar-fill { height: 100%; border-radius: 4px; }
+.pestle-bar .bar-fill.critical { background: var(--bad); }
+.pestle-bar .bar-fill.high { background: var(--warn); }
+.pestle-bar .bar-fill.moderate { background: #eab308; }
+.pestle-bar .bar-fill.low { background: var(--ok); }
+.pestle-bar .score-val { font-size: 12px; font-weight: 700; text-align: right; }
+.pestle-bar .score-val.critical { color: var(--bad); }
+.pestle-bar .score-val.high { color: var(--warn); }
+.pestle-bar .score-val.moderate { color: #a16207; }
+
+/* SWOT */
+.swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.swot-tile { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; border-top: 3px solid var(--muted-2); }
+.swot-tile.S { border-top-color: var(--ok); }
+.swot-tile.W { border-top-color: var(--warn); }
+.swot-tile.O { border-top-color: var(--accent); }
+.swot-tile.T { border-top-color: var(--bad); }
+.swot-tile .hd { font-size: 10px; letter-spacing: 1.5px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.swot-tile .letter { width: 22px; height: 22px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
+.swot-tile.S .letter { background: var(--ok); } .swot-tile.S .hd { color: var(--ok); }
+.swot-tile.W .letter { background: var(--warn); } .swot-tile.W .hd { color: var(--warn); }
+.swot-tile.O .letter { background: var(--accent); } .swot-tile.O .hd { color: var(--accent); }
+.swot-tile.T .letter { background: var(--bad); } .swot-tile.T .hd { color: var(--bad); }
+.swot-tile ul { list-style: none; padding: 0; margin: 0; }
+.swot-tile ul li { padding: 5px 0; border-bottom: 1px solid var(--line-soft); font-size: 10.5px; color: var(--ink-2); line-height: 1.5; }
+.swot-tile ul li:last-child { border-bottom: 0; }
+.swot-tile ul li strong { color: var(--ink); }
+
+/* TOWS */
+.tows-compact { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tows-cell { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; border-top: 3px solid var(--accent); }
+.tows-cell.SO { border-top-color: var(--ok); } .tows-cell.SO .lab { color: var(--ok); }
+.tows-cell.WO { border-top-color: var(--accent); } .tows-cell.WO .lab { color: var(--accent); }
+.tows-cell.ST { border-top-color: var(--warn); } .tows-cell.ST .lab { color: var(--warn); }
+.tows-cell.WT { border-top-color: var(--bad); } .tows-cell.WT .lab { color: var(--bad); }
+.tows-cell .lab { font-size: 10px; letter-spacing: 1.5px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; }
+.tows-cell .body { font-size: 10.5px; color: var(--ink-2); line-height: 1.55; }
+.tows-cell .body strong { color: var(--ink); }
+
+.foot { padding: 8px 4mm; font-size: 9.5px; color: var(--muted); text-align: center; }
+.foot .dl { display:block; margin-bottom: 4px; }
+.foot strong { color: var(--ink-2); }
+a { color: var(--accent); text-decoration: none; }
 </style>
 </head>
 <body>
-
-<div class="export-bar">
-  <div class="brand">◆ BUSINESS INSIGHT · 全景战略分析</div>
-  <button onclick="window.print()">
-    <span class="material-icons-outlined" style="font-size:16px;">picture_as_pdf</span>
-    Export PDF
-  </button>
-</div>
-
 <div class="sheet">
 
   <div class="head">
     <div>
       <div class="kicker">BUSINESS INSIGHT · 全景战略分析</div>
-      <h1>海尔智家 Haier Smart Home</h1>
-      <div class="sub">消费电子 / 智能家居 · 2026-05-19 · 综合：PESTLE · Porter's 5 · BMC · SWOT/TOWS</div>
+      <h1>{{COMPANY_NAME}} {{COMPANY_NAME_CN}} ({{TICKER}})</h1>
+      <div class="sub">分析流程：BMC 商业模式 → Porter's 5 行业结构 → PESTLE 宏观环境 → SWOT/TOWS 战略综合 → Top 3 战略举措 · 生成于 {{DATE}}</div>
     </div>
-    <div class="pill">
-      <span class="material-icons-outlined">insights</span>
-      Top 3 战略举措
-    </div>
+    <div class="pill">Top 3 战略举措</div>
   </div>
 
-  <!-- ============ TOP 3 STRATEGIC INITIATIVES ============ -->
+  <!-- Executive Snapshot -->
   <div class="card">
-    <h2><span class="material-icons-outlined">flag</span>Top 3 Strategic Initiatives · 客户最可能推进的战略举措</h2>
+    <h2>Executive Snapshot · 一句话总览 (基准: 2025 FY + 2026 Q1)</h2>
+    <p style="margin:0; font-size:12px; color:var(--ink-2); line-height:1.7;">
+      <strong>2025 营收首破 300 亿 (¥305.14亿, +23.49%)</strong><sup class="cite"><a href="#src-1">[1]</a></sup>，三大板块齐增：充电储能 ¥154.02亿 (+21.59%, 占 50.47%) / 智能创新 ¥82.71亿 (+30.53%, 毛利 48.85%) / 智能影音 ¥68.33亿 (+20.05%)<sup class="cite"><a href="#src-2">[2]</a></sup>。<strong>2026 Q1 增收不增利</strong>：营收 ¥76.08亿 (+26.93%) 但归母净利 ¥4.72亿 <strong>同比 -4.87%</strong><sup class="cite"><a href="#src-3">[3]</a></sup> — 拐点信号 (汇兑损失 + OECD 支柱二税率 + 南芯科技股权公允价值 -1亿)；扣非 +24.39% 显示主业仍健康<sup class="cite"><a href="#src-4">[4]</a></sup>。<strong>三大外部威胁</strong>：Trump 关税 / UGREEN 上市后同位竞争<sup class="cite"><a href="#src-15">[15]</a></sup> / eufy 数据信任尾部风险<sup class="cite"><a href="#src-7">[7]</a></sup>。
+    </p>
+
+  </div>
+
+  <!-- Top 3 Strategic Initiatives -->
+  <div class="card">
+    <h2>Top 3 Strategic Initiatives · 客户最可能推进的战略举措</h2>
     <div class="sub-card">
       <div class="initiative-row">
         <div class="rank gold">1</div>
         <div class="body">
-          <h4>🥇 AI 平台架构选型与全球数据面建设</h4>
-          <p>《Premium Intelligence》战略把 VP 从"单品家电"升到"AI 驱动端到端生态"，要求跨品牌跨地域统一数据面 + 模型能力。Q3 末为架构选型锁定窗口 — 美的已先行 6–9 个月。</p>
-          <span class="tag">S2×O1 · SO策略</span><span class="tag">PESTLE Tech 4.2</span><span class="tag">Porter #1</span>
-          <div class="evidence">
-            <strong>公开依据：</strong>2026 战略发布 "AI 驱动端到端"，管理层投资者沟通明确"2026 年完成架构定义"；美的 MevoX + 华为云组合已形成对标压力。
-          </div>
+          <h4>🥇 AI 软硬一体战略 (Anker × Microsoft)</h4>
+          <p>以 Microsoft Build 2025 战略合作为锚点<sup class="cite"><a href="#src-8">[8]</a></sup>，把 Azure AI Translator / Voice Live API 集成到 Soundcore (音频翻译) → eufy (AI 安防) → Anker (AI 自适应充电)，形成"中价段唯一全栈 AI 智能硬件矩阵"。<span class="synth-tag">[分析师综合]</span></p>
+          <span class="tag">SO1 · S2×O2</span><span class="tag">PESTLE Tech 4.10</span><span class="tag">BMC §1.8</span>
+          <div class="evidence"><strong>公开依据：</strong>Anker 总裁赵东平在 Microsoft Build 2025 同台宣布"下一代耳机将集成 Azure Voice Live API 实现端到端生成式语音对话"<sup class="cite"><a href="#src-8">[8]</a></sup>；Soundcore Aerofit 2 已落地 Azure AI Translator + 100+ 语言<sup class="cite"><a href="#src-9">[9]</a></sup>。</div>
         </div>
       </div>
       <div class="initiative-row">
         <div class="rank silver">2</div>
         <div class="body">
-          <h4>🥈 北美供应链四线重塑（关税情景化 + 成本生产力）</h4>
-          <p>Q1 北美 −6.9%，管理层公开承认进入"能力重建期"。供应链可视化 / 采购决策 / 产品组合优化 / 成本生产力四线并行，核心是关税情景建模 + 实时决策能力。</p>
-          <span class="tag">S1×O2 · SO策略</span><span class="tag">PESTLE Political 4.4</span><span class="tag">BMC Cost + KA</span>
-          <div class="evidence">
-            <strong>公开依据：</strong>Q1 业绩会管理层使用"能力重建期"措辞；Louisville + 墨西哥产能已到位，缺的是决策智能层。
-          </div>
+          <h4>🥈 渠道去亚马逊化 — 独立站 + 海外仓 + 线下 KA</h4>
+          <p>独立站营收占比 9.25% (2025 Q1)<sup class="cite"><a href="#src-11">[11]</a></sup> → 20%+ (3 年)，线下 KA 28.78% (2024)<sup class="cite"><a href="#src-6">[6]</a></sup> → 35%+，Amazon 53% → &lt;40%；系统性降低 W1 渠道集中风险 + T1 关税单点暴露。<span class="synth-tag">[分析师综合]</span></p>
+          <span class="tag">SO3 · S3×O3</span><span class="tag">PESTLE Political 4.75</span><span class="tag">BMC Ch + KA</span>
+          <div class="evidence"><strong>公开依据：</strong>2024 七大独立站 ¥25.04 亿 <strong>+101.34% YoY</strong><sup class="cite"><a href="#src-6">[6]</a></sup>；2025 Q1 独立站 ¥5.55 亿 <strong>+53.19% YoY</strong><sup class="cite"><a href="#src-11">[11]</a></sup>；公司称"独立站是未来三年战略核心"<sup class="cite"><a href="#src-11">[11]</a></sup>。</div>
         </div>
       </div>
       <div class="initiative-row">
         <div class="rank bronze">3</div>
         <div class="body">
-          <h4>🥉 欧洲 HVAC 扩张 + Frankfurt D 股合规叙事</h4>
-          <p>欧洲 Q1 利润 +10%，HVAC 承接能源转型 B2B 需求。Frankfurt D 股推进提升合规透明度与资本可达性，强化欧洲市场战略地位。</p>
-          <span class="tag">S3×O3 · SO策略</span><span class="tag">PESTLE Environmental</span><span class="tag">BMC Ch + CS</span>
-          <div class="evidence">
-            <strong>公开依据：</strong>2026 战略明确 HVAC 为扩张方向；Frankfurt 上市进程活跃；欧洲 Q1 利润增长为资金来源。
-          </div>
+          <h4>🥉 储能业务全球化 (Anker SOLIX)</h4>
+          <p>抓住户外 + EU 阳台光伏 + 北美户用备电三波趋势<sup class="cite"><a href="#src-16">[16]</a></sup>，把 SOLIX 从单一品类做成与充电、音频并列的第三增长曲线。<span class="synth-tag">[分析师综合]</span></p>
+          <span class="tag">SO2 · S1+S6×O1</span><span class="tag">PESTLE Social 4.10</span><span class="tag">BMC §1.1 RS</span>
+          <div class="evidence"><strong>公开依据：</strong>SOLIX 2024 营收 <strong>¥30.20 亿，YoY +184%</strong><sup class="cite"><a href="#src-6">[6]</a></sup>；X1 户用储能 2024.4 北美上市；Solarbank 3 Pro 在 EU 阳台光伏储能领先<sup class="cite"><a href="#src-16">[16]</a></sup>。</div>
         </div>
       </div>
     </div>
-    <div class="reason-note on-white" style="margin-top: 12px;">
-      <span class="material-icons-outlined">psychology</span>
-      <div><strong>排名逻辑</strong>按"已有公开战略表态 × 资源配置行为 × 窗口紧迫性"综合排序。#1 对应最强外部压力（美的先行）+ 最明确战略语言；#2 对应最紧急 P&amp;L 压力；#3 对应最确定增长极。</div>
+    <div class="reason-note on-white" style="margin-top:12px;">
+      <strong>排名逻辑：</strong>按"已有公开战略表态 × 资源配置行为 × 窗口紧迫性"综合排序。#1 对应最强战略锚点 (Microsoft 同台宣布) + 最差异化护城河；#2 对应最紧急 P&amp;L 风险对冲；#3 对应最高增速业务 (+184%) 但赛道竞争最激烈。<span class="synth-tag">[分析师综合]</span>
     </div>
   </div>
 
-  <!-- ============ BMC SUMMARY ============ -->
-  <div class="card">
-    <h2><span class="material-icons-outlined">grid_view</span>Business Model Canvas · 商业画布速览</h2>
+  <!-- BMC -->
+  <div class="card bmc-card">
+    <div style="margin:-2px 0 10px; padding-bottom:8px; border-bottom:2px solid var(--accent);">
+      <div style="font-size:18px; letter-spacing:6px; color:var(--accent); font-weight:700; text-transform:uppercase;">REFERENCE · 分析依据</div>
+      <div style="font-size:11px; color:var(--muted); margin-top:4px;">以下为支撑 Top 3 战略举措的完整分析过程：BMC → Porter's 5 → PESTLE → SWOT/TOWS → 引用来源</div>
+    </div>
+    <h2>Business Model Canvas · 商业画布速览</h2>
     <div class="bmc-mini">
-      <div class="tile">
-        <div class="lab">KP · 合作</div>
-        <div class="val">零售分销 · 青岛生态 · <strong>云/AI选型待定</strong></div>
-      </div>
-      <div class="tile">
-        <div class="lab">KA · 业务</div>
-        <div class="val">供应链四线重塑 · AI模型开发 · HVAC扩张</div>
-      </div>
-      <div class="tile">
-        <div class="lab">VP · 价值</div>
-        <div class="val"><strong>Premium Intelligence</strong> — AI驱动端到端智能生活生态</div>
-      </div>
-      <div class="tile">
-        <div class="lab">CR · 关系</div>
-        <div class="val">品牌矩阵分层 · 偏交易型 · 订阅生态在建</div>
-      </div>
-      <div class="tile">
-        <div class="lab">CS · 客户</div>
-        <div class="val">北美GE高端 · 中国核心 · 欧洲HVAC · Q1三区分化</div>
-      </div>
-      <div class="tile">
-        <div class="lab">KR · 资源</div>
-        <div class="val">10大研发中心 · 85K+专利 · Louisville产能 · <strong>AI平台缺位</strong></div>
-      </div>
-      <div class="tile span2">
-        <div class="lab">Ch · 渠道</div>
-        <div class="val">线下零售+电商 · GE独立体系 · Frankfurt D股推进</div>
-      </div>
-      <div class="tile span2">
-        <div class="lab">Cost · 成本</div>
-        <div class="val">原材料55% · 人工15% · <strong>北美关税冲击 −200bps毛利</strong></div>
-      </div>
-      <div class="tile">
-        <div class="lab">RS · 收入</div>
-        <div class="val">Q1 737亿 <strong>−6.9%</strong> · 净利−15% · 欧洲+10%对冲</div>
-      </div>
-    </div>
-    <div class="reason-note on-white" style="margin-top: 10px;">
-      <span class="material-icons-outlined">psychology</span>
-      <div><strong>核心张力</strong>VP 升级到 AI 生态要求统一数据面（KR 缺位），而北美 P&amp;L 压力（Cost + RS）正在压缩新平台预算空间 — 这是海尔当前最大的内部结构性矛盾。</div>
+      <div class="tile kp"><div class="lab">KP · 合作</div><div class="val"><strong>Microsoft</strong> (Azure AI)<sup class="cite"><a href="#src-8">[8]</a></sup> · Amazon · Innoscience GaN · Qualcomm</div></div>
+      <div class="tile ka"><div class="lab">KA · 业务</div><div class="val">硬件 R&amp;D · Amazon 运营 · DTC 私域 · 全球供应链</div></div>
+      <div class="tile kr"><div class="lab">KR · 资源</div><div class="val">R&amp;D <strong>¥28.93亿</strong> (2025)<sup class="cite"><a href="#src-1">[1]</a></sup> · 2,237 项专利<sup class="cite"><a href="#src-10">[10]</a></sup> · Soundcore 5,200万+ 用户</div></div>
+      <div class="tile vp"><div class="lab">VP · 价值</div><div class="val"><strong>"中价段唯一 AI 全家桶"</strong> 充电+音频+安防+储能<span class="synth-tag">[分析师综合]</span></div></div>
+      <div class="tile cr"><div class="lab">CR · 关系</div><div class="val">DTC 会员 · 各品牌独立 App · 2 年质保 · <strong>缺订阅</strong></div></div>
+      <div class="tile ch"><div class="lab">CH · 渠道</div><div class="val">线上 70.22% (Amazon 核心) · 线下 <strong>+27.81%</strong><sup class="cite"><a href="#src-2">[2]</a></sup> · 26Q1 官网 ¥8.14亿 <strong>+46.73%</strong><sup class="cite"><a href="#src-3">[3]</a></sup></div></div>
+      <div class="tile cs"><div class="lab">CS · 客户</div><div class="val">北美 ¥141.33亿 (46.31%) · 欧洲 <strong>+43.48%</strong> 增速领跑 · 中国及其他 26.97%<sup class="cite"><a href="#src-2">[2]</a></sup></div></div>
+      <div class="tile cost"><div class="lab">Cost · 成本结构</div><div class="val">2025 毛利率 45.07% (+1.4pp)<sup class="cite"><a href="#src-1">[1]</a></sup> · 2026Q1 三费占比 23.50% (-4.95pp)<sup class="cite"><a href="#src-4">[4]</a></sup> · <strong>2025 经营现金流 ¥4.81亿 (-82.49%)</strong><sup class="cite"><a href="#src-1">[1]</a></sup></div></div>
+      <div class="tile rs"><div class="lab">RS · 收入流</div><div class="val">充电储能 50.47% / 智能创新 27.10% / 智能影音 22.39% · 海外 95.30%<sup class="cite"><a href="#src-2">[2]</a></sup> · <strong>几乎纯硬件 One-Time</strong></div></div>
     </div>
   </div>
 
-  <!-- ============ PORTER'S FIVE FORCES ============ -->
-  <div class="card">
-    <h2><span class="material-icons-outlined">hub</span>Porter's Five Forces · 五力威胁评估</h2>
+  <!-- Porter's 5 -->
+  <div class="card" style="page-break-before: always;">
+    <h2>Porter's Five Forces · 五力威胁评估</h2>
     <div class="p5-grid">
-      <div class="p5-cell">
-        <div class="ico"><span class="material-icons-outlined">groups</span></div>
-        <div class="lab">现有竞争</div>
-        <div class="score-ring high">4.8</div>
-        <div class="note">美的600亿AI + Electrolux联盟，价格战+生态战双线施压</div>
-      </div>
-      <div class="p5-cell">
-        <div class="ico"><span class="material-icons-outlined">local_shipping</span></div>
-        <div class="lab">供应商</div>
-        <div class="score-ring mid">3.6</div>
-        <div class="note">压缩机/芯片集中度高，替代开发周期长</div>
-      </div>
-      <div class="p5-cell">
-        <div class="ico"><span class="material-icons-outlined">shopping_cart</span></div>
-        <div class="lab">购买者</div>
-        <div class="score-ring mid">3.8</div>
-        <div class="note">大型零售商渠道控制力强，比价透明度高</div>
-      </div>
-      <div class="p5-cell">
-        <div class="ico"><span class="material-icons-outlined">swap_horiz</span></div>
-        <div class="lab">替代品</div>
-        <div class="score-ring mid">3.2</div>
-        <div class="note">智能家居生态平台（Apple/Google/小米）渐进替代</div>
-      </div>
-      <div class="p5-cell">
-        <div class="ico"><span class="material-icons-outlined">login</span></div>
-        <div class="lab">新进入者</div>
-        <div class="score-ring low">2.4</div>
-        <div class="note">重资产+品牌壁垒高，但跨界科技巨头有降维能力</div>
-      </div>
+      <div class="p5-cell"><div class="lab">现有竞争</div><div class="score-ring high">4.75</div><div class="note">UGREEN (充电)<sup class="cite"><a href="#src-15">[15]</a></sup> · JBL (音频) · Ring (安防) · EcoFlow/Jackery (储能)<sup class="cite"><a href="#src-16">[16]</a></sup> — 群狼围攻<span class="synth-tag">[分析师综合]</span></div></div>
+      <div class="p5-cell"><div class="lab">供应商 (Amazon)</div><div class="score-ring high">4.35</div><div class="note">Amazon 53% 渠道占比 + FBA/广告涨价；GaN/电芯供给多元<span class="synth-tag">[分析师综合]</span></div></div>
+      <div class="p5-cell"><div class="lab">新进入者</div><div class="score-ring high">4.10</div><div class="note">UGREEN IPO 募 8.8 亿<sup class="cite"><a href="#src-15">[15]</a></sup> · 小米生态链 · Ring/Nest 降维</div></div>
+      <div class="p5-cell"><div class="lab">购买者</div><div class="score-ring mid">3.75</div><div class="note">Amazon 一键比价 + KA 集采 + Amazon Basics PB<span class="synth-tag">[分析师综合]</span></div></div>
+      <div class="p5-cell"><div class="lab">替代品</div><div class="score-ring mid">3.35</div><div class="note">手机原厂快充 + 大电池 + 智能家居生态平台<span class="synth-tag">[分析师综合]</span></div></div>
     </div>
-    <div class="reason-note on-white" style="margin-top: 10px;">
-      <span class="material-icons-outlined">psychology</span>
-      <div><strong>最大威胁</strong>现有竞争者（4.8）— 美的+华为云+Electrolux组合对海尔 KP/VP/KA 三个画布模块形成系统性联动压力，窗口封闭在 Q3 末。</div>
+    <div class="reason-note on-white" style="margin-top:10px;">
+      <strong>最大威胁：</strong>现有竞争 (4.75) — Anker 横跨 4 条主战线，每条都有强势 vertical leader。eufy 在 Amazon 渠道对 Ring 处结构性劣势；UGREEN 上市后在充电正面交锋；SOLIX 切入晚于 EcoFlow/Jackery。差异化护城河必须靠 AI + GaN 双壁垒拉开。<span class="synth-tag">[分析师综合]</span>
     </div>
   </div>
 
-  <!-- ============ PESTLE HEATMAP ============ -->
+  <!-- PESTLE -->
   <div class="card">
-    <h2><span class="material-icons-outlined">public</span>PESTLE · 外部因素影响热力图</h2>
+    <h2>PESTLE · 外部因素影响热力图</h2>
     <div class="sub-card">
-      <div class="pestle-bar">
-        <div class="lab">Political · 政治</div>
-        <div class="bar-track"><div class="bar-fill critical" style="width:88%"></div></div>
-        <div class="score-val critical">4.4</div>
-      </div>
-      <div class="pestle-bar">
-        <div class="lab">Economic · 经济</div>
-        <div class="bar-track"><div class="bar-fill high" style="width:76%"></div></div>
-        <div class="score-val high">3.8</div>
-      </div>
-      <div class="pestle-bar">
-        <div class="lab">Social · 社会</div>
-        <div class="bar-track"><div class="bar-fill moderate" style="width:56%"></div></div>
-        <div class="score-val moderate">2.8</div>
-      </div>
-      <div class="pestle-bar">
-        <div class="lab">Technology · 技术</div>
-        <div class="bar-track"><div class="bar-fill critical" style="width:84%"></div></div>
-        <div class="score-val critical">4.2</div>
-      </div>
-      <div class="pestle-bar">
-        <div class="lab">Legal · 法律</div>
-        <div class="bar-track"><div class="bar-fill high" style="width:70%"></div></div>
-        <div class="score-val high">3.5</div>
-      </div>
-      <div class="pestle-bar">
-        <div class="lab">Environment · 环境</div>
-        <div class="bar-track"><div class="bar-fill moderate" style="width:62%"></div></div>
-        <div class="score-val moderate">3.1</div>
-      </div>
+      <div class="pestle-bar"><div class="lab">Political · 政治<small>Trump 关税 145%</small></div><div class="bar-track"><div class="bar-fill critical" style="width:95%"></div></div><div class="score-val critical">4.75</div></div>
+      <div class="pestle-bar"><div class="lab">Economic · 经济<small>USD/CNY 汇率 + FBA 通胀</small></div><div class="bar-track"><div class="bar-fill critical" style="width:92%"></div></div><div class="score-val critical">4.60</div></div>
+      <div class="pestle-bar"><div class="lab">Environment · 环境<small>EU Battery Regulation 2027</small></div><div class="bar-track"><div class="bar-fill critical" style="width:82%"></div></div><div class="score-val critical">4.10</div></div>
+      <div class="pestle-bar"><div class="lab">Technology · 技术<small>GaN 充电领导力 ✅</small></div><div class="bar-track"><div class="bar-fill high" style="width:82%"></div></div><div class="score-val high">4.10</div></div>
+      <div class="pestle-bar"><div class="lab">Social · 社会<small>户外/储能社会风潮 ✅</small></div><div class="bar-track"><div class="bar-fill high" style="width:82%"></div></div><div class="score-val high">4.10</div></div>
+      <div class="pestle-bar"><div class="lab">Legal · 法律<small>eufy 2022 数据事件残余</small></div><div class="bar-track"><div class="bar-fill moderate" style="width:68%"></div></div><div class="score-val moderate">3.40</div></div>
     </div>
-    <div class="reason-note on-white" style="margin-top: 10px;">
-      <span class="material-icons-outlined">psychology</span>
-      <div><strong>关键洞察</strong>Political（4.4）+ Technology（4.2）双高 — 关税政策直接冲击北美毛利，AI技术窗口封闭压力同步收紧。两者叠加形成"成本上升 × 投资紧迫"的双重钳制。</div>
+    <div class="reason-note on-white" style="margin-top:10px;">
+      <strong>关键洞察：</strong>Political (4.75) + Economic (4.60) 双 critical — 关税直接冲击北美 46.3% 营收<sup class="cite"><a href="#src-2">[2]</a></sup>，汇率波动放大 96% USD 收入风险。叠加 EU Battery 2027 可拆电池强制 → ID 重设计成本。<strong>正面因子</strong>：GaN 技术领导力<sup class="cite"><a href="#src-12">[12]</a></sup> + 储能社会需求形成增长对冲<sup class="cite"><a href="#src-16">[16]</a></sup>。<span class="synth-tag">[分析师综合]</span>
     </div>
   </div>
 
-  <!-- ============ SWOT / TOWS ============ -->
-  <div class="card">
-    <h2><span class="material-icons-outlined">grid_on</span>SWOT · 四象限综合</h2>
+  <!-- SWOT -->
+  <div class="card" style="page-break-before: always;">
+    <h2>SWOT · 四象限综合 (Cross-traced to BMC / P5F / PESTLE) <span class="synth-tag">[分析师综合]</span></h2>
     <div class="swot-grid">
       <div class="swot-tile S">
         <div class="hd"><span class="letter">S</span>Strengths · 优势</div>
         <ul>
-          <li><strong>S1</strong> GE Appliances 北美本地化产能，关税缓冲</li>
-          <li><strong>S2</strong> 品牌矩阵覆盖高端至大众（5大品牌）</li>
-          <li><strong>S3</strong> 欧洲 Q1 +10% 利润，区域风险对冲</li>
-          <li><strong>S4</strong> COSMOPlat 工业互联网 1000+ 协同企业</li>
+          <li><strong>S1</strong> 多品牌矩阵 + 全品类 (7 大品牌, 4 业务线) — BMC §1.1</li>
+          <li><strong>S2</strong> R&amp;D ¥21.08 亿 / 8.53% / +49% YoY — GaN/电池/AI<sup class="cite"><a href="#src-10">[10]</a></sup></li>
+          <li><strong>S3</strong> Amazon + 海外仓 + DTC 三位一体渠道能力</li>
+          <li><strong>S4</strong> Soundcore 5,200 万+ 全球用户基础</li>
+          <li><strong>S5</strong> 现金流健康 (净利 ¥21.14亿, 毛利 44.68%)<sup class="cite"><a href="#src-1">[1]</a></sup></li>
+          <li><strong>S6</strong> AI 战略合作壁垒 (Microsoft Build 2025)<sup class="cite"><a href="#src-8">[8]</a></sup></li>
         </ul>
       </div>
       <div class="swot-tile W">
         <div class="hd"><span class="letter">W</span>Weaknesses · 劣势</div>
         <ul>
-          <li><strong>W1</strong> 北美毛利受关税持续压缩，能力重建期</li>
-          <li><strong>W2</strong> AI 平台架构未定型，落后美的 6–9 个月</li>
-          <li><strong>W3</strong> 客户关系偏交易型，CXO 绑定弱</li>
-          <li><strong>W4</strong> 跨品牌统一用户 ID 未达成</li>
+          <li><strong>W1</strong> Amazon 单渠道 ~53% — 平台政策风险</li>
+          <li><strong>W2</strong> 海外营收 96% — 关税 + 汇率双暴露<sup class="cite"><a href="#src-2">[2]</a></sup></li>
+          <li><strong>W3</strong> 几乎纯硬件 One-Time，缺订阅/服务收入</li>
+          <li><strong>W4</strong> eufy 数据信任受损 (2022 事件)<sup class="cite"><a href="#src-7">[7]</a></sup><sup class="cite"><a href="#src-14">[14]</a></sup></li>
+          <li><strong>W5</strong> 每条战线都有 vertical leader 强敌</li>
+          <li><strong>W6</strong> 2025 Q3 经营现金流 -8.65 亿 (-152%)<sup class="cite"><a href="#src-5">[5]</a></sup></li>
         </ul>
       </div>
       <div class="swot-tile O">
         <div class="hd"><span class="letter">O</span>Opportunities · 机会</div>
         <ul>
-          <li><strong>O1</strong> Premium Intelligence 战略创造 AI 架构选型窗口</li>
-          <li><strong>O2</strong> 北美供应链重塑 → tariff 情景 + AI 补货场景</li>
-          <li><strong>O3</strong> Frankfurt D 股 → 欧洲合规叙事升级</li>
-          <li><strong>O4</strong> HVAC 欧洲扩张 — 能源转型 B2B 新场景</li>
+          <li><strong>O1</strong> SOLIX 储能 + EU 阳台光伏高增长赛道<sup class="cite"><a href="#src-16">[16]</a></sup></li>
+          <li><strong>O2</strong> AI 软硬一体 — 差异化新护城河</li>
+          <li><strong>O3</strong> 独立站 / DTC +101% YoY — 摆脱 Amazon<sup class="cite"><a href="#src-6">[6]</a></sup><sup class="cite"><a href="#src-11">[11]</a></sup></li>
+          <li><strong>O4</strong> EU USB-C 强制标准利好独立充电器</li>
+          <li><strong>O5</strong> 新兴市场 (拉美/中东/东南亚) 北美摊薄</li>
+          <li><strong>O6</strong> eufyMake / AnkerWork SMB / 创作者经济</li>
         </ul>
       </div>
       <div class="swot-tile T">
         <div class="hd"><span class="letter">T</span>Threats · 威胁</div>
         <ul>
-          <li><strong>T1</strong> 美的+华为云组合先行 AI 平台，窗口封闭</li>
-          <li><strong>T2</strong> 北美持续失血 → CFO 压缩新平台预算</li>
-          <li><strong>T3</strong> Azure 欧洲数据驻留叙事加码</li>
-          <li><strong>T4</strong> Electrolux-Midea 北美战略联盟威胁 GE 零售基础</li>
+          <li><strong>T1</strong> Trump 关税 145% — Q3 已减速至 +20%<sup class="cite"><a href="#src-5">[5]</a></sup></li>
+          <li><strong>T2</strong> UGREEN 上市 + 募 8.8 亿同位价格战<sup class="cite"><a href="#src-15">[15]</a></sup></li>
+          <li><strong>T3</strong> eufy 数据残余风险 (FTC/CIPA/GDPR)<sup class="cite"><a href="#src-14">[14]</a></sup></li>
+          <li><strong>T4</strong> Ring 在 Amazon 渠道结构性优势</li>
+          <li><strong>T5</strong> EU Battery Regulation 2027 强制可拆</li>
+          <li><strong>T6</strong> USD/CNY 高波动 + Amazon 成本通胀</li>
         </ul>
       </div>
     </div>
   </div>
 
-  <!-- TOWS Matrix -->
+  <!-- TOWS -->
   <div class="card">
-    <h2><span class="material-icons-outlined">account_tree</span>TOWS · 行动矩阵</h2>
+    <h2>TOWS · 行动矩阵 <span class="synth-tag">[分析师综合]</span></h2>
     <div class="tows-compact">
       <div class="tows-cell SO">
-        <div class="lab">S × O · 攻势</div>
-        <div class="body"><strong>S1×O2:</strong> 北美本地化产能作为供应链重塑信任底座，tariff-aware forecasting 落地。<br><strong>S2×O1:</strong> 品牌矩阵覆盖能力 × AI Vision 窗口，全品牌统一架构占位。</div>
+        <div class="lab">S × O · 攻势 (进攻)</div>
+        <div class="body">
+          <strong>SO1 · S2×O2:</strong> R&amp;D 强度 × AI 全家桶 — 重塑"中价段唯一 AI 全家桶"。<br>
+          <strong>SO2 · S1+S6×O1:</strong> 多品牌 × Microsoft × SOLIX 储能 EU+NA 双线扩张。<br>
+          <strong>SO3 · S3×O3:</strong> 三位一体渠道支撑独立站 9% → 20%+ (3 年)。
+        </div>
       </div>
       <div class="tows-cell ST">
         <div class="lab">S × T · 防守</div>
-        <div class="body"><strong>S3×T3:</strong> 欧洲利润优势 × Azure 叙事，用合规深度把竞品困在叙事层。<br><strong>S4×T1:</strong> COSMOPlat 生态优势防御平台化竞争。</div>
+        <div class="body">
+          <strong>ST1 · S2+S6×T2:</strong> GaN+AI 双壁垒拉开 vs UGREEN，不打价格战。<br>
+          <strong>ST2 · S3×T1:</strong> 海外仓 + 越/泰 ODM，美国出货已 50% 离中国 → 70%。<br>
+          <strong>ST3 · S1×T4:</strong> eufy 在 BestBuy/Costco/独立站布局，绕开 Ring。
+        </div>
       </div>
       <div class="tows-cell WO">
         <div class="lab">W × O · 补强</div>
-        <div class="body"><strong>W2×O1:</strong> AI 平台落后 → 利用 Premium Intelligence 窗口加速架构定义。<br><strong>W4×O1:</strong> 统一用户 ID 作为 AI 生态的前置条件纳入架构规划。</div>
+        <div class="body">
+          <strong>WO1 · W3×O2:</strong> AI 服务订阅化 (Translation Pro / Detection Pro) 修复 §1.5。<br>
+          <strong>WO2 · W1×O3:</strong> 独立站 + 海外仓 + 私域三轴 → Amazon &lt;40% (3 年)。<br>
+          <strong>WO3 · W4×O2:</strong> 边缘 AI 推理 + 公开第三方安全审计 → 重建 eufy 信任。
+        </div>
       </div>
       <div class="tows-cell WT">
         <div class="lab">W × T · 止损</div>
-        <div class="body"><strong>W1×T2:</strong> 北美 P&amp;L 压力 × 预算收紧 → 小规模 POC 先证 ROI，避免一次性大票决策。<br><strong>W3×T4:</strong> 加速多线程 CXO 关系建设防御联盟威胁。</div>
+        <div class="body">
+          <strong>WT1 · W2×T1:</strong> 加速 EU + 日本 + 新兴市场，北美营收 46% → 35% (3 年)。<br>
+          <strong>WT2 · W4×T3:</strong> 主动公开 eufy 安全审计 + Bug Bounty，先于 FTC/CIPA 行动。<br>
+          <strong>WT3 · W1×T1:</strong> KA 长约 + 独立站定价灵活，降低关税在 Amazon 定价的传导。
+        </div>
       </div>
     </div>
-    <div class="reason-note on-white" style="margin-top: 10px;">
-      <span class="material-icons-outlined">psychology</span>
-      <div><strong>推理</strong>SO/WO 推进空间最大（对应 Top 1 + Top 2 举措），ST/WT 提供防御底线。四象限均可追溯至上游 BMC/P5F/PESTLE 具体章节。</div>
+    <div class="reason-note on-white" style="margin-top:10px;">
+      <strong>推理：</strong>SO/WO 推进空间最大 (对应 Top 1 + Top 2 + Top 3 三大举措)；ST/WT 提供防御底线。四象限均可追溯至上游 BMC §1.1-1.9 / Porter §2.1-2.5 / PESTLE 6 维具体章节。<span class="synth-tag">[分析师综合]</span>
     </div>
   </div>
 
-  <!-- ============ SOURCES ============ -->
-  <div class="card">
-    <h2><span class="material-icons-outlined">link</span>Sources · 引用来源</h2>
+  <!-- Sources -->
+  <div class="card" style="page-break-before: always;">
+    <h2>Sources · 引用来源</h2>
     <div class="sub-card">
-      <ol style="padding-left:20px; margin:0; font-size:12px; color:var(--muted); line-height:1.9;">
-        <li><a href="https://finimize.com/content/haier-smart-homes-profit-fell-as-us-tariffs-and-weather-hit-demand" target="_blank">Finimize · 2026-04-28 · Haier Q1 tariff + weather impact</a></li>
-        <li><a href="https://www.marketscreener.com/news/haier-smart-home-reports-q1-2026-results-ce7f59ddd98cf320" target="_blank">MarketScreener · 2026-04-27 · Q1 2026 results</a></li>
-        <li><a href="https://www.tipranks.com/news/company-announcements/haier-smart-home-launches-2026-plan-to-boost-value-global-growth-and-efficiency" target="_blank">Tipranks · 2026-04-27 · Premium Intelligence strategy launch</a></li>
-        <li><a href="https://technave.com/gadget/Haier-unveils-2026-Smart-Home-Vision-focused-on-home-appliances-with-AI-45370.html" target="_blank">Technave · Haier 2026 AI Smart Home Vision</a></li>
-        <li><a href="https://in.tradingview.com/news/urn:summary_document_report:quartr.com:3261709:0-haier-smart-home-q1-2026-saw-lower-revenue-and-profit-but-strong-growth-in-europe-and-emerging-markets-offset-north-american-weakness/" target="_blank">Quartr / TradingView · Q1 Europe + EM growth</a></li>
-        <li><a href="https://intellectia.ai/news/stock/midea-group-plans-to-invest-rmb60b-in-ai-transformation-over-next-3-yrs" target="_blank">Intellectia · Midea 60B RMB AI transformation</a></li>
-        <li><a href="https://www.prnewswire.com/news-releases/electrolux-group-accelerates-profitable-growth-strategy-through-a-partnership-with-midea-global-organization-and-footprint-optimization-and-a-fully-underwritten-rights-issue-of-approx-sek-9-billion-302752025.html" target="_blank">PRNewswire · 2026-04-23 · Electrolux × Midea partnership</a></li>
+      <ol style="padding-left:20px; margin:0; font-size:10.5px; color:var(--muted); line-height:1.9;">
+        <li id="src-1"><a href="https://www.ithome.com/0/937/561.htm">IT之家 · 安克创新 2025 年报 (¥305.14亿)</a> — 2026-04-10</li>
+        <li id="src-2"><a href="http://www.eeo.com.cn/2026/0410/833940.shtml">经济观察网 · 2025 年报深度解读</a> — 2026-04-10</li>
+        <li id="src-3"><a href="https://www.ithome.com/0/945/207.htm">IT之家 · 安克 2026 Q1 报告 (¥76.08亿, 净利 -4.87%)</a> — 2026-04-29</li>
+        <li id="src-4"><a href="https://stock.stockstar.com/JC2026043000045391.shtml">东吴证券 · 2026Q1 点评 (毛销差亮眼)</a> — 2026-04-30</li>
+        <li id="src-5"><a href="https://stock.stockstar.com/notice/SN2025102900042718.shtml">证券之星 · 2025Q3 报告</a> (历史对照)</li>
+        <li id="src-6"><a href="https://www.cifnews.com/article/173998">雨果网 · 2024 业绩拆分</a></li>
+        <li id="src-7"><a href="https://www.ithome.com/0/657/668.htm">IT之家 · eufy 2022 数据事件整改</a></li>
+        <li id="src-8"><a href="http://www.eeo.com.cn/2025/0522/728128.shtml">经济观察网 · Microsoft Build 2025 战略合作</a></li>
+        <li id="src-9"><a href="https://www.shenzhenware.com/articles/16636">深圳湾 · Soundcore Aerofit 2 评测</a></li>
+        <li id="src-10"><a href="http://www.egainnews.com/article/17373">蓝海亿观 · 2024 R&D 投入数据</a></li>
+        <li id="src-11"><a href="https://news.qq.com/rain/a/20250508A05LEY00">腾讯 · 2025 Q1 财报独立站数据</a></li>
+        <li id="src-12"><a href="https://www.notebookcheck.net/Anker-Prime-Charger-and-Anker-Prime-Wireless-Charging-Station-now-official.1104205.0.html">Notebookcheck · IFA 2025 Prime Charger 210W</a></li>
+        <li id="src-13"><a href="https://www.theverge.com/news/765778/anker-fastest-power-bank-launches-new-prime-family">The Verge · Prime Power Bank 26K</a></li>
+        <li id="src-14"><a href="https://www.zdnet.com/article/eufys-security-cameras-send-data-to-the-cloud-without-consent-and-thats-not-the-worst-part/">ZDNET · eufy 安全研究</a></li>
+        <li id="src-15"><a href="https://xueqiu.com/8331329965/298786979">雪球 · UGREEN IPO 估值</a></li>
+        <li id="src-16"><a href="https://www.toutiao.com/article/7327186743608885797/">今日头条 · 储能竞争格局</a></li>
+        <li id="src-17"><a href="http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/810321619245/index.phtml">新浪财经 · 2025 业绩追踪</a></li>
       </ol>
     </div>
   </div>
 
   <div class="foot">
-    <span class="dl">本报告综合 <strong>PESTLE</strong> · <strong>Porter's Five Forces</strong> · <strong>Business Model Canvas</strong> 三框架分析，经 SWOT/TOWS 交叉推导得出战略优先级排名</span>
-    Generated by Kiro · Business Insight · 2026-05-19
+    <span class="dl">本报告综合 <strong>PESTLE</strong> · <strong>Porter's Five Forces</strong> · <strong>Business Model Canvas</strong> 三框架，经 SWOT/TOWS 交叉推导得出战略优先级排名</span>
+    Generated by Dali · Business Insight · {{DATE}} · AWS CMHK
   </div>
 
 </div>
-
-<script>
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('print') === '1') {
-    window.addEventListener('load', () => setTimeout(() => window.print(), 400));
-  }
-</script>
 </body>
 </html>
