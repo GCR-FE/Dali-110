@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Business Insight · Haier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="_shared.css" />
+<style>
+  /* === Top 3 Initiatives === */
+  .initiative-row {
+    display: grid; grid-template-columns: 50px 1fr; gap: 14px;
+    align-items: flex-start; padding: 16px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .initiative-row:last-child { border-bottom: 0; }
+  .initiative-row .rank {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 700; font-style: italic;
+  }
+  .initiative-row .rank.gold { background: #fef3c7; color: #92400e; }
+  .initiative-row .rank.silver { background: #f1f5f9; color: #475569; }
+  .initiative-row .rank.bronze { background: #fce7f3; color: #9d174d; }
+  .initiative-row .body h4 { margin: 0 0 4px; font-size: 14px; color: var(--ink); }
+  .initiative-row .body p { margin: 0 0 6px; font-size: 12.5px; color: var(--ink-2); line-height: 1.6; }
+  .initiative-row .body .tag {
+    display: inline-block; font-size: 10px; color: var(--muted);
+    background: var(--accent-softer); padding: 2px 7px; border-radius: 4px; margin-right: 4px;
+  }
+  .initiative-row .body .evidence {
+    margin-top: 6px; font-size: 11px; color: var(--muted); line-height: 1.5;
+    border-left: 2px solid var(--accent-soft); padding-left: 10px;
+  }
+</style>
+<style>
+  /* === BMC Mini Grid === */
+  .bmc-mini { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: auto auto; gap: 6px; }
+  .bmc-mini .tile {
+    background: var(--paper); border-radius: 8px; padding: 10px 12px;
+    border-top: 2px solid var(--accent-soft);
+  }
+  .bmc-mini .tile .lab {
+    font-size: 9px; letter-spacing: 1.2px; color: var(--muted);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .bmc-mini .tile .val { font-size: 11px; color: var(--ink-2); line-height: 1.45; }
+  .bmc-mini .tile .val strong { color: var(--ink); }
+  .bmc-mini .tile.span2 { grid-column: span 2; }
+  .bmc-mini .tile.bottom { grid-column: span 5; border-top-color: var(--warn-soft); }
+  .bmc-mini .tile.bottom-half { grid-column: span 2; border-top-color: var(--ok); }
+  .bmc-mini .tile.bottom-half2 { grid-column: span 3; border-top-color: var(--warn); }
+
+  /* === Porter's 5 Radar-style summary === */
+  .p5-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .p5-cell {
+    background: var(--paper); border-radius: 10px; padding: 12px;
+    text-align: center; position: relative;
+  }
+  .p5-cell .ico { font-size: 22px; color: var(--accent); margin-bottom: 4px; }
+  .p5-cell .lab { font-size: 9.5px; letter-spacing: 1px; color: var(--muted); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; }
+  .p5-cell .score-ring {
+    width: 42px; height: 42px; border-radius: 50%; margin: 0 auto 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; border: 3px solid var(--line);
+  }
+  .p5-cell .score-ring.high { border-color: var(--bad); color: var(--bad); }
+  .p5-cell .score-ring.mid { border-color: var(--warn); color: var(--warn); }
+  .p5-cell .score-ring.low { border-color: var(--ok); color: var(--ok); }
+  .p5-cell .note { font-size: 10.5px; color: var(--ink-2); line-height: 1.4; }
+</style>
+<style>
+  /* === PESTLE Heatmap === */
+  .pestle-bar { display: grid; grid-template-columns: 90px 1fr 50px; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line-soft); }
+  .pestle-bar:last-child { border-bottom: 0; }
+  .pestle-bar .lab { font-size: 11px; font-weight: 600; color: var(--ink); }
+  .pestle-bar .bar-track { height: 8px; background: var(--line-soft); border-radius: 4px; overflow: hidden; position: relative; }
+  .pestle-bar .bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+  .pestle-bar .bar-fill.critical { background: var(--bad); }
+  .pestle-bar .bar-fill.high { background: var(--warn); }
+  .pestle-bar .bar-fill.moderate { background: #eab308; }
+  .pestle-bar .bar-fill.low { background: var(--ok); }
+  .pestle-bar .score-val { font-size: 12px; font-weight: 700; text-align: right; }
+  .pestle-bar .score-val.critical { color: var(--bad); }
+  .pestle-bar .score-val.high { color: var(--warn); }
+  .pestle-bar .score-val.moderate { color: #a16207; }
+  .pestle-bar .score-val.low { color: var(--ok); }
+
+  /* === SWOT Grid === */
+  .swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .swot-tile {
+    background: var(--paper); border-radius: 10px; padding: 14px 16px;
+    border-top: 3px solid var(--muted-2);
+  }
+  .swot-tile.S { border-top-color: var(--ok); }
+  .swot-tile.W { border-top-color: var(--warn); }
+  .swot-tile.O { border-top-color: var(--accent); }
+  .swot-tile.T { border-top-color: var(--bad); }
+  .swot-tile .hd {
+    font-size: 10px; letter-spacing: 1.5px; font-weight: 700; text-transform: uppercase;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+  }
+  .swot-tile .letter {
+    width: 22px; height: 22px; border-radius: 4px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: #fff;
+  }
+  .swot-tile.S .letter { background: var(--ok); }
+  .swot-tile.S .hd { color: var(--ok); }
+  .swot-tile.W .letter { background: var(--warn); }
+  .swot-tile.W .hd { color: var(--warn); }
+  .swot-tile.O .letter { background: var(--accent); }
+  .swot-tile.O .hd { color: var(--accent); }
+  .swot-tile.T .letter { background: var(--bad); }
+  .swot-tile.T .hd { color: var(--bad); }
+  .swot-tile ul { list-style: none; padding: 0; margin: 0; }
+  .swot-tile ul li {
+    padding: 5px 0; border-bottom: 1px solid var(--line-soft);
+    font-size: 11.5px; color: var(--ink-2); line-height: 1.5;
+  }
+  .swot-tile ul li:last-child { border-bottom: 0; }
+</style>
+<style>
+  /* === TOWS Compact === */
+  .tows-compact { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tows-cell {
+    background: var(--paper); border-radius: 10px; padding: 12px 14px;
+    border-top: 3px solid var(--accent);
+  }
+  .tows-cell.SO { border-top-color: var(--ok); }
+  .tows-cell.WO { border-top-color: var(--accent); }
+  .tows-cell.ST { border-top-color: var(--warn); }
+  .tows-cell.WT { border-top-color: var(--bad); }
+  .tows-cell .lab {
+    font-size: 10px; letter-spacing: 1.5px; font-weight: 700; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .tows-cell.SO .lab { color: var(--ok); }
+  .tows-cell.WO .lab { color: var(--accent); }
+  .tows-cell.ST .lab { color: var(--warn); }
+  .tows-cell.WT .lab { color: var(--bad); }
+  .tows-cell .body { font-size: 11.5px; color: var(--ink-2); line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="export-bar">
+  <div class="brand">◆ BUSINESS INSIGHT · 全景战略分析</div>
+  <button onclick="window.print()">
+    <span class="material-icons-outlined" style="font-size:16px;">picture_as_pdf</span>
+    Export PDF
+  </button>
+</div>
+
+<div class="sheet">
+
+  <div class="head">
+    <div>
+      <div class="kicker">BUSINESS INSIGHT · 全景战略分析</div>
+      <h1>海尔智家 Haier Smart Home</h1>
+      <div class="sub">消费电子 / 智能家居 · 2026-05-19 · 综合：PESTLE · Porter's 5 · BMC · SWOT/TOWS</div>
+    </div>
+    <div class="pill">
+      <span class="material-icons-outlined">insights</span>
+      Top 3 战略举措
+    </div>
+  </div>
+
+  <!-- ============ TOP 3 STRATEGIC INITIATIVES ============ -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">flag</span>Top 3 Strategic Initiatives · 客户最可能推进的战略举措</h2>
+    <div class="sub-card">
+      <div class="initiative-row">
+        <div class="rank gold">1</div>
+        <div class="body">
+          <h4>🥇 AI 平台架构选型与全球数据面建设</h4>
+          <p>《Premium Intelligence》战略把 VP 从"单品家电"升到"AI 驱动端到端生态"，要求跨品牌跨地域统一数据面 + 模型能力。Q3 末为架构选型锁定窗口 — 美的已先行 6–9 个月。</p>
+          <span class="tag">S2×O1 · SO策略</span><span class="tag">PESTLE Tech 4.2</span><span class="tag">Porter #1</span>
+          <div class="evidence">
+            <strong>公开依据：</strong>2026 战略发布 "AI 驱动端到端"，管理层投资者沟通明确"2026 年完成架构定义"；美的 MevoX + 华为云组合已形成对标压力。
+          </div>
+        </div>
+      </div>
+      <div class="initiative-row">
+        <div class="rank silver">2</div>
+        <div class="body">
+          <h4>🥈 北美供应链四线重塑（关税情景化 + 成本生产力）</h4>
+          <p>Q1 北美 −6.9%，管理层公开承认进入"能力重建期"。供应链可视化 / 采购决策 / 产品组合优化 / 成本生产力四线并行，核心是关税情景建模 + 实时决策能力。</p>
+          <span class="tag">S1×O2 · SO策略</span><span class="tag">PESTLE Political 4.4</span><span class="tag">BMC Cost + KA</span>
+          <div class="evidence">
+            <strong>公开依据：</strong>Q1 业绩会管理层使用"能力重建期"措辞；Louisville + 墨西哥产能已到位，缺的是决策智能层。
+          </div>
+        </div>
+      </div>
+      <div class="initiative-row">
+        <div class="rank bronze">3</div>
+        <div class="body">
+          <h4>🥉 欧洲 HVAC 扩张 + Frankfurt D 股合规叙事</h4>
+          <p>欧洲 Q1 利润 +10%，HVAC 承接能源转型 B2B 需求。Frankfurt D 股推进提升合规透明度与资本可达性，强化欧洲市场战略地位。</p>
+          <span class="tag">S3×O3 · SO策略</span><span class="tag">PESTLE Environmental</span><span class="tag">BMC Ch + CS</span>
+          <div class="evidence">
+            <strong>公开依据：</strong>2026 战略明确 HVAC 为扩张方向；Frankfurt 上市进程活跃；欧洲 Q1 利润增长为资金来源。
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reason-note on-white" style="margin-top: 12px;">
+      <span class="material-icons-outlined">psychology</span>
+      <div><strong>排名逻辑</strong>按"已有公开战略表态 × 资源配置行为 × 窗口紧迫性"综合排序。#1 对应最强外部压力（美的先行）+ 最明确战略语言；#2 对应最紧急 P&amp;L 压力；#3 对应最确定增长极。</div>
+    </div>
+  </div>
+
+  <!-- ============ BMC SUMMARY ============ -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">grid_view</span>Business Model Canvas · 商业画布速览</h2>
+    <div class="bmc-mini">
+      <div class="tile">
+        <div class="lab">KP · 合作</div>
+        <div class="val">零售分销 · 青岛生态 · <strong>云/AI选型待定</strong></div>
+      </div>
+      <div class="tile">
+        <div class="lab">KA · 业务</div>
+        <div class="val">供应链四线重塑 · AI模型开发 · HVAC扩张</div>
+      </div>
+      <div class="tile">
+        <div class="lab">VP · 价值</div>
+        <div class="val"><strong>Premium Intelligence</strong> — AI驱动端到端智能生活生态</div>
+      </div>
+      <div class="tile">
+        <div class="lab">CR · 关系</div>
+        <div class="val">品牌矩阵分层 · 偏交易型 · 订阅生态在建</div>
+      </div>
+      <div class="tile">
+        <div class="lab">CS · 客户</div>
+        <div class="val">北美GE高端 · 中国核心 · 欧洲HVAC · Q1三区分化</div>
+      </div>
+      <div class="tile">
+        <div class="lab">KR · 资源</div>
+        <div class="val">10大研发中心 · 85K+专利 · Louisville产能 · <strong>AI平台缺位</strong></div>
+      </div>
+      <div class="tile span2">
+        <div class="lab">Ch · 渠道</div>
+        <div class="val">线下零售+电商 · GE独立体系 · Frankfurt D股推进</div>
+      </div>
+      <div class="tile span2">
+        <div class="lab">Cost · 成本</div>
+        <div class="val">原材料55% · 人工15% · <strong>北美关税冲击 −200bps毛利</strong></div>
+      </div>
+      <div class="tile">
+        <div class="lab">RS · 收入</div>
+        <div class="val">Q1 737亿 <strong>−6.9%</strong> · 净利−15% · 欧洲+10%对冲</div>
+      </div>
+    </div>
+    <div class="reason-note on-white" style="margin-top: 10px;">
+      <span class="material-icons-outlined">psychology</span>
+      <div><strong>核心张力</strong>VP 升级到 AI 生态要求统一数据面（KR 缺位），而北美 P&amp;L 压力（Cost + RS）正在压缩新平台预算空间 — 这是海尔当前最大的内部结构性矛盾。</div>
+    </div>
+  </div>
+
+  <!-- ============ PORTER'S FIVE FORCES ============ -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">hub</span>Porter's Five Forces · 五力威胁评估</h2>
+    <div class="p5-grid">
+      <div class="p5-cell">
+        <div class="ico"><span class="material-icons-outlined">groups</span></div>
+        <div class="lab">现有竞争</div>
+        <div class="score-ring high">4.8</div>
+        <div class="note">美的600亿AI + Electrolux联盟，价格战+生态战双线施压</div>
+      </div>
+      <div class="p5-cell">
+        <div class="ico"><span class="material-icons-outlined">local_shipping</span></div>
+        <div class="lab">供应商</div>
+        <div class="score-ring mid">3.6</div>
+        <div class="note">压缩机/芯片集中度高，替代开发周期长</div>
+      </div>
+      <div class="p5-cell">
+        <div class="ico"><span class="material-icons-outlined">shopping_cart</span></div>
+        <div class="lab">购买者</div>
+        <div class="score-ring mid">3.8</div>
+        <div class="note">大型零售商渠道控制力强，比价透明度高</div>
+      </div>
+      <div class="p5-cell">
+        <div class="ico"><span class="material-icons-outlined">swap_horiz</span></div>
+        <div class="lab">替代品</div>
+        <div class="score-ring mid">3.2</div>
+        <div class="note">智能家居生态平台（Apple/Google/小米）渐进替代</div>
+      </div>
+      <div class="p5-cell">
+        <div class="ico"><span class="material-icons-outlined">login</span></div>
+        <div class="lab">新进入者</div>
+        <div class="score-ring low">2.4</div>
+        <div class="note">重资产+品牌壁垒高，但跨界科技巨头有降维能力</div>
+      </div>
+    </div>
+    <div class="reason-note on-white" style="margin-top: 10px;">
+      <span class="material-icons-outlined">psychology</span>
+      <div><strong>最大威胁</strong>现有竞争者（4.8）— 美的+华为云+Electrolux组合对海尔 KP/VP/KA 三个画布模块形成系统性联动压力，窗口封闭在 Q3 末。</div>
+    </div>
+  </div>
+
+  <!-- ============ PESTLE HEATMAP ============ -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">public</span>PESTLE · 外部因素影响热力图</h2>
+    <div class="sub-card">
+      <div class="pestle-bar">
+        <div class="lab">Political · 政治</div>
+        <div class="bar-track"><div class="bar-fill critical" style="width:88%"></div></div>
+        <div class="score-val critical">4.4</div>
+      </div>
+      <div class="pestle-bar">
+        <div class="lab">Economic · 经济</div>
+        <div class="bar-track"><div class="bar-fill high" style="width:76%"></div></div>
+        <div class="score-val high">3.8</div>
+      </div>
+      <div class="pestle-bar">
+        <div class="lab">Social · 社会</div>
+        <div class="bar-track"><div class="bar-fill moderate" style="width:56%"></div></div>
+        <div class="score-val moderate">2.8</div>
+      </div>
+      <div class="pestle-bar">
+        <div class="lab">Technology · 技术</div>
+        <div class="bar-track"><div class="bar-fill critical" style="width:84%"></div></div>
+        <div class="score-val critical">4.2</div>
+      </div>
+      <div class="pestle-bar">
+        <div class="lab">Legal · 法律</div>
+        <div class="bar-track"><div class="bar-fill high" style="width:70%"></div></div>
+        <div class="score-val high">3.5</div>
+      </div>
+      <div class="pestle-bar">
+        <div class="lab">Environment · 环境</div>
+        <div class="bar-track"><div class="bar-fill moderate" style="width:62%"></div></div>
+        <div class="score-val moderate">3.1</div>
+      </div>
+    </div>
+    <div class="reason-note on-white" style="margin-top: 10px;">
+      <span class="material-icons-outlined">psychology</span>
+      <div><strong>关键洞察</strong>Political（4.4）+ Technology（4.2）双高 — 关税政策直接冲击北美毛利，AI技术窗口封闭压力同步收紧。两者叠加形成"成本上升 × 投资紧迫"的双重钳制。</div>
+    </div>
+  </div>
+
+  <!-- ============ SWOT / TOWS ============ -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">grid_on</span>SWOT · 四象限综合</h2>
+    <div class="swot-grid">
+      <div class="swot-tile S">
+        <div class="hd"><span class="letter">S</span>Strengths · 优势</div>
+        <ul>
+          <li><strong>S1</strong> GE Appliances 北美本地化产能，关税缓冲</li>
+          <li><strong>S2</strong> 品牌矩阵覆盖高端至大众（5大品牌）</li>
+          <li><strong>S3</strong> 欧洲 Q1 +10% 利润，区域风险对冲</li>
+          <li><strong>S4</strong> COSMOPlat 工业互联网 1000+ 协同企业</li>
+        </ul>
+      </div>
+      <div class="swot-tile W">
+        <div class="hd"><span class="letter">W</span>Weaknesses · 劣势</div>
+        <ul>
+          <li><strong>W1</strong> 北美毛利受关税持续压缩，能力重建期</li>
+          <li><strong>W2</strong> AI 平台架构未定型，落后美的 6–9 个月</li>
+          <li><strong>W3</strong> 客户关系偏交易型，CXO 绑定弱</li>
+          <li><strong>W4</strong> 跨品牌统一用户 ID 未达成</li>
+        </ul>
+      </div>
+      <div class="swot-tile O">
+        <div class="hd"><span class="letter">O</span>Opportunities · 机会</div>
+        <ul>
+          <li><strong>O1</strong> Premium Intelligence 战略创造 AI 架构选型窗口</li>
+          <li><strong>O2</strong> 北美供应链重塑 → tariff 情景 + AI 补货场景</li>
+          <li><strong>O3</strong> Frankfurt D 股 → 欧洲合规叙事升级</li>
+          <li><strong>O4</strong> HVAC 欧洲扩张 — 能源转型 B2B 新场景</li>
+        </ul>
+      </div>
+      <div class="swot-tile T">
+        <div class="hd"><span class="letter">T</span>Threats · 威胁</div>
+        <ul>
+          <li><strong>T1</strong> 美的+华为云组合先行 AI 平台，窗口封闭</li>
+          <li><strong>T2</strong> 北美持续失血 → CFO 压缩新平台预算</li>
+          <li><strong>T3</strong> Azure 欧洲数据驻留叙事加码</li>
+          <li><strong>T4</strong> Electrolux-Midea 北美战略联盟威胁 GE 零售基础</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOWS Matrix -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">account_tree</span>TOWS · 行动矩阵</h2>
+    <div class="tows-compact">
+      <div class="tows-cell SO">
+        <div class="lab">S × O · 攻势</div>
+        <div class="body"><strong>S1×O2:</strong> 北美本地化产能作为供应链重塑信任底座，tariff-aware forecasting 落地。<br><strong>S2×O1:</strong> 品牌矩阵覆盖能力 × AI Vision 窗口，全品牌统一架构占位。</div>
+      </div>
+      <div class="tows-cell ST">
+        <div class="lab">S × T · 防守</div>
+        <div class="body"><strong>S3×T3:</strong> 欧洲利润优势 × Azure 叙事，用合规深度把竞品困在叙事层。<br><strong>S4×T1:</strong> COSMOPlat 生态优势防御平台化竞争。</div>
+      </div>
+      <div class="tows-cell WO">
+        <div class="lab">W × O · 补强</div>
+        <div class="body"><strong>W2×O1:</strong> AI 平台落后 → 利用 Premium Intelligence 窗口加速架构定义。<br><strong>W4×O1:</strong> 统一用户 ID 作为 AI 生态的前置条件纳入架构规划。</div>
+      </div>
+      <div class="tows-cell WT">
+        <div class="lab">W × T · 止损</div>
+        <div class="body"><strong>W1×T2:</strong> 北美 P&amp;L 压力 × 预算收紧 → 小规模 POC 先证 ROI，避免一次性大票决策。<br><strong>W3×T4:</strong> 加速多线程 CXO 关系建设防御联盟威胁。</div>
+      </div>
+    </div>
+    <div class="reason-note on-white" style="margin-top: 10px;">
+      <span class="material-icons-outlined">psychology</span>
+      <div><strong>推理</strong>SO/WO 推进空间最大（对应 Top 1 + Top 2 举措），ST/WT 提供防御底线。四象限均可追溯至上游 BMC/P5F/PESTLE 具体章节。</div>
+    </div>
+  </div>
+
+  <!-- ============ SOURCES ============ -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">link</span>Sources · 引用来源</h2>
+    <div class="sub-card">
+      <ol style="padding-left:20px; margin:0; font-size:12px; color:var(--muted); line-height:1.9;">
+        <li><a href="https://finimize.com/content/haier-smart-homes-profit-fell-as-us-tariffs-and-weather-hit-demand" target="_blank">Finimize · 2026-04-28 · Haier Q1 tariff + weather impact</a></li>
+        <li><a href="https://www.marketscreener.com/news/haier-smart-home-reports-q1-2026-results-ce7f59ddd98cf320" target="_blank">MarketScreener · 2026-04-27 · Q1 2026 results</a></li>
+        <li><a href="https://www.tipranks.com/news/company-announcements/haier-smart-home-launches-2026-plan-to-boost-value-global-growth-and-efficiency" target="_blank">Tipranks · 2026-04-27 · Premium Intelligence strategy launch</a></li>
+        <li><a href="https://technave.com/gadget/Haier-unveils-2026-Smart-Home-Vision-focused-on-home-appliances-with-AI-45370.html" target="_blank">Technave · Haier 2026 AI Smart Home Vision</a></li>
+        <li><a href="https://in.tradingview.com/news/urn:summary_document_report:quartr.com:3261709:0-haier-smart-home-q1-2026-saw-lower-revenue-and-profit-but-strong-growth-in-europe-and-emerging-markets-offset-north-american-weakness/" target="_blank">Quartr / TradingView · Q1 Europe + EM growth</a></li>
+        <li><a href="https://intellectia.ai/news/stock/midea-group-plans-to-invest-rmb60b-in-ai-transformation-over-next-3-yrs" target="_blank">Intellectia · Midea 60B RMB AI transformation</a></li>
+        <li><a href="https://www.prnewswire.com/news-releases/electrolux-group-accelerates-profitable-growth-strategy-through-a-partnership-with-midea-global-organization-and-footprint-optimization-and-a-fully-underwritten-rights-issue-of-approx-sek-9-billion-302752025.html" target="_blank">PRNewswire · 2026-04-23 · Electrolux × Midea partnership</a></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span class="dl">本报告综合 <strong>PESTLE</strong> · <strong>Porter's Five Forces</strong> · <strong>Business Model Canvas</strong> 三框架分析，经 SWOT/TOWS 交叉推导得出战略优先级排名</span>
+    Generated by Kiro · Business Insight · 2026-05-19
+  </div>
+
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('print') === '1') {
+    window.addEventListener('load', () => setTimeout(() => window.print(), 400));
+  }
+</script>
+</body>
+</html>

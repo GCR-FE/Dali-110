@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solutions Search · {{ customer_name }}</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+<style>
+    :root {
+        --md-sys-color-primary: #6750A4;
+        --md-sys-color-on-primary: #FFFFFF;
+        --md-sys-color-primary-container: #EADDFF;
+        --md-sys-color-on-primary-container: #21005D;
+        --md-sys-color-secondary: #625B71;
+        --md-sys-color-on-secondary: #FFFFFF;
+        --md-sys-color-secondary-container: #E8DEF8;
+        --md-sys-color-tertiary: #7D5260;
+        --md-sys-color-tertiary-container: #FFD8E4;
+        --md-sys-color-surface: #FFFBFE;
+        --md-sys-color-surface-variant: #E7E0EC;
+        --md-sys-color-on-surface: #1C1B1F;
+        --md-sys-color-on-surface-variant: #49454F;
+        --md-sys-color-outline: #79747E;
+        --md-sys-color-outline-variant: #CAC4D0;
+        --md-sys-color-surface-container-lowest: #FFFFFF;
+        --md-sys-color-surface-container-low: #F7F2FA;
+        --md-sys-color-surface-container: #F3EDF7;
+        --md-sys-color-surface-container-high: #ECE6F0;
+        --md-sys-color-surface-container-highest: #E6E0E9;
+        --md-sys-color-error: #B3261E;
+        --md-sys-color-error-container: #F9DEDC;
+        --md-sys-color-success: #386A20;
+        --md-sys-color-success-container: #C8E6C9;
+        --md-sys-color-warning: #F57F17;
+        --md-sys-color-warning-container: #FFF9C4;
+    }
+
+    * { font-family: 'Google Sans', 'Noto Sans SC', sans-serif; }
+
+    body {
+        background-color: var(--md-sys-color-surface);
+        color: var(--md-sys-color-on-surface);
+    }
+
+    .md-card {
+        background: var(--md-sys-color-surface-container-lowest);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: 28px;
+        padding: 24px;
+        transition: box-shadow 0.2s ease;
+    }
+
+    .md-card:hover {
+        box-shadow: 0 2px 6px 2px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.12);
+    }
+
+    .md-card-elevated {
+        background: var(--md-sys-color-surface-container-low);
+        border: none;
+        border-radius: 28px;
+        padding: 24px;
+        box-shadow: 0 1px 3px 1px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.12);
+        transition: box-shadow 0.2s ease;
+    }
+
+    .md-card-elevated:hover {
+        box-shadow: 0 4px 8px 3px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.12);
+    }
+
+    .md-card-filled {
+        background: var(--md-sys-color-surface-container-highest);
+        border: none;
+        border-radius: 28px;
+        padding: 24px;
+    }
+
+    .md-fab {
+        background: var(--md-sys-color-primary-container);
+        color: var(--md-sys-color-on-primary-container);
+        border-radius: 16px;
+        padding: 16px 24px;
+        font-weight: 500;
+        box-shadow: 0 4px 8px 3px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.12);
+    }
+
+    .pill-badge {
+        border-radius: 100px;
+        padding: 4px 16px;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        white-space: nowrap;
+    }
+
+    .pill-direct { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+    .pill-pattern { background: var(--md-sys-color-success-container); color: var(--md-sys-color-success); }
+    .pill-displacement { background: var(--md-sys-color-warning-container); color: var(--md-sys-color-warning); }
+    .pill-inspirational { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-secondary); }
+
+    .section-title {
+        font-size: 22px;
+        font-weight: 500;
+        color: var(--md-sys-color-on-surface);
+        letter-spacing: 0;
+        margin-bottom: 16px;
+    }
+
+    .label-large {
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.1px;
+        color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .title-medium {
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 0.15px;
+    }
+
+    .body-medium {
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: 0.25px;
+        color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .headline-small {
+        font-size: 24px;
+        font-weight: 400;
+        letter-spacing: 0;
+    }
+
+    .display-small {
+        font-size: 36px;
+        font-weight: 400;
+        letter-spacing: 0;
+    }
+
+    .match-tile {
+        background: var(--md-sys-color-surface-container-lowest);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: 20px;
+        padding: 16px;
+        border-left: 4px solid var(--md-sys-color-primary);
+        transition: box-shadow 0.2s ease;
+    }
+    .match-tile:hover {
+        box-shadow: 0 2px 6px 2px rgba(0,0,0,0.08);
+    }
+    .match-tile.pattern { border-left-color: var(--md-sys-color-success); }
+    .match-tile.displacement { border-left-color: var(--md-sys-color-warning); }
+    .match-tile.inspirational { border-left-color: var(--md-sys-color-secondary); }
+
+    .match-tile h4 a {
+        color: var(--md-sys-color-on-surface);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .match-tile h4 a:hover {
+        color: var(--md-sys-color-primary);
+        text-decoration: underline;
+    }
+
+    .next-step-strip {
+        margin-top: 16px;
+        background: var(--md-sys-color-primary-container);
+        border-radius: 16px;
+        padding: 14px 18px;
+        font-size: 13px;
+        color: var(--md-sys-color-on-primary-container);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .gap-warning {
+        background: var(--md-sys-color-warning-container);
+        color: var(--md-sys-color-on-surface);
+        border-radius: 16px;
+        padding: 14px 18px;
+        font-size: 13px;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .reason-note {
+        margin-top: 12px;
+        background: var(--md-sys-color-surface-container);
+        border-radius: 16px;
+        padding: 12px 16px;
+        font-size: 12px;
+        color: var(--md-sys-color-on-surface-variant);
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+    }
+
+    @media print {
+        body { background: white; }
+        .md-card, .md-card-elevated, .md-card-filled { box-shadow: none; border: 1px solid #e0e0e0; }
+    }
+</style>
+</head>
+<body class="min-h-screen p-6 md:p-10">
+<div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between mb-2">
+        <div>
+            <p class="label-large uppercase tracking-wider" style="color: var(--md-sys-color-primary);">Solutions Search · Solutions 搜索结果</p>
+            <h1 class="display-small mt-1">{{ customer_name }}</h1>
+            <p class="body-medium mt-1">{{ industry }} · {{ date }} · 上游：{{ upstream_source }} · Source: ./references/</p>
+        </div>
+        <div class="md-fab flex items-center gap-2">
+            <span class="material-symbols-outlined">search</span>
+            <span class="text-lg font-medium">4-step match</span>
+        </div>
+    </header>
+
+    <!-- Coverage Summary -->
+    <section class="md-card-elevated">
+        <h2 class="section-title flex items-center gap-2">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">grading</span>
+            Search Coverage · 检索覆盖
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div class="md-card-filled text-center p-5">
+                <p class="label-large">战略倡议</p>
+                <p class="title-medium mt-1" style="color: var(--md-sys-color-on-surface);">{{ coverage_summary.initiatives_count }} · Initiatives</p>
+            </div>
+            <div class="md-card-filled text-center p-5">
+                <p class="label-large">匹配文档</p>
+                <p class="title-medium mt-1" style="color: var(--md-sys-color-primary);">{{ coverage_summary.references_count }} · References</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Initiatives -->
+    {% for initiative in initiatives %}
+    <section class="md-card">
+        <h2 class="section-title flex items-center gap-2">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">flag</span>
+            Initiative {{ "%02d"|format(initiative.number) }} · {{ initiative.title }}
+        </h2>
+        <div class="flex items-center gap-3 mb-4 pb-3" style="border-bottom: 1px solid var(--md-sys-color-outline-variant);">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm" style="background: var(--md-sys-color-primary);">{{ initiative.number }}</div>
+            <div>
+                <p class="title-medium">{{ initiative.subtitle }}</p>
+                <p class="body-medium text-xs mt-0.5">潜在机会：{{ initiative.potential_opportunity }}</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for ref in initiative.references %}
+            <div class="match-tile {{ ref.match_type if ref.match_type != 'direct' else '' }}">
+                <span class="pill-badge pill-{{ ref.match_type }} mb-2"><span class="material-symbols-outlined" style="font-size:14px;">{{ ref.icon }}</span>{{ ref.match_type_label }}</span>
+                <span class="pill-badge ml-1" style="background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface-variant); font-size:10px;">{{ ref.match_strength }}</span>
+                <span class="pill-badge ml-1" style="background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface-variant); font-size:10px;">{{ ref.freshness_tier }}</span>
+                <h4 class="mt-1"><a href="{{ ref.url }}" target="_blank">{{ ref.title }}</a></h4>
+                <p class="body-medium mt-1 text-xs">{{ ref.description }}</p>
+                <div class="flex gap-2 mt-2 flex-wrap">
+                    {% for tag in ref.tags %}
+                    <span class="pill-badge" style="background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface-variant); font-size:10px;">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="next-step-strip">
+            <span class="material-symbols-outlined" style="font-size:18px;">flag</span>
+            <span class="font-bold text-xs uppercase tracking-wider mr-1">Next Step</span>
+            {{ initiative.next_step }}
+        </div>
+
+        {% if initiative.coverage_gap and initiative.coverage_gap != "none" %}
+        <div class="gap-warning">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-warning); font-size:18px;">warning_amber</span>
+            <div><strong>Coverage Gap</strong> {{ initiative.coverage_gap }}</div>
+        </div>
+        {% endif %}
+    </section>
+    {% endfor %}
+
+    <!-- Footer -->
+    <footer class="text-center py-4">
+        <p class="text-xs mt-1" style="color: var(--md-sys-color-outline);">Generated by Dali · Solutions Search · {{ date }}</p>
+    </footer>
+
+</div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('print') === '1') {
+        window.addEventListener('load', () => setTimeout(() => window.print(), 400));
+    }
+</script>
+</body>
+</html>

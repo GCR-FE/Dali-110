@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="{{ meta.lang | default('zh-CN') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opportunity Progression Report — {{ meta.opportunity_name }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            /* Material Design 3 tokens — Primary: #6750A4 (purple) */
+            --md-sys-color-primary: #6750A4;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #EADDFF;
+            --md-sys-color-on-primary-container: #21005D;
+            --md-sys-color-secondary: #625B71;
+            --md-sys-color-on-secondary: #FFFFFF;
+            --md-sys-color-secondary-container: #E8DEF8;
+            --md-sys-color-tertiary: #7D5260;
+            --md-sys-color-tertiary-container: #FFD8E4;
+            --md-sys-color-surface: #FFFBFE;
+            --md-sys-color-surface-variant: #E7E0EC;
+            --md-sys-color-on-surface: #1C1B1F;
+            --md-sys-color-on-surface-variant: #49454F;
+            --md-sys-color-outline: #79747E;
+            --md-sys-color-outline-variant: #CAC4D0;
+            --md-sys-color-surface-container-lowest: #FFFFFF;
+            --md-sys-color-surface-container-low: #F7F2FA;
+            --md-sys-color-surface-container: #F3EDF7;
+            --md-sys-color-surface-container-high: #ECE6F0;
+            --md-sys-color-surface-container-highest: #E6E0E9;
+            --md-sys-color-error: #B3261E;
+            --md-sys-color-error-container: #F9DEDC;
+            --md-sys-color-on-error-container: #410E0B;
+            --md-sys-color-warning: #8C5000;
+            --md-sys-color-warning-container: #FFDDB1;
+            --md-sys-color-on-warning-container: #2D1600;
+            --md-sys-color-success: #386A20;
+            --md-sys-color-success-container: #B7F397;
+            --md-sys-color-on-success-container: #0F2000;
+        }
+
+        /* Typography:
+           - Latin → Amazon Ember (loaded from reader's machine when available)
+           - CJK   → 思源黑体 SC (Source Han Sans SC) / Noto Sans SC (Google Fonts CDN)
+           - Silent system-default fallback when neither is available */
+        * { font-family: "Amazon Ember", "Source Han Sans SC", "Noto Sans SC",
+                         -apple-system, BlinkMacSystemFont, "PingFang SC",
+                         "Microsoft YaHei", sans-serif; }
+        body { background-color: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); }
+
+        /* --- card levels --- */
+        .md-card {
+            background: var(--md-sys-color-surface-container-lowest);
+            border: 1px solid var(--md-sys-color-outline-variant);
+            border-radius: 28px; padding: 24px;
+            transition: box-shadow 0.2s ease;
+        }
+        .md-card:hover { box-shadow: 0 2px 6px 2px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.12); }
+
+        .md-card-elevated {
+            background: var(--md-sys-color-surface-container-low);
+            border: none; border-radius: 28px; padding: 24px;
+            box-shadow: 0 1px 3px 1px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.12);
+            transition: box-shadow 0.2s ease;
+        }
+        .md-card-elevated:hover { box-shadow: 0 4px 8px 3px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.12); }
+
+        .md-card-filled {
+            background: var(--md-sys-color-surface-container-highest);
+            border: none; border-radius: 28px; padding: 24px;
+        }
+
+        .md-fab {
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            border-radius: 16px; padding: 14px 22px; font-weight: 500;
+            box-shadow: 0 4px 8px 3px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .pill-badge {
+            border-radius: 100px; padding: 4px 14px;
+            font-size: 12px; font-weight: 500; letter-spacing: 0.3px;
+            display: inline-flex; align-items: center; gap: 4px;
+            white-space: nowrap;
+        }
+
+        .stepper-line { height: 2px; flex: 1; min-width: 12px; }
+
+        .section-title {
+            font-size: 22px; font-weight: 500;
+            color: var(--md-sys-color-on-surface); margin-bottom: 16px;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .label-large {
+            font-size: 13px; font-weight: 500; letter-spacing: 0.3px;
+            color: var(--md-sys-color-on-surface-variant); text-transform: uppercase;
+        }
+        .title-medium { font-size: 16px; font-weight: 500; letter-spacing: 0.15px; }
+        .body-medium {
+            font-size: 14px; font-weight: 400; letter-spacing: 0.25px;
+            color: var(--md-sys-color-on-surface-variant); line-height: 1.6;
+        }
+        .headline-small { font-size: 22px; font-weight: 500; }
+        .display-small { font-size: 34px; font-weight: 500; letter-spacing: -0.2px; }
+
+        .score-bar {
+            width: 100%; height: 6px;
+            background: var(--md-sys-color-surface-container-high);
+            border-radius: 100px; overflow: hidden; margin-top: 8px;
+        }
+        .score-bar-fill { height: 100%; border-radius: 100px; transition: width 0.4s; }
+
+        .banner-rollback {
+            background: var(--md-sys-color-warning-container);
+            border: 1px solid var(--md-sys-color-warning);
+            border-left: 4px solid var(--md-sys-color-warning);
+            border-radius: 16px; padding: 16px 20px;
+            display: flex; gap: 12px; align-items: flex-start;
+        }
+
+        .element-card {
+            background: var(--md-sys-color-surface-container);
+            border-radius: 20px; padding: 16px 18px;
+            border: 1px solid var(--md-sys-color-outline-variant);
+        }
+        .element-card.p0 { border-left: 4px solid var(--md-sys-color-error); }
+        .element-card.p1 { border-left: 4px solid var(--md-sys-color-warning); }
+        .element-card.p2 { border-left: 4px solid var(--md-sys-color-success); }
+
+        .week-row {
+            display: flex; gap: 12px; align-items: flex-start;
+            padding: 10px 14px; background: var(--md-sys-color-surface-container);
+            border-radius: 12px; margin-top: 6px;
+        }
+        .week-chip {
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            border-radius: 8px; padding: 4px 10px;
+            font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+            flex-shrink: 0; min-width: 36px; text-align: center;
+        }
+
+        table.exit-criteria {
+            width: 100%; border-collapse: separate; border-spacing: 0 4px; font-size: 13px;
+        }
+        table.exit-criteria th {
+            text-align: left; padding: 10px 12px;
+            font-weight: 500; font-size: 12px; letter-spacing: 0.5px;
+            color: var(--md-sys-color-on-surface-variant); text-transform: uppercase;
+        }
+        table.exit-criteria td {
+            padding: 12px; background: var(--md-sys-color-surface-container); vertical-align: top;
+        }
+        table.exit-criteria tr td:first-child { border-radius: 12px 0 0 12px; }
+        table.exit-criteria tr td:last-child { border-radius: 0 12px 12px 0; }
+
+        .chain-diagram {
+            background: var(--md-sys-color-surface-container);
+            border-radius: 16px; padding: 20px;
+            font-family: 'SF Mono', 'Consolas', monospace;
+            font-size: 13px; line-height: 1.9;
+            color: var(--md-sys-color-on-surface); overflow-x: auto;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 14mm 12mm;
+            }
+
+            html, body {
+                background: white !important;
+                font-size: 13px;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* Force background colors + borders to survive Chrome's default print */
+            *, *::before, *::after {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* --- Density compaction: screen uses generous whitespace, print needs compact --- */
+            .max-w-6xl { max-width: 100% !important; }
+            .space-y-6 > * + * { margin-top: 14px !important; }
+            .md-card, .md-card-elevated { padding: 16px !important; border-radius: 18px !important; }
+            .md-card-filled { padding: 12px !important; border-radius: 16px !important; }
+            .element-card { padding: 12px !important; border-radius: 14px !important; }
+            .chain-diagram { padding: 12px !important; font-size: 11px !important; line-height: 1.55 !important; }
+            .banner-rollback { padding: 10px 14px !important; }
+            .md-fab { padding: 8px 14px !important; border-radius: 12px !important; }
+            .week-row { padding: 6px 10px !important; margin-top: 4px !important; }
+
+            /* Headline sizes scaled for paper — display-small was 34px, excessive in print */
+            .display-small { font-size: 26px !important; line-height: 1.2 !important; }
+            .headline-small { font-size: 18px !important; }
+            .section-title { font-size: 18px !important; margin-bottom: 10px !important; }
+            .title-medium { font-size: 14px !important; }
+            .body-medium { font-size: 12.5px !important; line-height: 1.5 !important; }
+            .label-large { font-size: 11px !important; }
+
+            /* Snapshot / metric grids: let every cell size to its own content */
+            .grid { gap: 8px !important; align-items: start !important; }
+            .md-card-filled.text-center { padding: 10px !important; }
+
+            /* Exit-criteria table tightening */
+            table.exit-criteria th { padding: 6px 8px !important; font-size: 10.5px !important; }
+            table.exit-criteria td { padding: 7px 8px !important; }
+            .pill-badge { padding: 2px 10px !important; font-size: 11px !important; }
+
+            /* --- Pagination rules --- */
+            section { page-break-inside: auto; }
+            h1, h2, h3, .section-title { page-break-after: avoid; break-after: avoid; }
+
+            /* Atomic units that must never split */
+            .md-card-filled,
+            .element-card,
+            .week-row,
+            .banner-rollback,
+            .chain-diagram,
+            .md-fab,
+            .pill-badge,
+            .md-stepper-row {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            /* Layer B Diagnostic cards carry long evidence + root_cause text and
+               often exceed remaining page space, causing premature page breaks.
+               Allow them to flow across pages while small Layer A summary cards
+               stay atomic via the rule above. */
+            .element-card-diagnostic { page-break-inside: auto !important; break-inside: auto !important; }
+            table.exit-criteria tr { page-break-inside: avoid; break-inside: avoid; }
+
+            /* Horizontal "metric strip" grids (3-4 colored cells in a row) are
+               visually atomic — splitting them mid-row produces orphan cells on
+               the next page. Any .grid whose immediate children are md-card-filled
+               or use the grid-cols-3/4 pattern is treated as one unit. */
+            .grid.grid-cols-1.md\:grid-cols-3,
+            .grid.grid-cols-1.md\:grid-cols-4 {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            /* Container cards allow breaks so their inner elements can flow.
+               Phase 2 card (.phase25-card) is NOT forced atomic — its full content
+               (stepper + verdict grid + rationale + blocker + targets + gaps) often
+               exceeds remaining space on page 1, which previously caused page 1 to
+               render with ~80% whitespace. Stepper atomicity is preserved at the
+               .md-stepper-row level (defined above). */
+            .md-card, .md-card-elevated, .phase25-card { page-break-inside: auto; }
+            /* :has() as progressive enhancement: stepper-bearing cards stay atomic
+               only if the stepper itself is the dominant content. Phase 2's stepper
+               is one row among many sub-blocks, so this rule no longer fires for it. */
+            .md-card-elevated:has(.md-stepper-row) > .md-stepper-row { page-break-inside: avoid; break-inside: avoid; }
+
+            /* Stepper nodes in print: slightly smaller and tighter label stack */
+            .md-stepper-row { margin-top: 10px !important; margin-bottom: 10px !important; }
+            .md-stepper-row > div[style*="min-width"] { min-width: 88px !important; }
+            .md-stepper-row .w-10.h-10 { width: 30px !important; height: 30px !important; }
+
+            /* Typography — avoid single-line orphans/widows */
+            p, li { orphans: 3; widows: 3; }
+
+            /* Hide interactive hover effects */
+            .md-card:hover, .md-card-elevated:hover { box-shadow: none !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-10">
+<div class="max-w-6xl mx-auto space-y-6">
+
+    {# ============================== HEADER ============================== #}
+    <header class="flex items-center justify-between mb-2 flex-wrap gap-4">
+        <div>
+            <p class="label-large" style="color: var(--md-sys-color-primary);">OPPORTUNITY PROGRESSION REPORT</p>
+            <h1 class="display-small mt-1">{{ meta.opportunity_name }}</h1>
+            <p class="body-medium mt-1">
+                {{ meta.customer }}{% if meta.industry %} · {{ meta.industry }}{% endif %} ·
+                {{ meta.tier }} Opportunity · {{ meta.framework | default('MEDDPICC') }}
+            </p>
+        </div>
+        {% if meta.arr %}
+        <div class="md-fab flex items-center gap-2">
+            <span class="material-symbols-outlined">attach_money</span>
+            <span class="text-lg font-medium">{{ meta.arr }}</span>
+        </div>
+        {% endif %}
+    </header>
+
+    {# ============================== ROLLBACK BANNER (conditional) ============================== #}
+    {% if rollback_banner and rollback_banner.show %}
+    <div class="banner-rollback">
+        <span class="material-symbols-outlined" style="color: var(--md-sys-color-warning);">warning</span>
+        <div>
+            <p class="title-medium" style="color: var(--md-sys-color-on-warning-container);">
+                🔴 建议回退到 <strong>{{ rollback_banner.target_stage }}</strong>
+            </p>
+            <p class="body-medium mt-1" style="color: var(--md-sys-color-on-warning-container);">
+                {{ rollback_banner.reason }}
+            </p>
+        </div>
+    </div>
+    {% endif %}
+
+    {# ============================== PHASE 2 ============================== #}
+    {% if phase2 %}
+    <section class="md-card-elevated phase25-card">
+        <h2 class="section-title">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">dashboard</span>
+            Phase 2 · Deal Assessment
+        </h2>
+
+        {# --- verdict snapshot row --- #}
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-2">
+            <div class="md-card-filled text-center p-5">
+                <p class="label-large">Verdict</p>
+                <p class="title-medium mt-2" style="color: var(--md-sys-color-{{ phase2.verdict_color | default('primary') }});">{{ phase2.verdict | default(phase2.health) }}</p>
+            </div>
+            <div class="md-card-filled text-center p-5">
+                <p class="label-large">Total Score</p>
+                <p class="title-medium mt-2">{{ phase2.total }}</p>
+            </div>
+            <div class="md-card-filled text-center p-5">
+                <p class="label-large">Current Stage</p>
+                <p class="title-medium mt-2" style="color: var(--md-sys-color-primary);">{{ phase2.stage }}</p>
+            </div>
+            <div class="md-card-filled text-center p-5">
+                <p class="label-large">Classification</p>
+                <p class="title-medium mt-2">{{ phase2.classification }}</p>
+            </div>
+        </div>
+
+        {# --- stage stepper (rendered when phase2.stepper present) --- #}
+        {% if phase2.stepper %}
+        <div class="md-stepper-row flex items-center justify-between mt-6 mb-4 px-1 overflow-x-auto">
+            {% for node in phase2.stepper %}
+            <div class="flex flex-col items-center" style="min-width: 110px;">
+                {% if node.state == 'rollback' %}
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-medium"
+                     style="background: var(--md-sys-color-primary-container); border: 3px dashed var(--md-sys-color-primary); color: var(--md-sys-color-primary);">
+                    <span class="material-symbols-outlined text-base">undo</span>
+                </div>
+                {% elif node.state == 'current' %}
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-medium text-white"
+                     style="background: var(--md-sys-color-primary);">
+                    <span class="material-symbols-outlined text-base">location_on</span>
+                </div>
+                {% elif node.state == 'done' %}
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-medium"
+                     style="background: var(--md-sys-color-success);">
+                    <span class="material-symbols-outlined text-xl">check</span>
+                </div>
+                {% else %}
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-medium"
+                     style="border: 2px solid var(--md-sys-color-outline); background: transparent; color: var(--md-sys-color-outline);">
+                    <span class="text-sm">{{ loop.index }}</span>
+                </div>
+                {% endif %}
+                <p class="text-xs mt-2 text-center font-medium"
+                   style="color: {% if node.state in ['current','rollback','done'] %}var(--md-sys-color-primary){% else %}var(--md-sys-color-outline){% endif %};">
+                    {{ node.name }}
+                </p>
+                <p class="text-[11px] text-center" style="color: var(--md-sys-color-on-surface-variant);">{{ node.sublabel }}</p>
+            </div>
+            {% if not loop.last %}
+            <div class="stepper-line"
+                 style="background: {% if phase2.stepper[loop.index0 + 1].state in ['current','done','rollback'] %}var(--md-sys-color-primary){% else %}var(--md-sys-color-outline-variant){% endif %};"></div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {# --- rationale (verdict explanation, comes immediately after stepper) --- #}
+        {% if phase2.rationale %}
+        <div class="mt-5 p-4 rounded-2xl" style="background: var(--md-sys-color-surface-container);">
+            <p class="label-large mb-2">为什么这个判断</p>
+            {% for para in phase2.rationale %}
+            <p class="body-medium {% if not loop.first %}mt-2{% endif %}">{{ para | safe }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {# --- 行动焦点: primary blocker + immediate action paired in one card --- #}
+        {% if phase2.primary_blocker or phase2.immediate_action %}
+        <div class="mt-4 rounded-2xl overflow-hidden" style="background: var(--md-sys-color-error-container);">
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                {# left half: primary blocker #}
+                {% if phase2.primary_blocker %}
+                <div class="p-5" style="background: var(--md-sys-color-error-container);">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined" style="color: var(--md-sys-color-error);">block</span>
+                        <span class="label-large" style="color: var(--md-sys-color-error);">关键阻塞 · Primary Blocker</span>
+                    </div>
+                    <p class="title-medium" style="color: var(--md-sys-color-on-error-container);">{{ phase2.primary_blocker.element }} · {{ phase2.primary_blocker.score_pct }}</p>
+                    <p class="body-medium mt-2" style="color: var(--md-sys-color-on-error-container);">
+                        {{ phase2.primary_blocker.rationale }}
+                    </p>
+                </div>
+                {% endif %}
+                {# right half: immediate action — same card, primary container background to signal "the answer" #}
+                {% if phase2.immediate_action %}
+                <div class="p-5" style="background: var(--md-sys-color-primary-container); border-left: 1px solid var(--md-sys-color-outline-variant);">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">rocket_launch</span>
+                        <span class="label-large" style="color: var(--md-sys-color-primary);">本周行动 · Immediate Action</span>
+                    </div>
+                    <p class="body-medium" style="color: var(--md-sys-color-on-primary-container);">
+                        {{ phase2.immediate_action }}
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        {# --- progression gate gaps (only when failed) --- #}
+        {% if phase2.progression_gaps %}
+        <div class="mt-4 p-5 rounded-2xl" style="background: var(--md-sys-color-warning-container);">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined" style="color: var(--md-sys-color-warning);">trending_up</span>
+                <span class="label-large" style="color: var(--md-sys-color-warning);">进下一阶段（{{ phase2.progression_gaps.target_stage }}）还需要</span>
+            </div>
+            <ul class="space-y-1 body-medium" style="color: var(--md-sys-color-on-warning-container);">
+                {% for gap in phase2.progression_gaps['items'] %}
+                <li class="flex items-start gap-2">
+                    <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-warning);">arrow_right</span>
+                    {{ gap }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {# --- 30-day targets --- #}
+        {% if phase2.targets %}
+        <div class="mt-4 md-card-filled p-5">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">flag</span>
+                <span class="label-large" style="color: var(--md-sys-color-primary);">30 天目标 · 30-Day Targets</span>
+            </div>
+            <ul class="space-y-2 body-medium" style="color: var(--md-sys-color-on-surface);">
+                {% for t in phase2.targets %}
+                <li class="flex items-start gap-2">
+                    <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-primary);">arrow_right</span>
+                    {{ t.element }} ≥ {{ t.threshold }} · {{ t.text }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </section>
+    {% endif %}
+
+    {# ============================== PHASE 3 ============================== #}
+    {% if phase3 %}
+    <section class="md-card">
+        <h2 class="section-title">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">fact_check</span>
+            Phase 3 · Exit Criteria & Sales Stage Assessment
+        </h2>
+
+        {% if phase3.stage_aggregates %}
+        <div class="grid grid-cols-1 md:grid-cols-{{ phase3.stage_aggregates | length }} gap-4 mt-2">
+            {% for sa in phase3.stage_aggregates %}
+            <div class="md-card-filled p-5">
+                <div class="flex justify-between items-center">
+                    <p class="title-medium">{{ sa.name }}{% if sa.is_current %} <span class="text-xs" style="color: var(--md-sys-color-primary);">· current</span>{% endif %}</p>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-{{ sa.color }}-container); color: var(--md-sys-color-on-{{ sa.color }}-container);">{{ sa.pct }}%</span>
+                </div>
+                <div class="score-bar"><div class="score-bar-fill" style="width:{{ sa.pct }}%; background: var(--md-sys-color-{{ sa.color }});"></div></div>
+                <p class="body-medium mt-2">{{ sa.count }} exit criteria · 聚合完成度 {{ sa.pct }}%</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if phase3.rows %}
+        <div class="mt-5 overflow-x-auto">
+            <table class="exit-criteria">
+                <thead>
+                    <tr>
+                        <th>#</th><th>Stage</th><th>Exit Criterion</th><th>Completion %</th><th>Mapped Element</th><th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in phase3.rows %}
+                    <tr>
+                        <td>{{ r.num }}</td>
+                        <td>{{ r.stage }}</td>
+                        <td>{{ r.criterion }}</td>
+                        <td>{{ r.completion_pct }}%</td>
+                        <td>{{ r.element_label }} ({{ r.element_pct }}%)</td>
+                        <td>
+                            <span class="pill-badge"
+                                  style="background: var(--md-sys-color-{{ r.status_color }}-container); color: var(--md-sys-color-on-{{ r.status_color }}-container);">
+                                {{ r.status_icon }} {{ r.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        {% if phase3.risks %}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
+            {% for rk in phase3.risks %}
+            <div class="p-4 rounded-2xl"
+                 style="background: var(--md-sys-color-{{ rk.bg_color }}-container);">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="pill-badge" style="background: var(--md-sys-color-{{ rk.bg_color }}); color: var(--md-sys-color-on-primary);">{{ rk.kind }}</span>
+                </div>
+                <p class="body-medium" style="color: var(--md-sys-color-on-{{ rk.bg_color }}-container);">{{ rk.text }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </section>
+    {% endif %}
+
+    {# ============================== PHASE 4 ============================== #}
+    {% if phase4 and phase4.show %}
+    <section class="md-card">
+        <h2 class="section-title">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">insights</span>
+            Phase 4 · Market & Competitive Intelligence
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+            <div class="md-card-filled p-5">
+                <p class="label-large" style="color: var(--md-sys-color-primary);">1 · 客户当前云与 GenAI 栈</p>
+                <ul class="space-y-2 mt-3 body-medium" style="color: var(--md-sys-color-on-surface);">
+                    {% for item in phase4.current_stack %}
+                    <li class="flex gap-2">
+                        <span class="material-symbols-outlined text-base" style="color: var(--md-sys-color-primary);">{{ item.icon | default('cloud') }}</span>
+                        {{ item.text }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="md-card-filled p-5">
+                <p class="label-large" style="color: var(--md-sys-color-primary);">2 · 行业采购行为</p>
+                <ul class="space-y-2 mt-3 body-medium" style="color: var(--md-sys-color-on-surface);">
+                    <li><strong>决策因素:</strong> {{ phase4.buying_behavior.factors }}</li>
+                    <li><strong>采购痛点:</strong> {{ phase4.buying_behavior.painpoints }}</li>
+                    <li><strong>采购周期:</strong> {{ phase4.buying_behavior.cycle }}</li>
+                    <li><strong>技术考虑:</strong> {{ phase4.buying_behavior.tech }}</li>
+                </ul>
+            </div>
+            <div class="md-card-filled p-5">
+                <p class="label-large" style="color: var(--md-sys-color-primary);">3 · 同行业参考客户</p>
+                <ul class="space-y-2 mt-3 body-medium" style="color: var(--md-sys-color-on-surface);">
+                    {% for ref in phase4.references %}
+                    <li class="flex gap-2">
+                        <span class="material-symbols-outlined text-base" style="color: var(--md-sys-color-tertiary);">star</span>
+                        {{ ref }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        {% if phase4.competitors %}
+        <div class="mt-5">
+            <p class="label-large mb-3">Competitive Landscape · via competitive-intelligence skill</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {% for c in phase4.competitors %}
+                <div class="p-4 rounded-2xl border"
+                     style="background: var(--md-sys-color-surface-container-high); border-color: var(--md-sys-color-outline-variant);">
+                    <div class="flex items-center justify-between">
+                        <p class="title-medium">{{ c.name }}</p>
+                        <span class="pill-badge"
+                              style="background: var(--md-sys-color-{{ c.threat_color }}-container); color: var(--md-sys-color-on-{{ c.threat_color }}-container);">
+                            {{ c.threat_level }}
+                        </span>
+                    </div>
+                    <p class="body-medium mt-2">{{ c.desc }}</p>
+                    <p class="body-medium mt-2"><strong>AWS 差异:</strong> {{ c.aws_diff }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <p class="body-medium mt-4 italic">Source: account-context skill + solutions-search skill + competitive-intelligence skill.</p>
+    </section>
+    {% endif %}
+
+    {# ============================== PHASE 5 ============================== #}
+    {% if phase5 %}
+    <section class="md-card">
+        <h2 class="section-title">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">analytics</span>
+            Phase 5 · Element Gap Analysis
+        </h2>
+
+        <p class="label-large mb-3">Layer A · Element Summary</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            {% for el in phase5.elements %}
+            <div class="element-card {{ el.priority | lower }}">
+                <div class="flex justify-between items-baseline">
+                    <p class="title-medium">{{ el.code }}</p>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-{{ el.priority_color }}); color: var(--md-sys-color-on-primary);">{{ el.priority }}</span>
+                </div>
+                <p class="body-medium">{{ el.name }}</p>
+                <p class="headline-small mt-1" style="color: var(--md-sys-color-{{ el.score_color }});">{{ el.score_pct }}%</p>
+                <div class="score-bar"><div class="score-bar-fill" style="width:{{ el.score_pct }}%; background: var(--md-sys-color-{{ el.score_color }});"></div></div>
+                <p class="text-[12px] mt-2" style="color: var(--md-sys-color-on-surface-variant);">{{ el.relationship_note }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% set has_layer_b = phase5.elements | selectattr('layer_b_card') | list | length > 0 %}
+        {% if has_layer_b %}
+        <p class="label-large mt-6 mb-3">Layer B · Diagnostic Cards</p>
+        <div class="space-y-3">
+            {% for el in phase5.elements if el.layer_b_card %}
+            <div class="element-card element-card-diagnostic {{ el.priority | lower }}">
+                <p class="title-medium">{{ el.code }} — {{ el.name }} · {{ el.score_pct }}%</p>
+                {% if el.layer_b_card.evidence %}
+                <p class="body-medium italic mt-2">Diagnostic Evidence: {{ el.layer_b_card.evidence }}</p>
+                {% endif %}
+                <p class="body-medium mt-2" style="color: var(--md-sys-color-on-surface);">
+                    <strong>Root Cause:</strong> {{ el.layer_b_card.root_cause }}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="body-medium mt-6">All in-scope elements at P2 — no active diagnostic cards.</p>
+        {% endif %}
+    </section>
+
+    {# ---- Stakeholder Profiling ---- #}
+    {% if phase5.stakeholders %}
+    <section class="md-card">
+        <h2 class="section-title">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">groups</span>
+            Stakeholder Profiling
+        </h2>
+        {% if phase5.stakeholder_source %}
+        <p class="label-large mb-2">{{ phase5.stakeholder_source }}</p>
+        {% endif %}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
+            {% for sh in phase5.stakeholders %}
+            <div class="md-card-filled p-5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="title-medium">{{ sh.name }}</p>
+                        <p class="body-medium">{{ sh.role }}</p>
+                    </div>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-{{ sh.tag_bg }}); color: var(--md-sys-color-{{ sh.tag_fg }});">{{ sh.tag }}</span>
+                </div>
+                <p class="body-medium mt-3">{{ sh.desc }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if phase5.cxo_overlay %}
+        <div class="mt-5 p-5 rounded-2xl" style="background: var(--md-sys-color-primary-container);">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined" style="color: var(--md-sys-color-on-primary-container);">person</span>
+                <p class="label-large" style="color: var(--md-sys-color-on-primary-container);">CxO Persona Overlay · {{ phase5.cxo_overlay.title }}</p>
+            </div>
+            <p class="body-medium" style="color: var(--md-sys-color-on-primary-container);">{{ phase5.cxo_overlay.text }}</p>
+        </div>
+        {% endif %}
+    </section>
+    {% endif %}
+
+    {# ---- Verification Questions ---- #}
+    {% if phase5.questions %}
+    <section class="md-card">
+        <h2 class="section-title">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">forum</span>
+            Customer Verification Questions
+        </h2>
+
+        {% if phase5.questions.persona_traits %}
+        <div class="p-4 rounded-2xl mb-4" style="background: var(--md-sys-color-surface-container);">
+            <p class="label-large mb-2">Persona Traits Applied</p>
+            <ul class="space-y-1 body-medium" style="color: var(--md-sys-color-on-surface);">
+                {% for t in phase5.questions.persona_traits %}
+                <li>{{ loop.index }}. {{ t }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% for block in phase5.questions.by_element %}
+        <div class="mb-4">
+            <p class="title-medium mb-2">
+                {{ block.element }}
+                <span class="pill-badge" style="background: var(--md-sys-color-{{ block.priority_color }}); color: var(--md-sys-color-on-primary);">{{ block.priority }}</span>
+            </p>
+            {% for q in block['items'] %}
+            <div class="p-4 rounded-2xl {% if not loop.first %}mt-2{% endif %}" style="background: var(--md-sys-color-surface-container);">
+                <p class="body-medium" style="color: var(--md-sys-color-on-surface);">
+                    <strong>{% if q.label %}{{ q.label }}:{% else %}主问题 {{ loop.index }}:{% endif %}</strong> "{{ q.prompt }}"
+                </p>
+                {% if q.purpose %}<p class="body-medium mt-2"><strong>Purpose:</strong> {{ q.purpose }}</p>{% endif %}
+                {% if q.insights %}<p class="body-medium mt-1"><strong>Expected insights:</strong> {{ q.insights }}</p>{% endif %}
+                {% if q.followup %}<p class="body-medium mt-1"><strong>Follow-up:</strong> "{{ q.followup }}"</p>{% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+    {% endif %}
+
+    {# ============================== PHASE 6 ============================== #}
+    {% if phase6 %}
+    <section class="md-card-elevated" style="border-left: 4px solid var(--md-sys-color-primary);">
+        <h2 class="section-title">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">flag</span>
+            Phase 6 · Action Plan
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+            <div class="md-card-filled p-5">
+                <p class="label-large">Score</p>
+                <p class="title-medium mt-1">{{ phase6.score }}</p>
+            </div>
+            <div class="md-card-filled p-5">
+                <p class="label-large">Current Stage</p>
+                <p class="title-medium mt-1">
+                    {{ phase6.stage }}{% if phase6.stage_note %} · <span style="color: var(--md-sys-color-warning);">{{ phase6.stage_note }}</span>{% endif %}
+                </p>
+            </div>
+            <div class="md-card-filled p-5">
+                <p class="label-large">{{ phase6.stage }} Completion</p>
+                <p class="title-medium mt-1">{{ phase6.completion_pct }}%</p>
+            </div>
+        </div>
+
+        {% if phase6.context %}
+        <div class="mt-4 p-4 rounded-2xl" style="background: var(--md-sys-color-surface-container);">
+            <p class="label-large mb-2">Context · 未完成出口标准</p>
+            <ul class="space-y-1 body-medium" style="color: var(--md-sys-color-on-surface);">
+                {% for c in phase6.context %}
+                <li>• {{ c | safe }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {# Section 2 — Winning Strategies (one-liner overview, no nested weeks) #}
+        {% if phase6.strategies %}
+        <p class="label-large mt-5 mb-2">Winning Strategies · 战略概览</p>
+        <div class="space-y-2">
+            {% for s in phase6.strategies %}
+            <div class="p-4 rounded-2xl"
+                 style="background: var(--md-sys-color-{% if loop.first %}primary-container{% else %}surface-container-high{% endif %});">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                    <p class="title-medium" style="color: var(--md-sys-color-{% if loop.first %}on-primary-container{% else %}on-surface{% endif %});">
+                        <strong>{{ s.id | default('S' + loop.index | string) }}</strong> · {{ s.title }}{% if s.target %} · <span style="color: var(--md-sys-color-primary);">{{ s.target }}</span>{% endif %}
+                    </p>
+                    {% if s.tag %}
+                    <span class="pill-badge" style="background: var(--md-sys-color-primary); color: white;">{{ s.tag }}</span>
+                    {% endif %}
+                </div>
+                <p class="body-medium mt-1" style="color: var(--md-sys-color-{% if loop.first %}on-primary-container{% else %}on-surface-variant{% endif %});">
+                    <em>{{ s.rationale }}</em>
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {# Section 3 — Weekly Plan (action-first, calendar-event de-duplicated) #}
+        {% if phase6.weekly_actions %}
+        <p class="label-large mt-5 mb-2">Weekly Plan · 执行视角</p>
+        <div class="space-y-3">
+            {% for w in phase6.weekly_actions %}
+            <div class="p-4 rounded-2xl" style="background: var(--md-sys-color-surface-container);">
+                <p class="title-medium mb-2" style="color: var(--md-sys-color-on-surface);">
+                    <strong>{{ w.week }}</strong>{% if w.label %} <span style="color: var(--md-sys-color-on-surface-variant); font-size: 13px;">· {{ w.label }}</span>{% endif %}
+                </p>
+                <ul class="space-y-1 body-medium" style="color: var(--md-sys-color-on-surface);">
+                    {% for a in w.actions %}
+                    <li class="flex items-start gap-2">
+                        <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-primary);">arrow_right</span>
+                        <span>{{ a.description }}</span>
+                        {% if a.strategy_tags %}
+                        <span class="ml-auto pill-badge" style="background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container);">{{ a.strategy_tags | join(' · ') }}</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+        {% if phase6.horizon_extension_reason %}
+        <p class="body-medium mt-3 italic" style="color: var(--md-sys-color-on-surface-variant);">
+            Horizon extended to {{ phase6.weekly_horizon | default(6) }} weeks because {{ phase6.horizon_extension_reason }}
+        </p>
+        {% endif %}
+        {% endif %}
+
+        {% if phase6.metrics %}
+        <div class="mt-5">
+            <p class="label-large mb-2">Key Success Metrics · 30-day targets</p>
+            <div class="space-y-2">
+                {% for m in phase6.metrics %}
+                <div class="flex items-center gap-3 p-3 rounded-xl" style="background: var(--md-sys-color-surface-container);">
+                    <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">task_alt</span>
+                    <span class="body-medium" style="color: var(--md-sys-color-on-surface);">{{ m.text }}</span>
+                    <span class="ml-auto pill-badge" style="background: var(--md-sys-color-primary); color: white;">{{ m.strategy_tag }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </section>
+    {% endif %}
+
+    {# ============================== FOOTER ============================== #}
+    <footer class="text-center py-8">
+        <p class="body-medium">Generated by Opportunity Progression Skill · Dali Agent</p>
+        <p class="body-medium mt-1" style="font-size: 12px;">Report Date: {{ meta.report_date }}</p>
+    </footer>
+
+</div>
+</body>
+</html>

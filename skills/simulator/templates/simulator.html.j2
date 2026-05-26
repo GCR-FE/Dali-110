@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ contact_name }} · 预演复盘 · Rehearsal Notes</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Text:wght@400;500;700&family=Roboto:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        'md-primary':           '#6750A4',
+        'md-primary-container': '#EADDFF',
+        'md-on-primary':        '#FFFFFF',
+        'md-on-primary-container': '#21005D',
+        'md-secondary':         '#625B71',
+        'md-secondary-container': '#E8DEF8',
+        'md-tertiary':          '#7D5260',
+        'md-tertiary-container': '#FFD8E4',
+        'md-surface':           '#FEF7FF',
+        'md-surface-container': '#F3EDF7',
+        'md-surface-container-high': '#ECE6F0',
+        'md-on-surface':        '#1D1B20',
+        'md-on-surface-variant': '#49454F',
+        'md-outline':           '#79747E',
+        'md-outline-variant':   '#CAC4D0',
+        'md-success':           '#2E7D32',
+        'md-success-container': '#C8E6C9',
+        'md-warning':           '#F57C00',
+        'md-warning-container': '#FFE0B2',
+        'md-error':             '#B3261E',
+        'md-error-container':   '#F9DEDC',
+      },
+      borderRadius: {
+        'md-xl': '28px',
+        'md-lg': '16px',
+        'md-md': '12px',
+        'md-sm': '8px',
+      },
+      fontFamily: {
+        'display': ['"Google Sans Text"', '"Noto Sans SC"', 'Roboto', 'sans-serif'],
+        'body': ['"Google Sans Text"', '"Noto Sans SC"', 'Roboto', 'sans-serif'],
+      },
+    }
+  }
+}
+</script>
+
+<style>
+@page {
+  size: A4;
+  margin: 1.8cm;
+  @bottom-center {
+    content: counter(page) " / " counter(pages);
+    font-size: 9pt;
+    color: #79747E;
+  }
+}
+body {
+  font-family: "Google Sans Text", "Noto Sans SC", "PingFang SC", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
+}
+.section-body { font-size: 15px; line-height: 1.85; color: #1D1B20; }
+.section-body p { margin: 0.6em 0; }
+.section-body strong { color: #21005D; font-weight: 700; }
+.section-body ul, .section-body ol { margin: 0.7em 0; padding-left: 1.4em; }
+.section-body li { margin: 0.35em 0; }
+.section-body li::marker { color: #6750A4; }
+.section-body blockquote { border-left: 4px solid #6750A4; background: #FEF7FF; padding: 0.6em 1em; margin: 0.8em 0; color: #49454F; border-radius: 0 12px 12px 0; }
+
+.takeaway-card {
+  background: #FEF7FF;
+  border: 1px solid #CAC4D0;
+  border-left: 4px solid #6750A4;
+  border-radius: 12px;
+  padding: 1em 1.2em;
+}
+.takeaway-card .label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6750A4;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5em;
+}
+.takeaway-card .text {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: #1D1B20;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35em 0.9em;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid;
+}
+.tag-chip-up { background: #C8E6C9; color: #2E7D32; border-color: #2E7D32; }
+.tag-chip-flat { background: #FFE0B2; color: #F57C00; border-color: #F57C00; }
+.tag-chip-down { background: #F9DEDC; color: #B3261E; border-color: #B3261E; }
+.tag-chip-fid-high { background: #C8E6C9; color: #2E7D32; border-color: #2E7D32; }
+.tag-chip-fid-medium { background: #FFE0B2; color: #F57C00; border-color: #F57C00; }
+.tag-chip-fid-low { background: #F9DEDC; color: #B3261E; border-color: #B3261E; }
+
+@media print {
+  body { background: white !important; }
+  .hover\:shadow-md:hover { box-shadow: none !important; }
+  section { break-inside: avoid; page-break-inside: avoid; }
+  h1, h2 { break-after: avoid; }
+  .max-w-6xl { max-width: 100% !important; }
+}
+</style>
+</head>
+
+<body class="bg-md-surface font-body text-md-on-surface antialiased">
+
+<div class="max-w-6xl mx-auto px-6 py-10">
+
+  <header class="bg-md-primary text-md-on-primary rounded-md-xl p-8 mb-6 shadow-md">
+    <div class="flex items-center justify-between mb-4 text-sm opacity-90">
+      <div>
+        <span class="px-3 py-1 rounded-full bg-white/15 font-medium">预演复盘 · Rehearsal Notes</span>
+      </div>
+      <div class="text-xs opacity-80">渲染于 {{ rendered_at }}</div>
+    </div>
+
+    <h1 class="font-display text-4xl font-bold leading-tight mb-1">{{ contact_name }}</h1>
+    <div class="text-lg opacity-90">{{ contact_title }} · {{ company }}</div>
+
+    <div class="flex flex-wrap gap-3 mt-5 text-sm">
+      <div class="bg-white/10 px-3 py-1.5 rounded-full">
+        <span>场景:{{ scenario }}</span>
+      </div>
+      <div class="bg-white/10 px-3 py-1.5 rounded-full">
+        <span>难度:{{ difficulty_label }}</span>
+      </div>
+      <div class="bg-white/10 px-3 py-1.5 rounded-full">
+        <span>预演时间:{{ rehearsal_date }}</span>
+      </div>
+      <div class="bg-white/10 px-3 py-1.5 rounded-full">
+        <span>用了 {{ rounds }} 轮</span>
+      </div>
+    </div>
+  </header>
+
+  {# ============== 0. 写在前面(减压 + 三件价值) ============== #}
+  {% if takeaways %}
+  <section class="bg-md-surface-container rounded-md-xl p-6 mb-6 border border-md-outline-variant">
+    <h2 class="font-display font-bold text-xl text-md-on-surface mb-3">写在前面</h2>
+    <p class="text-md-on-surface-variant text-sm leading-relaxed mb-5">
+      这只是一次模拟,<strong class="text-md-on-surface">不是真实拜访的结果</strong>。预演里没做好的地方,真实见面前还有时间调整。模拟的价值在"<strong class="text-md-on-surface">提前看到自己卡在哪</strong>",不在"做得好"。
+    </p>
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="takeaway-card">
+        <div class="label">提前准备</div>
+        <div class="text">{{ takeaways.preparation }}</div>
+      </div>
+      <div class="takeaway-card">
+        <div class="label">经历可能情况</div>
+        <div class="text">{{ takeaways.what_might_happen }}</div>
+      </div>
+      <div class="takeaway-card">
+        <div class="label">调整方向</div>
+        <div class="text">{{ takeaways.adjustment }}</div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  {# ============== Trust trajectory + Fidelity 状态行 ============== #}
+  <section class="bg-md-surface-container rounded-md-xl p-5 mb-6 border border-md-outline-variant">
+    <div class="flex flex-wrap items-center gap-4 text-sm">
+      <span class="font-medium text-md-on-surface-variant">关系走向:</span>
+      {% if trust_trajectory == "up" %}
+        <span class="tag-chip tag-chip-up">↑ 往前走了</span>
+      {% elif trust_trajectory == "down" %}
+        <span class="tag-chip tag-chip-down">↓ 退了</span>
+      {% else %}
+        <span class="tag-chip tag-chip-flat">→ 没动</span>
+      {% endif %}
+
+      <span class="ml-4 font-medium text-md-on-surface-variant">扮演真实度:</span>
+      {% if fidelity == "high" %}
+        <span class="tag-chip tag-chip-fid-high">高</span>
+      {% elif fidelity == "low" %}
+        <span class="tag-chip tag-chip-fid-low">低(画像不够)</span>
+      {% else %}
+        <span class="tag-chip tag-chip-fid-medium">中</span>
+      {% endif %}
+    </div>
+  </section>
+
+  {# ============== 主体 11 段(0 已渲染过,1-10 渲染) ============== #}
+  <main class="space-y-5">
+    {% for section in sections %}
+    <section id="{{ section.key }}" class="bg-md-surface-container rounded-md-xl p-6 border border-md-outline-variant transition-shadow hover:shadow-md">
+      <h2 class="font-display font-bold text-xl text-md-on-surface mb-4">{{ section.title }}</h2>
+      <div class="prose prose-md max-w-none text-md-on-surface section-body">
+        {{ section.html | safe }}
+      </div>
+    </section>
+    {% endfor %}
+  </main>
+
+  <footer class="mt-8 pt-6 border-t border-md-outline-variant text-sm text-md-on-surface-variant">
+    <div class="mb-2 italic">
+      <span>以上是基于模拟的反馈,实际拜访可能更复杂。你自己的现场感受更重要,如果有不同看法随时告诉我。</span>
+    </div>
+    <div class="font-mono text-xs opacity-70">
+      Skill: simulator · Schema: 2.0 · Visual: MD3
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

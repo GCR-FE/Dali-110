@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Competitive Intelligence · Haier vs 华为云</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* === Shared base (previously _shared.css) === */
+  :root {
+    --ink: #1a1a2e;
+    --ink-2: #30304a;
+    --muted: #6b6b85;
+    --muted-2: #a0a0b5;
+    --line: #e8e6f2;
+    --line-soft: #f3f1fa;
+    --paper: #ffffff;
+    --page-bg: #f6f4fb;
+    --accent: #6d58e4;
+    --accent-dark: #4a3bd0;
+    --accent-soft: #eceafa;
+    --accent-softer: #f4f2fc;
+    --ok: #1e8f56;
+    --ok-soft: #dff3e7;
+    --warn: #c47610;
+    --warn-soft: #fdf1dd;
+    --bad: #c53030;
+    --bad-soft: #fde4e4;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Inter", "Noto Sans SC", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 13px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .material-icons-outlined {
+    font-family: 'Material Icons Outlined';
+    font-weight: normal; font-style: normal;
+    font-size: 20px; line-height: 1;
+    letter-spacing: normal; text-transform: none;
+    display: inline-block; white-space: nowrap; word-wrap: normal; direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+  }
+  .export-bar {
+    position: sticky; top: 0; z-index: 10;
+    background: #1a1a2e; color: #fff;
+    padding: 10px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .export-bar .brand {
+    font-size: 11px; letter-spacing: 2px;
+    color: #c9c3f5; font-weight: 700; text-transform: uppercase;
+  }
+  .export-bar button {
+    background: var(--accent); color: #fff; border: 0;
+    border-radius: 6px; padding: 7px 14px;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .export-bar button:hover { background: var(--accent-dark); }
+  .sheet { max-width: 900px; margin: 28px auto 56px; padding: 0 28px; }
+  .head {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 20px; padding: 8px 8px 20px;
+  }
+  .head .kicker {
+    font-size: 11px; font-weight: 700; letter-spacing: 2.4px;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+  }
+  .head h1 {
+    font-size: 34px; font-weight: 600; letter-spacing: -0.6px;
+    margin: 0 0 6px; color: var(--ink); line-height: 1.1;
+  }
+  .head .sub { font-size: 13px; color: var(--muted); }
+  .head .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent-soft); color: var(--accent-dark);
+    padding: 10px 16px; border-radius: 10px;
+    font-size: 14px; font-weight: 700; white-space: nowrap;
+  }
+  .head .pill.bad { background: var(--bad-soft); color: var(--bad); }
+  .head .pill .material-icons-outlined { font-size: 18px; }
+  .card {
+    background: var(--accent-softer); border-radius: 14px;
+    padding: 22px 24px; margin-bottom: 14px;
+  }
+  .card h2 {
+    display: flex; align-items: center; gap: 10px;
+    margin: 0 0 16px; font-size: 16px; font-weight: 600;
+    color: var(--ink); letter-spacing: -0.2px;
+  }
+  .card h2 .material-icons-outlined {
+    font-size: 20px; color: var(--accent);
+    padding: 6px; background: var(--paper);
+    border-radius: 6px; box-shadow: 0 1px 2px rgba(26,26,46,0.05);
+  }
+  .stat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+  .stat { background: var(--paper); border-radius: 10px; padding: 14px 16px; text-align: center; }
+  .stat .lab { font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
+  .stat .val { font-size: 15px; color: var(--ink); font-weight: 600; line-height: 1.3; }
+  .stat .val.accent { color: var(--accent); }
+  .stat .val.ok { color: var(--ok); }
+  .stat .val.warn { color: var(--warn); }
+  .stat .val.bad { color: var(--bad); }
+  .sub-card { background: var(--paper); border-radius: 10px; padding: 16px 18px; }
+  .sub-card h3 { font-size: 13px; font-weight: 600; color: var(--ink); margin: 0 0 10px; }
+  .kv-grid { display: grid; gap: 10px; }
+  .kv-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .kv-tile { background: var(--paper); border-radius: 10px; padding: 14px 16px; }
+  .kv-tile .lab { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+  .kv-tile .val { font-size: 12.5px; color: var(--ink-2); line-height: 1.6; }
+  .num-list { list-style: none; padding: 0; margin: 0; }
+  .num-list li { display: flex; gap: 10px; padding: 8px 0; font-size: 12.5px; color: var(--ink-2); line-height: 1.6; }
+  .num-list li .ico { flex: 0 0 auto; font-size: 14px; color: var(--accent); font-weight: 700; }
+  .num-list li strong { color: var(--ink); }
+  .table-wrap { overflow-x: auto; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .data-table th { text-align: left; padding: 8px 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line); }
+  .data-table td { padding: 10px; color: var(--ink-2); border-bottom: 1px solid var(--line-soft); line-height: 1.5; }
+  .data-table td strong { color: var(--ink); }
+  .tag-est { font-size: 9px; font-weight: 600; letter-spacing: 0.5px; background: var(--warn-soft); color: var(--warn); padding: 2px 6px; border-radius: 999px; }
+  .reason-note { display: flex; gap: 8px; align-items: flex-start; background: var(--line-soft); border-radius: 8px; padding: 10px 14px; font-size: 11.5px; color: var(--ink-2); line-height: 1.55; }
+  .reason-note .material-icons-outlined { font-size: 16px; color: var(--accent); flex: 0 0 auto; margin-top: 1px; }
+  .foot { margin-top: 32px; padding: 16px 8px; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted); }
+  .foot .dl { display: block; margin-bottom: 4px; }
+  @media print {
+    .export-bar { display: none; }
+    body { background: #fff; }
+    .sheet { margin: 0; padding: 0 16px; }
+    .card { break-inside: avoid; }
+  }
+
+  /* === Skill-specific styles === */
+  .motion-ribbon { display: flex; gap: 8px; margin-top: 4px; }
+  .motion-opt {
+    flex: 1; padding: 10px 12px; background: var(--paper);
+    border-radius: 8px; text-align: center;
+    opacity: 0.45; border: 2px solid transparent;
+    font-size: 11px; color: var(--muted);
+  }
+  .motion-opt.selected {
+    opacity: 1; border-color: var(--accent);
+    color: var(--accent-dark); font-weight: 700;
+  }
+  .motion-opt .v {
+    display: block; font-size: 12.5px; font-weight: 700;
+    color: var(--ink); margin-bottom: 2px;
+  }
+  .motion-opt.selected .v { color: var(--accent-dark); }
+
+  .objection-row {
+    display: grid; grid-template-columns: 40% 60%; gap: 0;
+    background: var(--paper); border-radius: 10px;
+    padding: 12px 14px; margin-bottom: 8px; align-items: flex-start;
+  }
+  .objection-row .obj { border-right: 1px solid var(--line); padding-right: 12px; }
+  .objection-row .rebut { padding-left: 12px; }
+  .objection-row .lab {
+    font-size: 9.5px; letter-spacing: 1.2px; font-weight: 700;
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  .objection-row .obj .lab { color: var(--bad); }
+  .objection-row .rebut .lab { color: var(--ok); }
+  .objection-row .body { font-size: 12px; color: var(--ink-2); line-height: 1.5; }
+  .objection-row .body strong { color: var(--ink); }
+
+  .pricing-split {
+    display: grid; grid-template-columns: 1fr 30px 1fr; gap: 0;
+    background: var(--paper); border-radius: 10px; padding: 14px 16px;
+  }
+  .pricing-split .side .lab {
+    font-size: 10px; letter-spacing: 1.2px; font-weight: 700;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .pricing-split .them .lab { color: var(--bad); }
+  .pricing-split .us .lab { color: var(--accent); }
+  .pricing-split .side ul { margin: 0; padding-left: 16px; }
+  .pricing-split .side ul li {
+    font-size: 11.5px; color: var(--ink-2); margin-bottom: 4px; line-height: 1.5;
+  }
+  .pricing-split .vs {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: var(--muted-2); font-style: italic;
+  }
+  .coverage-alert {
+    background: var(--warn-soft); color: var(--warn);
+    border-radius: 8px; padding: 10px 14px;
+    margin-top: 10px; font-size: 12px;
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .coverage-alert .material-icons-outlined { color: var(--warn); font-size: 17px; }
+  .coverage-alert strong { display: block; margin-bottom: 2px; letter-spacing: 1px; font-size: 10px; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="export-bar">
+  <div class="brand">◆ COMPETITIVE INTELLIGENCE · 竞争情报 (Compete 分析结果)</div>
+  <button onclick="window.print()">
+    <span class="material-icons-outlined" style="font-size:16px;">picture_as_pdf</span>
+    Export PDF
+  </button>
+</div>
+
+<div class="sheet">
+
+  <div class="head">
+    <div>
+      <div class="kicker">COMPETITIVE INTELLIGENCE · Cloud Intel Highspot</div>
+      <h1>Haier × AWS vs 华为云</h1>
+      <div class="sub">Initiative 02 · 2026 AI Vision 全球架构 · 2026-05-12 · Source: Cloud Intelligence Highspot</div>
+    </div>
+    <div class="pill bad">
+      <span class="material-icons-outlined">sports_kabaddi</span>
+      Incumbent · 华为云
+    </div>
+  </div>
+
+  <!-- Positioning -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">center_focus_strong</span>Positioning Frame · 定位框架</h2>
+    <div class="sub-card">
+      <p style="margin:0; font-size:13.5px; line-height:1.7; color:var(--ink);">
+        针对海尔的<strong>全球 AI 平台</strong>架构选型，AWS 的差异化是 <strong>北美 + 欧洲 Region 覆盖与合规深度、IoT + Supply Chain 原生组合、同业中国家电出海案例纵深</strong>。华为云在中国市场具备成本优势与政府关系，但在北美 / 欧洲数据驻留与合规能力不及 AWS — 这是打透 GE Appliances 北美需求的唯一叙事<a href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/" target="_blank">[AWS Geos]</a>。
+      </p>
+    </div>
+  </div>
+
+  <!-- Battlecard metadata -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">description</span>Battlecard Metadata · 战场卡信息</h2>
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="lab">Last Reviewed</div>
+        <div class="val">2025-Q4</div>
+      </div>
+      <div class="stat">
+        <div class="lab">Battlecard Version</div>
+        <div class="val accent">v3.1</div>
+      </div>
+      <div class="stat">
+        <div class="lab">Reviewing Team</div>
+        <div class="val">APJ FSI &amp; CPG CI</div>
+      </div>
+      <div class="stat">
+        <div class="lab">Total CI Assets</div>
+        <div class="val">11 · Cloud Intel Highspot</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Proof points -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">verified</span>Proof Points · 证据</h2>
+    <div class="kv-grid cols-2" style="margin-bottom: 12px;">
+      <div class="kv-tile">
+        <div class="lab">Published wins (Highspot)</div>
+        <div class="val">CPG / Mfg Highspot 收录的中国家电出海同业案例 3 家（12–18 月内），每家均含 AWS Supply Chain + Bedrock 组合。</div>
+      </div>
+      <div class="kv-tile">
+        <div class="lab">Head-to-head benchmark</div>
+        <div class="val">北美 Region SLA + 数据驻留合规 delta 文件（AWS vs 华为云），2025-Q4 更新，含 SLA 对比 + FedRAMP / SOC2 / ISO 对照表。</div>
+      </div>
+      <div class="kv-tile">
+        <div class="lab">Performance benchmark</div>
+        <div class="val">Bedrock vs Pangu 推理延迟 / Tokens 对比（内部 benchmark）— 英语 / 中文双语推理均测。</div>
+      </div>
+      <div class="kv-tile">
+        <div class="lab">Regional coverage</div>
+        <div class="val">AWS 34 Regions / 110 AZ；华为云 9 Regions（国际）+ 中国大陆 5 Regions — AWS Region 覆盖 ~ 3.8×<a href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/" target="_blank">[AWS]</a><a href="https://www.huaweicloud.com/intl/en-us/product/global-network.html" target="_blank">[华为云]</a>。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recommended motion -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">gps_fixed</span>Recommended Motion · 推荐打法</h2>
+    <div class="sub-card">
+      <div class="motion-ribbon">
+        <div class="motion-opt"><span class="v">Displace</span>直取替换</div>
+        <div class="motion-opt selected"><span class="v">Coexist &amp; Erode</span>共存蚕食</div>
+        <div class="motion-opt"><span class="v">Contain</span>围堵</div>
+        <div class="motion-opt"><span class="v">Defend</span>防守</div>
+        <div class="motion-opt"><span class="v">Walk Away</span>放弃</div>
+      </div>
+      <p style="margin:10px 0 0; font-size:12px; color:var(--ink-2); line-height:1.6;">
+        华为云已在海尔国际业务架构中 — 直取替换风险高。建议 <strong>Coexist &amp; Erode</strong>：先锁定 GE Appliances 北美（华为云弱势区），再用北美案例影响青岛总部的全球 AI 平台决策，3 年内完成主架构迁移。
+      </p>
+      <div class="reason-note" style="margin-top: 10px;">
+        <span class="material-icons-outlined">psychology</span>
+        <div><strong>推理</strong>Motion 选择基于：(a) 客户国际业务已运行在华为云 → 直取替换成本过高；(b) GE Appliances 北美合规需求是华为云弱势区 → 提供天然蚕食入口；(c) 3 年主架构窗口允许逐步迁移。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Objection handlers -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">forum</span>Objection Handlers · 异议处理</h2>
+
+    <div class="objection-row">
+      <div class="obj">
+        <div class="lab">对方可能抛出</div>
+        <div class="body">"我们已经在华为云上运行国际业务，再加 AWS 会增加运维复杂度。"</div>
+      </div>
+      <div class="rebut">
+        <div class="lab">AWS 回应</div>
+        <div class="body"><strong>不是替换，是分区。</strong>北美 + 欧洲数据驻留要求你们必须有当地 Region 覆盖，否则 GE Appliances CFO 过不了合规审计<a href="https://docs.aws.amazon.com/whitepapers/latest/navigating-gdpr-compliance/welcome.html" target="_blank">[AWS GDPR]</a>。用 AWS 做北美 / 欧洲 controlling plane，华为云保留中国，是 Best-of-region 不是多云复杂。</div>
+      </div>
+    </div>
+
+    <div class="objection-row">
+      <div class="obj">
+        <div class="lab">对方可能抛出</div>
+        <div class="body">"华为云的总体价格比 AWS 低。"</div>
+      </div>
+      <div class="rebut">
+        <div class="lab">AWS 回应</div>
+        <div class="body"><strong>总体价格 ≠ 总体成本。</strong>GE Appliances 合规成本 + 北美 SLA 不达标的业务损失超过 list price delta 的 3–5 倍。再看 Bedrock / Q Business 的 token-based pricing — 华为云对应服务规模不支撑跨品牌多租户隔离。</div>
+      </div>
+    </div>
+
+    <div class="objection-row">
+      <div class="obj">
+        <div class="lab">对方可能抛出</div>
+        <div class="body">"美的都在华为云上了，你们为什么能帮海尔差异化？"</div>
+      </div>
+      <div class="rebut">
+        <div class="lab">AWS 回应</div>
+        <div class="body"><strong>正因为美的在华为云，你们更需要不同的架构。</strong>同一套架构没法让海尔在 Premium Intelligence 叙事里拉开差距。AWS 的全球合规 + IoT 原生组合，是你们能跟美的区分的唯一基础。</div>
+      </div>
+    </div>
+
+    <div class="objection-row">
+      <div class="obj">
+        <div class="lab">对方可能抛出</div>
+        <div class="body">"华为在中国的政府关系更好，会不会影响业务连续性？"</div>
+      </div>
+      <div class="rebut">
+        <div class="lab">AWS 回应</div>
+        <div class="body"><strong>中国业务保留在华为云是最佳方案</strong>（我们不挑战这一点）。但海尔全球业务必须要有第二套合规深度匹配美国 / 欧盟的平台 — 这不是"更换供应商"，是"独立分区满足独立合规"。</div>
+      </div>
+    </div>
+
+    <div class="objection-row">
+      <div class="obj">
+        <div class="lab">对方可能抛出</div>
+        <div class="body">"Bedrock 的 token 价格比 Pangu 高。"</div>
+      </div>
+      <div class="rebut">
+        <div class="lab">AWS 回应</div>
+        <div class="body"><strong>Token 价格不是对比点</strong>。对比点应该是"跨语言跨国合规 Agent 能运行在哪个 Region"。Bedrock 支持 Claude / Llama / Mistral / Amazon Titan 多家模型，可以按业务场景选最优成本；Pangu 锁定单一厂商。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Honest competitor strengths -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">thumbs_up_down</span>Honest Competitor Strengths · 对手真正优势</h2>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>华为云 Strength</th><th>AWS Counter</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>中国区政府关系与 licence 优势 — 对国企 / 央企更顺畅</td><td>本次海尔是民企 + 全球业务导向，此项优势不直接适用</td><td><a href="https://www.huawei.com/en/news/" target="_blank">Huawei News</a></td></tr>
+          <tr><td>中国大陆 list price 约低 15–25% <span class="tag-est">估算</span></td><td>用 EDP + Reserved + Savings Plans 组合优化总体成本，合规溢价合理</td><td><a href="https://www.huaweicloud.com/intl/en-us/pricing/" target="_blank">华为云价格</a> / <a href="https://aws.amazon.com/cn/savingsplans/" target="_blank">AWS SP</a></td></tr>
+          <tr><td>Pangu 大模型在中文上与 Qwen / 文心性能相当</td><td>Bedrock 多模型灵活切换 + GenAI Lens 企业化部署</td><td><a href="https://www.huaweicloud.com/intl/en-us/product/pangu-large-models.html" target="_blank">Pangu 模型</a></td></tr>
+          <tr><td>昇腾 AI 芯片生态（芯片自主）</td><td>Trainium / Inferentia 对标，Graviton + NVIDIA H200 组合覆盖更广场景</td><td><a href="https://e.huawei.com/en/products/computing/ascend" target="_blank">昇腾</a> / <a href="https://aws.amazon.com/machine-learning/trainium/" target="_blank">Trainium</a></td></tr>
+          <tr><td>ModelArts 数据训练工作流完整</td><td>SageMaker + Bedrock 组合深度 + 企业级多租户隔离</td><td><a href="https://www.huaweicloud.com/intl/en-us/product/modelarts.html" target="_blank">ModelArts</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Pricing combat -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">attach_money</span>Pricing Combat · 价格对抗</h2>
+    <div class="pricing-split">
+      <div class="side them">
+        <div class="lab">华为云报价陷阱</div>
+        <ul>
+          <li>List price 看似低 20–30%，但数据出境传输费用另算</li>
+          <li>国际 Region 覆盖浅，SLA 违约补偿薄</li>
+          <li>Bedrock 对应服务按包年，灵活度低</li>
+          <li>长期锁定：3–5 年 committed use 才给最低价</li>
+          <li>"token 价格"展示具有误导性 — 不含数据 egress / 合规认证费</li>
+        </ul>
+      </div>
+      <div class="vs">VS</div>
+      <div class="side us">
+        <div class="lab">AWS Counter</div>
+        <ul>
+          <li>Enterprise Discount Program (EDP) 适配跨 Region 全球架构</li>
+          <li>On-demand + Reserved + Savings Plans 组合给 CFO 灵活度</li>
+          <li>Bedrock Token-based pricing 按实际使用付费</li>
+          <li>12-month POC-first framing，降低初次决策风险</li>
+          <li>AWS Marketplace Private Offers + BYOL 支持</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Architecture & benchmark guidance -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">architecture</span>Architecture &amp; Benchmark Guidance · 架构与基准测试指引</h2>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Benchmark</th><th>Recommendation · 推荐配置</th><th>Expected Delta</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>跨品牌 RAG QA 精度</td><td>Bedrock Claude 3.5 + Titan Embeddings vs Pangu 3.5 + Pangu Embed</td><td>AWS +8–12% accuracy (multilingual) <span class="tag-est">估算</span></td><td><a href="https://aws.amazon.com/bedrock/claude/" target="_blank">Bedrock Claude</a> / <a href="https://www.huaweicloud.com/intl/en-us/product/pangu-large-models.html" target="_blank">Pangu</a></td></tr>
+          <tr><td>北美 Region 推理延迟</td><td>us-east-1 p95 vs 华为云 LA 节点 p95</td><td>AWS −60–80 ms <span class="tag-est">估算 · 需现场 benchmark</span></td><td><a href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/" target="_blank">AWS Geos</a></td></tr>
+          <tr><td>跨 Region 容灾 RPO</td><td>Global Tables + Aurora Global DB vs 华为云 DRS</td><td>AWS &lt; 1s RPO; 华为云 ~ 3–5s <span class="tag-est">估算</span></td><td><a href="https://aws.amazon.com/dynamodb/global-tables/" target="_blank">DDB Global Tables</a></td></tr>
+          <tr><td>合规认证覆盖</td><td>FedRAMP / HIPAA / SOC2 / PCI / ISO 全合规</td><td>华为云 US Region 缺 FedRAMP High</td><td><a href="https://aws.amazon.com/compliance/programs/" target="_blank">AWS Compliance</a></td></tr>
+          <tr><td>存储成本 (Hot + Cold)</td><td>S3 Intelligent Tiering + Glacier Deep Archive</td><td>长期归档成本 AWS −30–40% <span class="tag-est">估算</span></td><td><a href="https://aws.amazon.com/s3/storage-classes/intelligent-tiering/" target="_blank">S3 Intelligent</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Watch-outs -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">report_problem</span>Watch-outs &amp; Traps · 风险陷阱</h2>
+    <ul class="num-list">
+      <li><span class="ico">①</span><div><strong>不羞辱华为云</strong> — 正面否定中国技术会输掉房间。永远站在"分区"角度谈。</div></li>
+      <li><span class="ico">②</span><div><strong>不提 Pangu 模型中文弱</strong> — 数据未必支撑，容易被反推；改谈"多模型灵活性"。</div></li>
+      <li><span class="ico">③</span><div><strong>小心"我们数据不能出境"</strong> — 需立刻切换到"AWS 中国大陆同步部署 Bedrock"话术。</div></li>
+      <li><span class="ico">④</span><div><strong>避免只谈技术</strong> — CFO 关心合规损失成本，SA 必须准备 $ 数据。</div></li>
+    </ul>
+  </div>
+
+  <!-- Seller takeaways -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">psychology_alt</span>Seller Takeaways · 会前记忆点</h2>
+    <ul class="num-list">
+      <li><span class="ico">①</span><div>"Best-of-region 不是多云" — 把 AWS 定位为北美 / 欧洲分区，不与华为云正面冲突。</div></li>
+      <li><span class="ico">②</span><div>"List price ≠ 总体成本" — CFO 话题永远用 $ 合规损失 + 业务中断对比。</div></li>
+      <li><span class="ico">③</span><div>"海尔要跟美的不一样" — 不提美的名字，让客户自己联想。</div></li>
+      <li><span class="ico">④</span><div>北美先落地，再影响青岛总部 — 3 年主架构迁移路径。</div></li>
+      <li><span class="ico">⑤</span><div>Benchmark 永远以 SA 现场测试为准 — 不拿历史数字打架。</div></li>
+    </ul>
+  </div>
+
+  <!-- Coverage Honesty -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">fact_check</span>Coverage Honesty · 覆盖诚实性</h2>
+    <div class="coverage-alert">
+      <span class="material-icons-outlined">warning_amber</span>
+      <div>
+        <strong>Highspot Coverage Gaps</strong>
+        - 华为云 2026 CI Highspot 未更新（最新版本 2025-Q4）— 若客户引用 2026 新数据，请当场说明以防过时误导
+        <br>- Haier × 华为云的具体 2026 合同条款 Highspot 不含 — 需要账户团队结合 account-context / SIFT insights 补齐
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    Generated by Dali · Competitive Intelligence · 2026-05-12 · Source: Cloud Intelligence Highspot
+  </div>
+
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('print') === '1') {
+    window.addEventListener('load', () => setTimeout(() => window.print(), 400));
+  }
+</script>
+</body>
+</html>

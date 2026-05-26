@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>市场情报预警卡 · 海尔智家</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink-2: #30304a;
+    --muted: #6b6b85;
+    --muted-2: #a0a0b5;
+    --line: #e8e6f2;
+    --line-soft: #f3f1fa;
+    --paper: #ffffff;
+    --page-bg: #f6f4fb;
+
+    --accent: #6d58e4;
+    --accent-dark: #4a3bd0;
+    --accent-soft: #eceafa;
+    --accent-softer: #f4f2fc;
+
+    --ok: #1e8f56;
+    --ok-soft: #dff3e7;
+    --warn: #c47610;
+    --warn-soft: #fdf1dd;
+    --bad: #c53030;
+    --bad-soft: #fde4e4;
+    --coi: #7c2d12;
+    --coi-soft: #fef5e7;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Inter", "Noto Sans SC", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 13px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .material-icons-outlined {
+    font-family: 'Material Icons Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .export-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #1a1a2e;
+    color: #fff;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .export-bar .brand {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #c9c3f5;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .export-bar button {
+    background: var(--accent);
+    color: #fff;
+    border: 0;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .export-bar button:hover { background: var(--accent-dark); }
+
+  .sheet {
+    max-width: 900px;
+    margin: 28px auto 56px;
+    padding: 0 28px;
+  }
+
+  /* ===== Header ===== */
+  .head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 8px 8px 20px;
+  }
+  .head .kicker {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .head h1 {
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -0.6px;
+    margin: 0 0 6px;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .head .sub {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .head .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-soft);
+    color: var(--accent-dark);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .head .pill .material-icons-outlined { font-size: 18px; }
+
+  /* ===== Card ===== */
+  .card {
+    background: var(--accent-softer);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 14px;
+  }
+  .card h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.2px;
+  }
+  .card h2 .material-icons-outlined {
+    font-size: 20px;
+    color: var(--accent);
+    padding: 6px;
+    background: var(--paper);
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(26, 26, 46, 0.05);
+  }
+  .card h2 .est {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--warn);
+    background: var(--warn-soft);
+    padding: 3px 8px;
+    border-radius: 999px;
+    margin-left: 6px;
+  }
+
+  /* ===== Stat grid (snapshot style) ===== */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .stat {
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .stat .lab {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .stat .val {
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .stat .val.accent { color: var(--accent); }
+  .stat .val.ok { color: var(--ok); }
+  .stat .val.warn { color: var(--warn); }
+  .stat .val.bad { color: var(--bad); }
+
+  /* ===== Timeline (roadmap style) ===== */
+  .timeline {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    padding: 6px 4px 0;
+  }
+  .timeline .node {
+    flex: 0 0 auto;
+    text-align: center;
+    min-width: 78px;
+  }
+  .timeline .node .circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--paper);
+    border: 2px solid var(--line);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .timeline .node .circle .material-icons-outlined { font-size: 16px; }
+  .timeline .node.done .circle {
+    background: var(--ok);
+    border-color: var(--ok);
+    color: #fff;
+  }
+  .timeline .node.active .circle {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--paper);
+    box-shadow: 0 0 0 4px rgba(109,88,228,0.14);
+  }
+  .timeline .node.active .circle::after {
+    content: "";
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: block;
+  }
+  .timeline .node.active .circle { font-size: 0; }
+  .timeline .node .t {
+    display: block;
+    margin-top: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .timeline .node.done .t { color: var(--ok); }
+  .timeline .node.active .t { color: var(--accent); }
+  .timeline .node .tt {
+    display: block;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+    font-weight: 500;
+  }
+  .timeline .bar {
+    flex: 1 1 0;
+    height: 2px;
+    background: var(--line);
+    margin: 15px 0 0;
+    min-width: 20px;
+  }
+  .timeline .bar.done { background: var(--ok); }
+
+  /* ===== Two-column strategic content ===== */
+  .cols-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .sub-card {
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .sub-card h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 10px;
+  }
+  .sub-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .sub-card ul li {
+    display: flex;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+    padding: 5px 0;
+    line-height: 1.55;
+  }
+  .sub-card ul li .material-icons-outlined {
+    color: var(--accent);
+    font-size: 16px;
+    flex: 0 0 auto;
+    margin-top: 1px;
+  }
+  .sub-card ul li.star .material-icons-outlined { color: var(--warn); }
+
+  /* ===== Signal cards (stakeholder style) ===== */
+  .sig-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .sig {
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 14px 16px;
+    position: relative;
+  }
+  .sig .rk-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .sig .rk {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+  .sig.r1 .rk { background: var(--bad-soft); color: var(--bad); }
+  .sig.r2 .rk { background: var(--warn-soft); color: var(--warn); }
+  .sig.r3 .rk { background: #fff8dc; color: #a16207; }
+  .sig .dim {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .sig .body {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .sig .body strong { color: var(--ink); }
+  .sig .reason {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+    padding: 6px 10px;
+    background: var(--accent-softer);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 6px;
+  }
+  .sig .reason .ico {
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    flex: 0 0 auto;
+  }
+  .sig .src {
+    font-size: 10.5px;
+    color: var(--muted);
+    line-height: 1.5;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+  }
+  .sig .src a { color: var(--accent); }
+
+  .watchlist {
+    margin-top: 12px;
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 11.5px;
+    color: var(--muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .watchlist .material-icons-outlined {
+    color: var(--muted-2);
+    font-size: 16px;
+  }
+  .watchlist strong {
+    color: var(--ink-2);
+    font-weight: 600;
+    margin-right: 4px;
+  }
+
+  /* ===== Stakeholder-style impact ===== */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .imp {
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .imp .lab {
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    color: var(--muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .imp .val {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .imp .val strong { color: var(--ink); }
+
+  /* Reasoning — meta explanation, applies to every layer per SKILL transparency rule */
+  .reason-note {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: var(--accent-softer);
+    border-radius: 10px;
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.55;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .reason-note .material-icons-outlined {
+    color: var(--accent);
+    font-size: 15px;
+    margin-top: 1px;
+    flex: 0 0 auto;
+  }
+  .reason-note strong {
+    color: var(--accent-dark);
+    font-weight: 700;
+    margin-right: 4px;
+  }
+
+  /* ===== ARR table ===== */
+  .arr-wrap {
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 6px 14px 14px;
+  }
+  .arr {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  .arr th, .arr td {
+    padding: 10px 8px;
+    text-align: left;
+  }
+  .arr th {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    font-weight: 700;
+    border-bottom: 1px solid var(--line);
+  }
+  .arr td { border-bottom: 1px solid var(--line-soft); color: var(--ink-2); }
+  .arr tr:last-child td { border-bottom: 0; }
+  .arr td:first-child { color: var(--ink); font-weight: 600; }
+  .arr th:last-child, .arr td:last-child {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .arr td:last-child { color: var(--accent); font-weight: 600; }
+  .advantage {
+    margin-top: 12px;
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .advantage .material-icons-outlined { color: var(--accent); font-size: 18px; margin-top: 1px; }
+  .advantage strong { color: var(--ink); margin-right: 4px; }
+
+  /* ===== Urgency ===== */
+  .urg-top {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .urg-top .u {
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .urg-top .u .lab {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .urg-top .u .val { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+
+  .coi-card {
+    background: var(--coi-soft);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  .coi-card .material-icons-outlined { color: var(--warn); font-size: 20px; margin-top: 1px; }
+  .coi-card .lab {
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--warn);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .coi-card .val { font-size: 13px; color: var(--ink); }
+  .coi-card .val strong { color: var(--coi); }
+
+  .sim {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .sim .s {
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 12px 14px;
+    border-left: 3px solid var(--muted-2);
+  }
+  .sim .s.good { border-left-color: var(--ok); }
+  .sim .s.warn { border-left-color: var(--warn); }
+  .sim .s.bad { border-left-color: var(--bad); }
+  .sim .s .when {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .sim .s.good .when { color: var(--ok); }
+  .sim .s.warn .when { color: var(--warn); }
+  .sim .s.bad .when { color: var(--bad); }
+  .sim .s .what { font-size: 12px; color: var(--ink-2); line-height: 1.45; }
+
+  /* ===== Psychology ===== */
+  .psy {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .psy .p {
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .psy .p .lab {
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .psy .p .val { font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
+  .motion-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--accent);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-right: 6px;
+  }
+  .motion-chip .material-icons-outlined { font-size: 13px; }
+
+  .hook {
+    margin-top: 12px;
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 14px 18px;
+    border-left: 3px solid var(--accent);
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.65;
+    font-style: italic;
+  }
+  .hook .lab {
+    display: block;
+    font-style: normal;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  /* ===== Action — milestone style (matching reference's "Next Milestone") ===== */
+  .action-snapshot {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .action-snapshot .stat {
+    text-align: left;
+    padding: 14px 16px;
+  }
+  .action-snapshot .stat .lab {
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .action-snapshot .stat .val {
+    text-align: left;
+    font-size: 12.5px;
+    color: var(--ink-2);
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .core-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: var(--paper);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .core-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 12.5px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .core-list li:last-child { border-bottom: 0; }
+  .core-list li .ico {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .core-list li .lab {
+    font-weight: 600;
+    color: var(--ink);
+    margin-right: 4px;
+  }
+
+  .path {
+    display: flex;
+    gap: 0;
+    margin-top: 12px;
+    align-items: stretch;
+  }
+  .path .step {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 12px 10px;
+    text-align: center;
+    background: var(--paper);
+    border-right: 1px solid var(--line-soft);
+    position: relative;
+  }
+  .path .step:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
+  .path .step:last-child { border-right: 0; border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
+  .path .step .n {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+  .path .step.start .n { background: var(--accent); color: #fff; }
+  .path .step.end .n { background: var(--ok); color: #fff; }
+  .path .step.end .n .material-icons-outlined { font-size: 13px; }
+  .path .step .t {
+    display: block;
+    font-size: 10.5px;
+    color: var(--ink-2);
+    line-height: 1.4;
+  }
+
+  /* ===== Internal data summary ===== */
+  .summary-card {
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .summary-card strong { color: var(--ink-2); }
+  .summary-card code {
+    background: var(--warn-soft);
+    color: var(--warn);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* ===== Footer ===== */
+  .foot {
+    text-align: center;
+    padding: 18px 0 0;
+    font-size: 11px;
+    color: var(--muted-2);
+    letter-spacing: 0.3px;
+  }
+  .foot .dl {
+    display: block;
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+    font-style: italic;
+  }
+  .foot .dl strong { color: var(--accent); font-style: normal; }
+
+  /* ===== Print ===== */
+  @page {
+    size: A4;
+    margin: 12mm 10mm;
+  }
+  @media print {
+    body { background: #fff; }
+    .export-bar { display: none; }
+    .sheet { margin: 0; padding: 0; max-width: none; }
+    .card { break-inside: avoid; }
+    .sig-grid, .impact-grid, .urg-top, .sim, .psy, .path, .core-list, .action-snapshot, .stat-grid { break-inside: avoid; }
+    .card h2 .material-icons-outlined { box-shadow: none; border: 1px solid var(--line); }
+  }
+</style>
+</head>
+<body>
+
+<div class="export-bar">
+  <div class="brand">◆ MARKET INTELLIGENCE · WARNING CARD</div>
+  <button onclick="window.print()">
+    <span class="material-icons-outlined" style="font-size:16px;">picture_as_pdf</span>
+    Export PDF
+  </button>
+</div>
+
+<div class="sheet">
+
+  <!-- Header -->
+  <div class="head">
+    <div>
+      <div class="kicker">Market Intelligence · 客户策略变化预警器</div>
+      <h1>海尔智家 Haier Smart Home</h1>
+      <div class="sub">消费电子 / 智能家居 / 白色家电 · 2026-05-10 · Owner: 待 AWSentral 补</div>
+    </div>
+    <div class="pill">
+      <span class="material-icons-outlined">warning_amber</span>
+      CoI $8–15M / 3Y $25–40M
+    </div>
+  </div>
+
+  <!-- Signal Layer -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">sensors</span>Signal Layer · 信号层</h2>
+    <div class="sig-grid">
+      <div class="sig r1">
+        <div class="rk-row">
+          <span class="rk">排名 #1</span>
+          <span class="dim">市场 · 运营</span>
+        </div>
+        <div class="body">海尔 Q1 2026 营收 <strong>-6.9%</strong>（737 亿 RMB），归母净利 <strong>-15%</strong>（46.5 亿）；北美在关税 + 严冬下受压，GE Appliances 进入"能力重建期"。</div>
+        <div class="reason">
+          <span class="ico">推理</span>
+          <span>强战略 + 运营双击：业绩下滑 + 明确"重建"语言 = 管理层公开承认需重构，Q3 末为架构锁定期，窗口硬性。</span>
+        </div>
+        <div class="src">
+          <a href="https://finimize.com/content/haier-smart-homes-profit-fell-as-us-tariffs-and-weather-hit-demand" target="_blank">Finimize · 2026-04-28</a><br>
+          <a href="https://www.marketscreener.com/news/haier-smart-home-reports-q1-2026-results-ce7f59ddd98cf320" target="_blank">MarketScreener · 2026-04-27</a>
+        </div>
+      </div>
+
+      <div class="sig r2">
+        <div class="rk-row">
+          <span class="rk">排名 #2</span>
+          <span class="dim">行业 · 市场</span>
+        </div>
+        <div class="body">2026 战略《Premium Intelligence, Forward Together》发布：从单品家电转型 AI 驱动端到端智能生活生态；同步 2026 Plan 强化全球能力 + HVAC 扩张 + 模型升级。</div>
+        <div class="reason">
+          <span class="ico">推理</span>
+          <span>战略方向明确 + 全球架构待选 = 切入 #1 后延展到 AI 平台的天然路径；但战略语言层级分散，暂作延伸而非入口。</span>
+        </div>
+        <div class="src">
+          <a href="https://www.tipranks.com/news/company-announcements/haier-smart-home-launches-2026-plan-to-boost-value-global-growth-and-efficiency" target="_blank">Tipranks · 2026-04-27</a><br>
+          <a href="https://technave.com/gadget/Haier-unveils-2026-Smart-Home-Vision-focused-on-home-appliances-with-AI-45370.html" target="_blank">Technave</a>
+        </div>
+      </div>
+
+      <div class="sig r3">
+        <div class="rk-row">
+          <span class="rk">排名 #3</span>
+          <span class="dim">行业 · 竞对</span>
+        </div>
+        <div class="body">美的投入 <strong>RMB 600 亿</strong> AI 转型 · 发布 MevoX agent · $2.2B 可转债全球扩张 · 与 Electrolux 北美合作 · 国际业务已运行在华为云。</div>
+        <div class="reason">
+          <span class="ico">推理</span>
+          <span>直接竞对资本 + 架构双线领先 = 时间加速器：若海尔不在本季度内启动选型，竞对话语权会外溢至 GE Appliances 供应商评估。</span>
+        </div>
+        <div class="src">
+          <a href="https://intellectia.ai/news/stock/midea-group-plans-to-invest-rmb60b-in-ai-transformation-over-next-3-yrs" target="_blank">Intellectia</a><br>
+          <a href="https://www.morningstar.com/news/dow-jones/2026050618789/midea-group-plans-22-billion-fund-raise-for-business-expansion" target="_blank">Morningstar · 2026-05-06</a><br>
+          <a href="https://www.prnewswire.com/news-releases/electrolux-group-accelerates-profitable-growth-strategy-through-a-partnership-with-midea-global-organization-and-footprint-optimization-and-a-fully-underwritten-rights-issue-of-approx-sek-9-billion-302752025.html" target="_blank">PRNewswire · 2026-04-23</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="watchlist">
+      <span class="material-icons-outlined">visibility</span>
+      <div><strong>观察清单</strong>欧洲 +10% 利润 · Frankfurt D 股推进（次级动能，下周复评）— <a href="https://in.tradingview.com/news/urn:summary_document_report:quartr.com:3261709:0-haier-smart-home-q1-2026-saw-lower-revenue-and-profit-but-strong-growth-in-europe-and-emerging-markets-offset-north-american-weakness/" target="_blank">Quartr / TradingView</a></div>
+    </div>
+  </div>
+
+  <!-- Impact Layer -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">groups</span>Impact Layer · 影响层</h2>
+    <div class="impact-grid">
+      <div class="imp">
+        <div class="lab">谁的 KPI</div>
+        <div class="val">GE Appliances <strong>北美 CTO</strong> + 供应链数字化 VP · 海尔全球 CIO + AI 平台负责人 · 青岛 CFO 办</div>
+      </div>
+      <div class="imp">
+        <div class="lab">具体影响</div>
+        <div class="val">北美供应链可视化与关税情景模拟 · 需求预测 / 动态定价 / 组合优化 · 工厂边缘 + IoT · 全球 AI 平台统一数据面</div>
+      </div>
+      <div class="imp">
+        <div class="lab">时间线</div>
+        <div class="val">Q2 供应链重塑执行 · <strong>Q3 AI 架构选型定型（3 年级绑定）</strong> · FY 末 P&amp;L 检验</div>
+      </div>
+    </div>
+    <div class="reason-note">
+      <span class="material-icons-outlined">psychology</span>
+      <div><strong>推理</strong>来自 #1 · GE Appliances "能力重建"声明 → KPI 归属北美 CTO + 供应链数字化 VP → 受影响系统 = 关税情景模拟 + 采购决策 → Q3 架构锁定 deadline。</div>
+    </div>
+  </div>
+
+  <!-- Opportunity Layer -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">trending_up</span>Opportunity Layer · 机会层 <span class="est">估算 · 需内部数据</span></h2>
+    <div class="arr-wrap">
+      <table class="arr">
+        <thead>
+          <tr><th>AWS 能力</th><th>匹配需求</th><th>ARR（估算）</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>AWS Supply Chain + Forecast</td><td>北美 tariff 情景模拟 + sourcing 决策</td><td>$4–8M</td></tr>
+          <tr><td>SageMaker + Bedrock</td><td>需求预测 / 动态定价 / 组合优化</td><td>$5–10M</td></tr>
+          <tr><td>IoT Core + Greengrass + Timestream</td><td>工厂边缘智能 + 设备推理</td><td>$3–6M</td></tr>
+          <tr><td>多 Region (US/EU/APAC)</td><td>2026 AI 平台全球数据面</td><td>$4–7M</td></tr>
+          <tr><td>Bedrock Agents + Q Business</td><td>对标 MevoX 自研 agent</td><td>$2–4M</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="advantage">
+      <span class="material-icons-outlined">verified</span>
+      <div><strong>独特优势 vs 华为云 / Azure / 阿里云</strong>北美 + 欧洲 Region 覆盖 · 合规深度 · IoT + Supply Chain 原生组合 · 同业案例纵深。</div>
+    </div>
+    <div class="reason-note">
+      <span class="material-icons-outlined">psychology</span>
+      <div><strong>推理</strong>ARR 区间基于同业可比出海主架构承诺（CPG / 制造业 deal registry）· TAS 百分比法 25–35% 首年爬坡 · 需 AWSentral spend / 活跃 opp / 同业参考架构内部验证。</div>
+    </div>
+  </div>
+
+  <!-- Urgency Layer -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">schedule</span>Urgency Layer · 紧迫性层</h2>
+    <div class="urg-top">
+      <div class="u">
+        <div class="lab">窗口</div>
+        <div class="val">2026-05 至 <strong>Q3 末</strong>（架构选型定型）</div>
+      </div>
+      <div class="u">
+        <div class="lab">竞对</div>
+        <div class="val">美的 / 华为云已在场 · Electrolux 北美直面 GE Appliances · Azure 欧/澳 30B+ 叙事</div>
+      </div>
+      <div class="u">
+        <div class="lab">衰减</div>
+        <div class="val">Q3 若他云定型 → 3 年不换 · 北美持续失血 → CFO 压缩新平台预算</div>
+      </div>
+    </div>
+
+    <div class="coi-card">
+      <span class="material-icons-outlined">priority_high</span>
+      <div>
+        <span class="lab">Cost of Inaction · 不行动成本</span>
+        <span class="val">本周不动 → 错过 GE Appliances 架构评估入围，首年 ARR 折损 <strong>$8–15M</strong> · 3 年 <strong>$25–40M</strong> <span style="color:var(--muted); font-size:11px;">[估算]</span></span>
+      </div>
+    </div>
+
+    <div class="sim">
+      <div class="s good">
+        <div class="when">本周动</div>
+        <div class="what">Q3 进入架构候选 · Q4 POC</div>
+      </div>
+      <div class="s warn">
+        <div class="when">1–3 月内</div>
+        <div class="what">ARR 下调 30–50%</div>
+      </div>
+      <div class="s bad">
+        <div class="when">过 Q3</div>
+        <div class="what">主架构机会归零，沦为备选云</div>
+      </div>
+    </div>
+    <div class="reason-note">
+      <span class="material-icons-outlined">psychology</span>
+      <div><strong>推理</strong>窗口锚定 Q3 末架构选型 deadline（来自 #1 公开声明）· 衰减曲线参照同业 3 年主架构 lock-in 惯例 · CoI 倒推自 Layer 3 首年 / 3 年 ARR 范围。</div>
+    </div>
+  </div>
+
+  <!-- Psychology Layer -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">psychology</span>Psychology Layer · 心理层</h2>
+    <div class="psy">
+      <div class="p">
+        <div class="lab">决策者状态</div>
+        <div class="val">焦虑 + 重建期（业绩压力 + 美的直接竞争 + 关税不确定）</div>
+      </div>
+      <div class="p">
+        <div class="lab">推荐 Motion</div>
+        <div class="val"><span class="motion-chip"><span class="material-icons-outlined">flash_on</span>CHALLENGER</span>教导"中国家电出海北美供应链 IT 重塑的三大错误"</div>
+      </div>
+      <div class="p" style="grid-column: 1 / -1;">
+        <div class="lab">避坑</div>
+        <div class="val">不列 feature · 不用安全事件倒逼（用韧性 framing）· 不回避美的 / 华为云（坦承 + 差异化）· 首触勿谈全球平台</div>
+      </div>
+    </div>
+    <div class="hook">
+      <span class="lab">话术钩子 · Opening Hook</span>
+      "过去 18 个月观察到三家中国家电出海踩了关税情景建模延迟 + 北美合规审计两个坑，想用 30 分钟分享。"
+    </div>
+    <div class="reason-note">
+      <span class="material-icons-outlined">psychology</span>
+      <div><strong>推理</strong>焦虑 + 重建期决策者对"探索式"SPIN 反感、对"ROI 式" Value-Based 嫌傲慢；Challenger 教导框架匹配执行期客户"别搞砸"的心理诉求。</div>
+    </div>
+  </div>
+
+  <!-- Action Layer -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">flag</span>Action Layer · 行动层 <span class="est">估算 · 需内部数据</span></h2>
+
+    <div class="action-snapshot">
+      <div class="stat">
+        <div class="lab">本周第一步</div>
+        <div class="val">通过 AWS Industry (CPG/Mfg) 团队 + 青岛生态伙伴引荐 GE Appliances 北美 CTO 办</div>
+      </div>
+      <div class="stat">
+        <div class="lab">目标会</div>
+        <div class="val">30 分钟线上 · 教导而非 pitch</div>
+      </div>
+      <div class="stat">
+        <div class="lab">成功标准</div>
+        <div class="val">落地免费 Workshop（VP + AI 负责人同席）</div>
+      </div>
+    </div>
+
+    <div class="hook" style="margin-top:0; margin-bottom:12px;">
+      <span class="lab">开场话术 · 引用 #1 信号</span>
+      "李总，我注意到海尔 Q1 北美做了明确的供应链重塑切换、进入能力重建下一阶段。我们刚帮另一家中国家电出海客户完成类似重塑——踩了三个坑，想用 30 分钟分享一下架构选择，不卖东西，就是同业经验。"
+    </div>
+
+    <ul class="core-list">
+      <li><span class="ico">①</span><div><span class="lab">出海三错</span>关税建模延迟 / 合规链路断 / 边缘-总部脱节</div></li>
+      <li><span class="ico">②</span><div><span class="lab">同业绕坑</span>同类中国家电出海客户已验证的绕坑模式</div></li>
+      <li><span class="ico">③</span><div><span class="lab">诊断问</span>"当前平台建 '明年 25–50% 关税变动' 情景，需要几天？"</div></li>
+    </ul>
+    <div class="reason-note">
+      <span class="material-icons-outlined">psychology</span>
+      <div><strong>推理</strong>Challenger motion × Q3 窗口 → 教导式开场 + 跳过 discovery，直接引用 #1 "能力重建"语言；升级路径按"教 → 信 → 提议"序列展开，每步解锁下一步。</div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <div style="font-size:10px; letter-spacing:1.2px; text-transform:uppercase; font-weight:700; color:var(--muted); margin-bottom:8px; padding-left:2px;">升级路径 · Escalation</div>
+      <div class="timeline" style="background:var(--paper); border-radius:10px; padding:16px 14px 12px;">
+        <div class="node active">
+          <span class="circle"></span>
+          <span class="t">电话</span>
+          <span class="tt">本周 30min</span>
+        </div>
+        <div class="bar"></div>
+        <div class="node">
+          <span class="circle">2</span>
+          <span class="t">Workshop</span>
+          <span class="tt">VP + AI 负责人</span>
+        </div>
+        <div class="bar"></div>
+        <div class="node">
+          <span class="circle">3</span>
+          <span class="t">架构建议书</span>
+          <span class="tt">Workshop 后</span>
+        </div>
+        <div class="bar"></div>
+        <div class="node">
+          <span class="circle">4</span>
+          <span class="t">POC</span>
+          <span class="tt">Tariff + 边缘</span>
+        </div>
+        <div class="bar"></div>
+        <div class="node">
+          <span class="circle">5</span>
+          <span class="t">AI Vision 评估</span>
+          <span class="tt">2026 全球架构</span>
+        </div>
+        <div class="bar"></div>
+        <div class="node">
+          <span class="circle">6</span>
+          <span class="t">多年度合约</span>
+          <span class="tt">主架构 commit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="foot">
+    <span class="dl">下游 · 触发 <strong>business-insight</strong>（内含 PESTLE + Porter's 5F + BMC → SWOT/TOWS → Top Initiatives）</span>
+    Generated by Kiro · Market Intelligence · 2026-05-10
+  </div>
+
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('print') === '1') {
+    window.addEventListener('load', () => setTimeout(() => window.print(), 400));
+  }
+</script>
+</body>
+</html>

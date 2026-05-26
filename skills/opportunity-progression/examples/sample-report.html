@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opportunity Progression Report — NIO — NOMI 多模态座舱 AI 升级</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            /* Material Design 3 tokens — Primary: #6750A4 (purple) */
+            --md-sys-color-primary: #6750A4;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #EADDFF;
+            --md-sys-color-on-primary-container: #21005D;
+            --md-sys-color-secondary: #625B71;
+            --md-sys-color-on-secondary: #FFFFFF;
+            --md-sys-color-secondary-container: #E8DEF8;
+            --md-sys-color-tertiary: #7D5260;
+            --md-sys-color-tertiary-container: #FFD8E4;
+            --md-sys-color-surface: #FFFBFE;
+            --md-sys-color-surface-variant: #E7E0EC;
+            --md-sys-color-on-surface: #1C1B1F;
+            --md-sys-color-on-surface-variant: #49454F;
+            --md-sys-color-outline: #79747E;
+            --md-sys-color-outline-variant: #CAC4D0;
+            --md-sys-color-surface-container-lowest: #FFFFFF;
+            --md-sys-color-surface-container-low: #F7F2FA;
+            --md-sys-color-surface-container: #F3EDF7;
+            --md-sys-color-surface-container-high: #ECE6F0;
+            --md-sys-color-surface-container-highest: #E6E0E9;
+            --md-sys-color-error: #B3261E;
+            --md-sys-color-error-container: #F9DEDC;
+            --md-sys-color-on-error-container: #410E0B;
+            --md-sys-color-warning: #8C5000;
+            --md-sys-color-warning-container: #FFDDB1;
+            --md-sys-color-on-warning-container: #2D1600;
+            --md-sys-color-success: #386A20;
+            --md-sys-color-success-container: #B7F397;
+            --md-sys-color-on-success-container: #0F2000;
+        }
+
+        /* Typography:
+           - Latin → Amazon Ember (loaded from reader's machine when available)
+           - CJK   → 思源黑体 SC (Source Han Sans SC) / Noto Sans SC (Google Fonts CDN)
+           - Silent system-default fallback when neither is available */
+        * { font-family: "Amazon Ember", "Source Han Sans SC", "Noto Sans SC",
+                         -apple-system, BlinkMacSystemFont, "PingFang SC",
+                         "Microsoft YaHei", sans-serif; }
+        body { background-color: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); }
+
+        /* --- card levels --- */
+        .md-card {
+            background: var(--md-sys-color-surface-container-lowest);
+            border: 1px solid var(--md-sys-color-outline-variant);
+            border-radius: 28px; padding: 24px;
+            transition: box-shadow 0.2s ease;
+        }
+        .md-card:hover { box-shadow: 0 2px 6px 2px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.12); }
+
+        .md-card-elevated {
+            background: var(--md-sys-color-surface-container-low);
+            border: none; border-radius: 28px; padding: 24px;
+            box-shadow: 0 1px 3px 1px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.12);
+            transition: box-shadow 0.2s ease;
+        }
+        .md-card-elevated:hover { box-shadow: 0 4px 8px 3px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.12); }
+
+        .md-card-filled {
+            background: var(--md-sys-color-surface-container-highest);
+            border: none; border-radius: 28px; padding: 24px;
+        }
+
+        .md-fab {
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            border-radius: 16px; padding: 14px 22px; font-weight: 500;
+            box-shadow: 0 4px 8px 3px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .pill-badge {
+            border-radius: 100px; padding: 4px 14px;
+            font-size: 12px; font-weight: 500; letter-spacing: 0.3px;
+            display: inline-flex; align-items: center; gap: 4px;
+            white-space: nowrap;
+        }
+
+        .stepper-line { height: 2px; flex: 1; min-width: 12px; }
+
+        .section-title {
+            font-size: 22px; font-weight: 500;
+            color: var(--md-sys-color-on-surface); margin-bottom: 16px;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .label-large {
+            font-size: 13px; font-weight: 500; letter-spacing: 0.3px;
+            color: var(--md-sys-color-on-surface-variant); text-transform: uppercase;
+        }
+        .title-medium { font-size: 16px; font-weight: 500; letter-spacing: 0.15px; }
+        .body-medium {
+            font-size: 14px; font-weight: 400; letter-spacing: 0.25px;
+            color: var(--md-sys-color-on-surface-variant); line-height: 1.6;
+        }
+        .headline-small { font-size: 22px; font-weight: 500; }
+        .display-small { font-size: 34px; font-weight: 500; letter-spacing: -0.2px; }
+
+        .score-bar {
+            width: 100%; height: 6px;
+            background: var(--md-sys-color-surface-container-high);
+            border-radius: 100px; overflow: hidden; margin-top: 8px;
+        }
+        .score-bar-fill { height: 100%; border-radius: 100px; transition: width 0.4s; }
+
+        .banner-rollback {
+            background: var(--md-sys-color-warning-container);
+            border: 1px solid var(--md-sys-color-warning);
+            border-left: 4px solid var(--md-sys-color-warning);
+            border-radius: 16px; padding: 16px 20px;
+            display: flex; gap: 12px; align-items: flex-start;
+        }
+
+        .element-card {
+            background: var(--md-sys-color-surface-container);
+            border-radius: 20px; padding: 16px 18px;
+            border: 1px solid var(--md-sys-color-outline-variant);
+        }
+        .element-card.p0 { border-left: 4px solid var(--md-sys-color-error); }
+        .element-card.p1 { border-left: 4px solid var(--md-sys-color-warning); }
+        .element-card.p2 { border-left: 4px solid var(--md-sys-color-success); }
+
+        .week-row {
+            display: flex; gap: 12px; align-items: flex-start;
+            padding: 10px 14px; background: var(--md-sys-color-surface-container);
+            border-radius: 12px; margin-top: 6px;
+        }
+        .week-chip {
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            border-radius: 8px; padding: 4px 10px;
+            font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+            flex-shrink: 0; min-width: 36px; text-align: center;
+        }
+
+        table.exit-criteria {
+            width: 100%; border-collapse: separate; border-spacing: 0 4px; font-size: 13px;
+        }
+        table.exit-criteria th {
+            text-align: left; padding: 10px 12px;
+            font-weight: 500; font-size: 12px; letter-spacing: 0.5px;
+            color: var(--md-sys-color-on-surface-variant); text-transform: uppercase;
+        }
+        table.exit-criteria td {
+            padding: 12px; background: var(--md-sys-color-surface-container); vertical-align: top;
+        }
+        table.exit-criteria tr td:first-child { border-radius: 12px 0 0 12px; }
+        table.exit-criteria tr td:last-child { border-radius: 0 12px 12px 0; }
+
+        .chain-diagram {
+            background: var(--md-sys-color-surface-container);
+            border-radius: 16px; padding: 20px;
+            font-family: 'SF Mono', 'Consolas', monospace;
+            font-size: 13px; line-height: 1.9;
+            color: var(--md-sys-color-on-surface); overflow-x: auto;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 14mm 12mm;
+            }
+
+            html, body {
+                background: white !important;
+                font-size: 13px;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* Force background colors + borders to survive Chrome's default print */
+            *, *::before, *::after {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* --- Density compaction: screen uses generous whitespace, print needs compact --- */
+            .max-w-6xl { max-width: 100% !important; }
+            .space-y-6 > * + * { margin-top: 14px !important; }
+            .md-card, .md-card-elevated { padding: 16px !important; border-radius: 18px !important; }
+            .md-card-filled { padding: 12px !important; border-radius: 16px !important; }
+            .element-card { padding: 12px !important; border-radius: 14px !important; }
+            .chain-diagram { padding: 12px !important; font-size: 11px !important; line-height: 1.55 !important; }
+            .banner-rollback { padding: 10px 14px !important; }
+            .md-fab { padding: 8px 14px !important; border-radius: 12px !important; }
+            .week-row { padding: 6px 10px !important; margin-top: 4px !important; }
+
+            /* Headline sizes scaled for paper — display-small was 34px, excessive in print */
+            .display-small { font-size: 26px !important; line-height: 1.2 !important; }
+            .headline-small { font-size: 18px !important; }
+            .section-title { font-size: 18px !important; margin-bottom: 10px !important; }
+            .title-medium { font-size: 14px !important; }
+            .body-medium { font-size: 12.5px !important; line-height: 1.5 !important; }
+            .label-large { font-size: 11px !important; }
+
+            /* Snapshot / metric grids: let every cell size to its own content */
+            .grid { gap: 8px !important; align-items: start !important; }
+            .md-card-filled.text-center { padding: 10px !important; }
+
+            /* Exit-criteria table tightening */
+            table.exit-criteria th { padding: 6px 8px !important; font-size: 10.5px !important; }
+            table.exit-criteria td { padding: 7px 8px !important; }
+            .pill-badge { padding: 2px 10px !important; font-size: 11px !important; }
+
+            /* --- Pagination rules --- */
+            section { page-break-inside: auto; }
+            h1, h2, h3, .section-title { page-break-after: avoid; break-after: avoid; }
+
+            /* Atomic units that must never split */
+            .md-card-filled,
+            .element-card,
+            .week-row,
+            .banner-rollback,
+            .chain-diagram,
+            .md-fab,
+            .pill-badge,
+            .md-stepper-row {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            table.exit-criteria tr { page-break-inside: avoid; break-inside: avoid; }
+
+            /* Horizontal "metric strip" grids (3-4 colored cells in a row) are
+               visually atomic — splitting them mid-row produces orphan cells on
+               the next page. Any .grid whose immediate children are md-card-filled
+               or use the grid-cols-3/4 pattern is treated as one unit. */
+            .grid.grid-cols-1.md\:grid-cols-3,
+            .grid.grid-cols-1.md\:grid-cols-4 {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            /* Container cards allow breaks so their inner elements can flow,
+               EXCEPT Phase 2 (with stepper) which is compact enough to stay on one page. */
+            .md-card, .md-card-elevated { page-break-inside: auto; }
+            .phase25-card { page-break-inside: avoid; break-inside: avoid; }
+            /* :has() as progressive enhancement for other stepper-like cards */
+            .md-card-elevated:has(.md-stepper-row) { page-break-inside: avoid; break-inside: avoid; }
+
+            /* Stepper nodes in print: slightly smaller and tighter label stack */
+            .md-stepper-row { margin-top: 10px !important; margin-bottom: 10px !important; }
+            .md-stepper-row > div[style*="min-width"] { min-width: 88px !important; }
+            .md-stepper-row .w-10.h-10 { width: 30px !important; height: 30px !important; }
+
+            /* Typography — avoid single-line orphans/widows */
+            p, li { orphans: 3; widows: 3; }
+
+            /* Hide interactive hover effects */
+            .md-card:hover, .md-card-elevated:hover { box-shadow: none !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-10">
+<div class="max-w-6xl mx-auto space-y-6">
+
+    <header class="flex items-center justify-between mb-2 flex-wrap gap-4">
+        <div>
+            <p class="label-large" style="color: var(--md-sys-color-primary);">OPPORTUNITY PROGRESSION REPORT</p>
+            <h1 class="display-small mt-1">NIO — NOMI 多模态座舱 AI 升级</h1>
+            <p class="body-medium mt-1">
+                NIO Inc. · Automotive ·
+                Strategic Opportunity · MEDDPICC
+            </p>
+        </div>
+        <div class="md-fab flex items-center gap-2">
+            <span class="material-symbols-outlined">attach_money</span>
+            <span class="text-lg font-medium">US$ 4M ARR</span>
+        </div>
+    </header>
+
+    <div class="banner-rollback">
+        <span class="material-symbols-outlined" style="color: var(--md-sys-color-warning);">warning</span>
+        <div>
+            <p class="title-medium" style="color: var(--md-sys-color-on-warning-container);">
+                🔴 建议回退到 <strong>Prospect</strong>
+            </p>
+            <p class="body-medium mt-1" style="color: var(--md-sys-color-on-warning-container);">
+                Qualified 阶段 EB 与 Champion 接触完整度合计仅 98%（< 100%），且 EB Ava 实质未接触；商机其实还停在 Prospect；下面的分析按 Qualified 在做，分数容易显得过分乐观。
+            </p>
+        </div>
+    </div>
+
+    <section class="md-card-elevated phase25-card">
+        <h2 class="section-title">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">dashboard</span>
+            Phase 2 · Deal Assessment
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-2">
+            <div class="md-card-filled text-center p-5">
+                <p class="label-large">Verdict</p>
+                <p class="title-medium mt-2" style="color: var(--md-sys-color-warning);">🔴 建议回退到 Prospect 阶段</p>
+            </div>
+            <div class="md-card-filled text-center p-5">
+                <p class="label-large">Total Score</p>
+                <p class="title-medium mt-2">62 / 100</p>
+            </div>
+            <div class="md-card-filled text-center p-5">
+                <p class="label-large">Current Stage</p>
+                <p class="title-medium mt-2" style="color: var(--md-sys-color-primary);">Qualified</p>
+            </div>
+            <div class="md-card-filled text-center p-5">
+                <p class="label-large">Classification</p>
+                <p class="title-medium mt-2">Strategic</p>
+            </div>
+        </div>
+
+        <div class="md-stepper-row flex items-center justify-between mt-6 mb-4 px-1 overflow-x-auto">
+            <div class="flex flex-col items-center" style="min-width: 110px;">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-medium"
+                     style="background: var(--md-sys-color-primary-container); border: 3px dashed var(--md-sys-color-primary); color: var(--md-sys-color-primary);">
+                    <span class="material-symbols-outlined text-base">undo</span>
+                </div>
+                <p class="text-xs mt-2 text-center font-medium"
+                   style="color: var(--md-sys-color-primary);">
+                    Prospect
+                </p>
+                <p class="text-[11px] text-center" style="color: var(--md-sys-color-on-surface-variant);">Rollback target</p>
+            </div>
+            <div class="stepper-line"
+                 style="background: var(--md-sys-color-primary);"></div>
+            <div class="flex flex-col items-center" style="min-width: 110px;">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-medium text-white"
+                     style="background: var(--md-sys-color-primary);">
+                    <span class="material-symbols-outlined text-base">location_on</span>
+                </div>
+                <p class="text-xs mt-2 text-center font-medium"
+                   style="color: var(--md-sys-color-primary);">
+                    Qualified
+                </p>
+                <p class="text-[11px] text-center" style="color: var(--md-sys-color-on-surface-variant);">Reported · 62%</p>
+            </div>
+            <div class="stepper-line"
+                 style="background: var(--md-sys-color-outline-variant);"></div>
+            <div class="flex flex-col items-center" style="min-width: 110px;">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-medium"
+                     style="border: 2px solid var(--md-sys-color-outline); background: transparent; color: var(--md-sys-color-outline);">
+                    <span class="text-sm">3</span>
+                </div>
+                <p class="text-xs mt-2 text-center font-medium"
+                   style="color: var(--md-sys-color-outline);">
+                    Technical Validation
+                </p>
+                <p class="text-[11px] text-center" style="color: var(--md-sys-color-on-surface-variant);">Upcoming</p>
+            </div>
+            <div class="stepper-line"
+                 style="background: var(--md-sys-color-outline-variant);"></div>
+            <div class="flex flex-col items-center" style="min-width: 110px;">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-medium"
+                     style="border: 2px solid var(--md-sys-color-outline); background: transparent; color: var(--md-sys-color-outline);">
+                    <span class="text-sm">4</span>
+                </div>
+                <p class="text-xs mt-2 text-center font-medium"
+                   style="color: var(--md-sys-color-outline);">
+                    Business Validation
+                </p>
+                <p class="text-[11px] text-center" style="color: var(--md-sys-color-on-surface-variant);">Upcoming</p>
+            </div>
+            <div class="stepper-line"
+                 style="background: var(--md-sys-color-outline-variant);"></div>
+            <div class="flex flex-col items-center" style="min-width: 110px;">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-medium"
+                     style="border: 2px solid var(--md-sys-color-outline); background: transparent; color: var(--md-sys-color-outline);">
+                    <span class="text-sm">5</span>
+                </div>
+                <p class="text-xs mt-2 text-center font-medium"
+                   style="color: var(--md-sys-color-outline);">
+                    Committed
+                </p>
+                <p class="text-[11px] text-center" style="color: var(--md-sys-color-on-surface-variant);">Upcoming</p>
+            </div>
+        </div>
+
+        <div class="mt-5 p-4 rounded-2xl" style="background: var(--md-sys-color-surface-container);">
+            <p class="label-large mb-2">为什么这个判断</p>
+            <p class="body-medium ">Qualified 阶段'已识别最终决策者'这条还没完成 — Ava 作为 EB 已经识别出来，但接触只到 Champion Alan 这一层，VP 级别的对话还没开始。</p>
+            <p class="body-medium mt-2">在 Qualified 阶段先补齐 EB 首次接触和基线指标量化，比硬推到 Tech Validation 更稳；接下来要进 Tech Validation 也还差 I 100% / CH 100% / EB 已接触三条。</p>
+        </div>
+
+        <div class="mt-4 rounded-2xl overflow-hidden" style="background: var(--md-sys-color-error-container);">
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <div class="p-5" style="background: var(--md-sys-color-error-container);">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined" style="color: var(--md-sys-color-error);">block</span>
+                        <span class="label-large" style="color: var(--md-sys-color-error);">关键阻塞 · Primary Blocker</span>
+                    </div>
+                    <p class="title-medium" style="color: var(--md-sys-color-on-error-container);">E — Economic Buyer · 15%</p>
+                    <p class="body-medium mt-2" style="color: var(--md-sys-color-on-error-container);">
+                        座舱研发 VP Ava 作为 EB 尚未实质接触，仅有 Champion Alan 层级的关系建立。EB 不在场，方案的商务条款、合规审批、价值确认都无法推进。这一步过不去，商机就停在 Qualified 推不动。
+                    </p>
+                </div>
+                <div class="p-5" style="background: var(--md-sys-color-primary-container); border-left: 1px solid var(--md-sys-color-outline-variant);">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">rocket_launch</span>
+                        <span class="label-large" style="color: var(--md-sys-color-primary);">本周行动 · Immediate Action</span>
+                    </div>
+                    <p class="body-medium" style="color: var(--md-sys-color-on-primary-container);">
+                        向 Alan 正式请求引荐 Ava,目标为 7 天内完成 30 分钟双向介绍会议;携带一份 Alan 已联审的多模态座舱价值简报作为见面材料。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 p-5 rounded-2xl" style="background: var(--md-sys-color-warning-container);">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined" style="color: var(--md-sys-color-warning);">trending_up</span>
+                <span class="label-large" style="color: var(--md-sys-color-warning);">进下一阶段（Tech Validation）还需要</span>
+            </div>
+            <ul class="space-y-1 body-medium" style="color: var(--md-sys-color-on-warning-container);">
+                <li class="flex items-start gap-2">
+                    <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-warning);">arrow_right</span>
+                    I = 92% → 目标 100%
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-warning);">arrow_right</span>
+                    CH = 83% → 目标 100%
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-warning);">arrow_right</span>
+                    已与 EB 接触并提及该项目
+                </li>
+            </ul>
+        </div>
+
+        <div class="mt-4 md-card-filled p-5">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">flag</span>
+                <span class="label-large" style="color: var(--md-sys-color-primary);">30 天目标 · 30-Day Targets</span>
+            </div>
+            <ul class="space-y-2 body-medium" style="color: var(--md-sys-color-on-surface);">
+                <li class="flex items-start gap-2">
+                    <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-primary);">arrow_right</span>
+                    E ≥ 55% · 完成 EB 首次接触并建立后续节奏
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-primary);">arrow_right</span>
+                    M ≥ 70% · 量化指标(日均召唤次数 27 次)获得 EB 口头确认
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-primary);">arrow_right</span>
+                    DP ≥ 70% · 正式识别预算审批路径与技术选型 gate
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="md-card">
+        <h2 class="section-title">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">fact_check</span>
+            Phase 3 · Exit Criteria & Sales Stage Assessment
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+            <div class="md-card-filled p-5">
+                <div class="flex justify-between items-center">
+                    <p class="title-medium">Prospect</p>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-success-container); color: var(--md-sys-color-on-success-container);">92%</span>
+                </div>
+                <div class="score-bar"><div class="score-bar-fill" style="width:92%; background: var(--md-sys-color-success);"></div></div>
+                <p class="body-medium mt-2">5 exit criteria · 聚合完成度 92%</p>
+            </div>
+            <div class="md-card-filled p-5">
+                <div class="flex justify-between items-center">
+                    <p class="title-medium">Qualified <span class="text-xs" style="color: var(--md-sys-color-primary);">· current</span></p>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-warning-container); color: var(--md-sys-color-on-warning-container);">68%</span>
+                </div>
+                <div class="score-bar"><div class="score-bar-fill" style="width:68%; background: var(--md-sys-color-warning);"></div></div>
+                <p class="body-medium mt-2">7 exit criteria · 聚合完成度 68%</p>
+            </div>
+        </div>
+
+        <div class="mt-5 overflow-x-auto">
+            <table class="exit-criteria">
+                <thead>
+                    <tr>
+                        <th>#</th><th>Stage</th><th>Exit Criterion</th><th>Completion %</th><th>Mapped Element</th><th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Prospect</td>
+                        <td>已发现客户机会</td>
+                        <td>100%</td>
+                        <td>I — 识别痛点 (92%)</td>
+                        <td>
+                            <span class="pill-badge"
+                                  style="background: var(--md-sys-color-success-container); color: var(--md-sys-color-on-success-container);">
+                                ✅ On Track
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Prospect</td>
+                        <td>机会具有有效估计价值</td>
+                        <td>80%</td>
+                        <td>E — 初步预算方向 (15%)</td>
+                        <td>
+                            <span class="pill-badge"
+                                  style="background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container);">
+                                🔴 At Risk
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Prospect</td>
+                        <td>机会具有有效估计价值</td>
+                        <td>80%</td>
+                        <td>M — 机会价值估算 (70%)</td>
+                        <td>
+                            <span class="pill-badge"
+                                  style="background: var(--md-sys-color-warning-container); color: var(--md-sys-color-on-warning-container);">
+                                ⚠️ Needs Improvement
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Prospect</td>
+                        <td>已安排与客户的初次会面</td>
+                        <td>100%</td>
+                        <td>DP — 启动对接 (60%)</td>
+                        <td>
+                            <span class="pill-badge"
+                                  style="background: var(--md-sys-color-warning-container); color: var(--md-sys-color-on-warning-container);">
+                                ⚠️ Needs Improvement
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Prospect</td>
+                        <td>已安排与客户的初次会面</td>
+                        <td>100%</td>
+                        <td>CH — Champion 评估 (83%)</td>
+                        <td>
+                            <span class="pill-badge"
+                                  style="background: var(--md-sys-color-success-container); color: var(--md-sys-color-on-success-container);">
+                                ✅ On Track
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Qualified</td>
+                        <td>客户愿意寻求解决方案</td>
+                        <td>75%</td>
+                        <td>I — 已验证痛点 (92%)</td>
+                        <td>
+                            <span class="pill-badge"
+                                  style="background: var(--md-sys-color-success-container); color: var(--md-sys-color-on-success-container);">
+                                ✅ On Track
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Qualified</td>
+                        <td>客户愿意寻求解决方案</td>
+                        <td>75%</td>
+                        <td>M — 初始业务成功指标 (70%)</td>
+                        <td>
+                            <span class="pill-badge"
+                                  style="background: var(--md-sys-color-warning-container); color: var(--md-sys-color-on-warning-container);">
+                                ⚠️ Needs Improvement
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Qualified</td>
+                        <td>已确定客户内部支持者/决策者</td>
+                        <td>60%</td>
+                        <td>E — 已识别最终决策者 (15%)</td>
+                        <td>
+                            <span class="pill-badge"
+                                  style="background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container);">
+                                🔴 At Risk
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>Qualified</td>
+                        <td>已确定客户内部支持者/决策者</td>
+                        <td>60%</td>
+                        <td>CH — 内部支持者确认 (83%)</td>
+                        <td>
+                            <span class="pill-badge"
+                                  style="background: var(--md-sys-color-success-container); color: var(--md-sys-color-on-success-container);">
+                                ✅ On Track
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>Qualified</td>
+                        <td>已确定客户内部支持者/决策者</td>
+                        <td>60%</td>
+                        <td>DP — 预算与时间框架 (60%)</td>
+                        <td>
+                            <span class="pill-badge"
+                                  style="background: var(--md-sys-color-warning-container); color: var(--md-sys-color-on-warning-container);">
+                                ⚠️ Needs Improvement
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>Qualified</td>
+                        <td>已确定交付合作伙伴策略</td>
+                        <td>50%</td>
+                        <td>CP — 竞争策略 (67%)</td>
+                        <td>
+                            <span class="pill-badge"
+                                  style="background: var(--md-sys-color-warning-container); color: var(--md-sys-color-on-warning-container);">
+                                ⚠️ Needs Improvement
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>Qualified</td>
+                        <td>已确定交付合作伙伴策略</td>
+                        <td>50%</td>
+                        <td>DP — 实施方法明确 (60%)</td>
+                        <td>
+                            <span class="pill-badge"
+                                  style="background: var(--md-sys-color-warning-container); color: var(--md-sys-color-on-warning-container);">
+                                ⚠️ Needs Improvement
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
+            <div class="p-4 rounded-2xl"
+                 style="background: var(--md-sys-color-error-container);">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="pill-badge" style="background: var(--md-sys-color-error); color: var(--md-sys-color-on-primary);">上一阶段未做到位</span>
+                </div>
+                <p class="body-medium" style="color: var(--md-sys-color-on-error-container);">Prospect 阶段'机会具有有效估计价值'还需要初步预算方向，但 EB 没接触，预算方向还停留在'CTO/创始人战略层口头同意'，没具体到 VP 层。</p>
+            </div>
+            <div class="p-4 rounded-2xl"
+                 style="background: var(--md-sys-color-warning-container);">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="pill-badge" style="background: var(--md-sys-color-warning); color: var(--md-sys-color-on-primary);">当前阶段卡点</span>
+                </div>
+                <p class="body-medium" style="color: var(--md-sys-color-on-warning-container);">Qualified 阶段'已确定交付合作伙伴策略'只完成 50%。CP 评分 67% 看起来还行，但合作伙伴选型实际还在讨论，没定稿。</p>
+            </div>
+            <div class="p-4 rounded-2xl"
+                 style="background: var(--md-sys-color-error-container);">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="pill-badge" style="background: var(--md-sys-color-error); color: var(--md-sys-color-on-primary);">关键人物缺位</span>
+                </div>
+                <p class="body-medium" style="color: var(--md-sys-color-on-error-container);">EB Ava 还没接触（E = 15%）— Champion Alan 强（83%）也替代不了 EB 的授权信号。VP 级别的对话不打开，商机推不到 Tech Validation。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="md-card">
+        <h2 class="section-title">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">insights</span>
+            Phase 4 · Market & Competitive Intelligence
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+            <div class="md-card-filled p-5">
+                <p class="label-large" style="color: var(--md-sys-color-primary);">1 · 客户当前云与 GenAI 栈</p>
+                <ul class="space-y-2 mt-3 body-medium" style="color: var(--md-sys-color-on-surface);">
+                    <li class="flex gap-2">
+                        <span class="material-symbols-outlined text-base" style="color: var(--md-sys-color-primary);">cloud</span>
+                        车联网:腾讯云 + Azure(在位)
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="material-symbols-outlined text-base" style="color: var(--md-sys-color-primary);">memory</span>
+                        数据平台:自建 + 阿里云(部分工作负载)
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="material-symbols-outlined text-base" style="color: var(--md-sys-color-primary);">psychology</span>
+                        GenAI:早期 POC 阶段,未形成标准栈
+                    </li>
+                </ul>
+            </div>
+            <div class="md-card-filled p-5">
+                <p class="label-large" style="color: var(--md-sys-color-primary);">2 · 行业采购行为</p>
+                <ul class="space-y-2 mt-3 body-medium" style="color: var(--md-sys-color-on-surface);">
+                    <li><strong>决策因素:</strong> 数据合规、车端延迟、国产算力可替代性</li>
+                    <li><strong>采购痛点:</strong> 长账期、本地化服务能力、外资云价格不透明</li>
+                    <li><strong>采购周期:</strong> 典型 6–9 个月,涉及 PMO 和供应链</li>
+                    <li><strong>技术考虑:</strong> 边云协同、模型可部署性、国产芯片兼容</li>
+                </ul>
+            </div>
+            <div class="md-card-filled p-5">
+                <p class="label-large" style="color: var(--md-sys-color-primary);">3 · 同行业参考客户</p>
+                <ul class="space-y-2 mt-3 body-medium" style="color: var(--md-sys-color-on-surface);">
+                    <li class="flex gap-2">
+                        <span class="material-symbols-outlined text-base" style="color: var(--md-sys-color-tertiary);">star</span>
+                        BMW — Alexa 车载集成 · Bedrock
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="material-symbols-outlined text-base" style="color: var(--md-sys-color-tertiary);">star</span>
+                        Rivian — 多模态 UX · SageMaker
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="material-symbols-outlined text-base" style="color: var(--md-sys-color-tertiary);">star</span>
+                        Toyota — 客服 AI 助手 · Nova Sonic
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <p class="label-large mb-3">Competitive Landscape · via competitive-intelligence skill</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 rounded-2xl border"
+                     style="background: var(--md-sys-color-surface-container-high); border-color: var(--md-sys-color-outline-variant);">
+                    <div class="flex items-center justify-between">
+                        <p class="title-medium">华为 HI 全栈</p>
+                        <span class="pill-badge"
+                              style="background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container);">
+                            Primary Threat
+                        </span>
+                    </div>
+                    <p class="body-medium mt-2">Slide 5 标杆(日均交互 27 次)的载体。装机量超 200 万,本土化与国产芯片天然契合。</p>
+                    <p class="body-medium mt-2"><strong>AWS 差异:</strong> 多模态大模型 + 全球跨区域模型更新速度,用 Nova Sonic + Bedrock 封装为国内可交付路径。</p>
+                </div>
+                <div class="p-4 rounded-2xl border"
+                     style="background: var(--md-sys-color-surface-container-high); border-color: var(--md-sys-color-outline-variant);">
+                    <div class="flex items-center justify-between">
+                        <p class="title-medium">腾讯云 + Azure</p>
+                        <span class="pill-badge"
+                              style="background: var(--md-sys-color-warning-container); color: var(--md-sys-color-on-warning-container);">
+                            Incumbent
+                        </span>
+                    </div>
+                    <p class="body-medium mt-2">在位车联网供应商。切换成本高,但座舱 AI 不是其主打能力线。</p>
+                    <p class="body-medium mt-2"><strong>AWS 差异:</strong> 不触碰车联网底座,聚焦座舱 AI 层的模型差异化,绕开在位替换。</p>
+                </div>
+            </div>
+        </div>
+
+        <p class="body-medium mt-4 italic">Source: account-context skill + solutions-search skill + competitive-intelligence skill.</p>
+    </section>
+
+    <section class="md-card">
+        <h2 class="section-title">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">analytics</span>
+            Phase 5 · Element Gap Analysis
+        </h2>
+
+        <p class="label-large mb-3">Layer A · Element Summary</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="element-card p0">
+                <div class="flex justify-between items-baseline">
+                    <p class="title-medium">E</p>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-error); color: var(--md-sys-color-on-primary);">P0</span>
+                </div>
+                <p class="body-medium">Economic Buyer</p>
+                <p class="headline-small mt-1" style="color: var(--md-sys-color-error);">15%</p>
+                <div class="score-bar"><div class="score-bar-fill" style="width:15%; background: var(--md-sys-color-error);"></div></div>
+                <p class="text-[12px] mt-2" style="color: var(--md-sys-color-on-surface-variant);">E 没就位，DC (50%) 和 DP (60%) 都跟着卡</p>
+            </div>
+            <div class="element-card p1">
+                <div class="flex justify-between items-baseline">
+                    <p class="title-medium">DC</p>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-warning); color: var(--md-sys-color-on-primary);">P1</span>
+                </div>
+                <p class="body-medium">Decision Criteria</p>
+                <p class="headline-small mt-1" style="color: var(--md-sys-color-warning);">50%</p>
+                <div class="score-bar"><div class="score-bar-fill" style="width:50%; background: var(--md-sys-color-warning);"></div></div>
+                <p class="text-[12px] mt-2" style="color: var(--md-sys-color-on-surface-variant);">E (15%) 没就位，DC 的商务半张就建不起来</p>
+            </div>
+            <div class="element-card p1">
+                <div class="flex justify-between items-baseline">
+                    <p class="title-medium">DP</p>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-warning); color: var(--md-sys-color-on-primary);">P1</span>
+                </div>
+                <p class="body-medium">Decision Process</p>
+                <p class="headline-small mt-1" style="color: var(--md-sys-color-warning);">60%</p>
+                <div class="score-bar"><div class="score-bar-fill" style="width:60%; background: var(--md-sys-color-warning);"></div></div>
+                <p class="text-[12px] mt-2" style="color: var(--md-sys-color-on-surface-variant);">E 和 CH 都跟 DP 挂钩；E 没就位，采购环节也没显性化</p>
+            </div>
+            <div class="element-card p0">
+                <div class="flex justify-between items-baseline">
+                    <p class="title-medium">P</p>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-error); color: var(--md-sys-color-on-primary);">P0</span>
+                </div>
+                <p class="body-medium">Paper Process</p>
+                <p class="headline-small mt-1" style="color: var(--md-sys-color-error);">33%</p>
+                <div class="score-bar"><div class="score-bar-fill" style="width:33%; background: var(--md-sys-color-error);"></div></div>
+                <p class="text-[12px] mt-2" style="color: var(--md-sys-color-on-surface-variant);">E 和 DP 都没就绪，合同环节自然推不动</p>
+            </div>
+            <div class="element-card p1">
+                <div class="flex justify-between items-baseline">
+                    <p class="title-medium">M</p>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-warning); color: var(--md-sys-color-on-primary);">P1</span>
+                </div>
+                <p class="body-medium">Metrics</p>
+                <p class="headline-small mt-1" style="color: var(--md-sys-color-warning);">70%</p>
+                <div class="score-bar"><div class="score-bar-fill" style="width:70%; background: var(--md-sys-color-warning);"></div></div>
+                <p class="text-[12px] mt-2" style="color: var(--md-sys-color-on-surface-variant);">E (15%) 没就位，EB 没法对指标做口头确认</p>
+            </div>
+            <div class="element-card —">
+                <div class="flex justify-between items-baseline">
+                    <p class="title-medium">I</p>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-success); color: var(--md-sys-color-on-primary);">—</span>
+                </div>
+                <p class="body-medium">Implicate the Pain</p>
+                <p class="headline-small mt-1" style="color: var(--md-sys-color-success);">92%</p>
+                <div class="score-bar"><div class="score-bar-fill" style="width:92%; background: var(--md-sys-color-success);"></div></div>
+                <p class="text-[12px] mt-2" style="color: var(--md-sys-color-on-surface-variant);">M 70% / DC 50% 都还在范围内，I 这条已经做好</p>
+            </div>
+            <div class="element-card p2">
+                <div class="flex justify-between items-baseline">
+                    <p class="title-medium">CH</p>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-success); color: var(--md-sys-color-on-primary);">P2</span>
+                </div>
+                <p class="body-medium">Champion</p>
+                <p class="headline-small mt-1" style="color: var(--md-sys-color-success);">83%</p>
+                <div class="score-bar"><div class="score-bar-fill" style="width:83%; background: var(--md-sys-color-success);"></div></div>
+                <p class="text-[12px] mt-2" style="color: var(--md-sys-color-on-surface-variant);">CP 67% 偏低，但 Champion 自身没问题</p>
+            </div>
+            <div class="element-card p1">
+                <div class="flex justify-between items-baseline">
+                    <p class="title-medium">CP</p>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-warning); color: var(--md-sys-color-on-primary);">P1</span>
+                </div>
+                <p class="body-medium">Competition</p>
+                <p class="headline-small mt-1" style="color: var(--md-sys-color-warning);">67%</p>
+                <div class="score-bar"><div class="score-bar-fill" style="width:67%; background: var(--md-sys-color-warning);"></div></div>
+                <p class="text-[12px] mt-2" style="color: var(--md-sys-color-on-surface-variant);">DC (50%) 一起低，差异化论据缺商务支撑</p>
+            </div>
+        </div>
+
+        <p class="label-large mt-6 mb-3">Layer B · Diagnostic Cards</p>
+        <div class="space-y-3">
+            <div class="element-card p0">
+                <p class="title-medium">E — Economic Buyer · 15%</p>
+                <p class="body-medium italic mt-2">Diagnostic Evidence: DC S2 标注'技术决策需 VP 背书'为 Yes，但 E 的 EB 接触类语句全部为 No —— DC 的 Yes 评分缺乏 EB 接触佐证，和 E 的实际进展对不上。</p>
+                <p class="body-medium mt-2" style="color: var(--md-sys-color-on-surface);">
+                    <strong>Root Cause:</strong> Ava（座舱研发 VP）已经在 Slide 9 组织架构里识别出来，但 AE 的接触路径只停留在 Champion Alan 这一层。Alan 是 Ava 的直属下级，文化和组织惯性下 Alan 倾向于'先把东西做出来再报给 VP'，所以 EB 接触被自然延迟。当前 E 缺的不是信息盲区，是接触节奏没主动打开。
+                </p>
+            </div>
+            <div class="element-card p1">
+                <p class="title-medium">DC — Decision Criteria · 50%</p>
+                <p class="body-medium mt-2" style="color: var(--md-sys-color-on-surface);">
+                    <strong>Root Cause:</strong> 技术维度的准入标准已经和 Alan 对齐（多模态能力、车端延迟、Nova Sonic 可部署性），但商务维度（合规、定价、本地化服务）需要 VP 级才能确认。E 没接触，DC 的商务半张就缺，所以评分卡在 50% 附近。
+                </p>
+            </div>
+            <div class="element-card p1">
+                <p class="title-medium">DP — Decision Process · 60%</p>
+                <p class="body-medium mt-2" style="color: var(--md-sys-color-on-surface);">
+                    <strong>Root Cause:</strong> 技术选型流程清晰（Alan 主导），但预算审批路径和供应商准入 gate 还没显性化。Slide 12 显示 Alex（采购总监）对外资云的本地化和账期敏感 —— DP 在采购节点有未识别的阻力路径。
+                </p>
+            </div>
+            <div class="element-card p0">
+                <p class="title-medium">P — Paper Process · 33%</p>
+                <p class="body-medium mt-2" style="color: var(--md-sys-color-on-surface);">
+                    <strong>Root Cause:</strong> PPA / EDP 合同路径还没讨论。P 跟 E、DP 都挂钩，两个都没就绪，合同环节整体卡死。当前阶段不直接修复 P，先解决 E。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="md-card">
+        <h2 class="section-title">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">groups</span>
+            Stakeholder Profiling
+        </h2>
+        <p class="label-large mb-2">Source: contact-profiling skill · CxO Persona reference: cxo-personas.md</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
+            <div class="md-card-filled p-5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="title-medium">Ava</p>
+                        <p class="body-medium">座舱研发 VP</p>
+                    </div>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-primary-container);">Economic Buyer</span>
+                </div>
+                <p class="body-medium mt-3">决策节奏偏审慎,重数据与风险论证。对外资云有品牌偏好但警惕合规风险。倾向由下属(Alan)先完成技术可行性,再亲自参与商务与合规层。</p>
+            </div>
+            <div class="md-card-filled p-5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="title-medium">Alan</p>
+                        <p class="body-medium">座舱 AI 基础服务总监</p>
+                    </div>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-success-container); color: var(--md-sys-color-on-success-container);">Champion</span>
+                </div>
+                <p class="body-medium mt-3">技术判断快、对多模态主题有学术偏好。Ava 直属下级,具备引荐权威但倾向先做内部联审再上报。</p>
+            </div>
+            <div class="md-card-filled p-5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="title-medium">Andy</p>
+                        <p class="body-medium">IT 基础架构总监</p>
+                    </div>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-surface-container-highest); color: var(--md-sys-color-on-surface-variant);">Coach</span>
+                </div>
+                <p class="body-medium mt-3">提供算力与基础架构配合视角。对多云与国产算力兼容性敏感。</p>
+            </div>
+            <div class="md-card-filled p-5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="title-medium">Alex</p>
+                        <p class="body-medium">采购总监</p>
+                    </div>
+                    <span class="pill-badge"
+                          style="background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container);">Skeptic</span>
+                </div>
+                <p class="body-medium mt-3">对外资云价格透明度、账期、本地化支持持保留态度。需在 Phase 6 Strategy 2 对齐。</p>
+            </div>
+        </div>
+
+        <div class="mt-5 p-5 rounded-2xl" style="background: var(--md-sys-color-primary-container);">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined" style="color: var(--md-sys-color-on-primary-container);">person</span>
+                <p class="label-large" style="color: var(--md-sys-color-on-primary-container);">CxO Persona Overlay · VP/部门负责人层</p>
+            </div>
+            <p class="body-medium" style="color: var(--md-sys-color-on-primary-container);">决策逻辑:技术成熟度 → 合规 → 总拥有成本 → 战略一致性。偏好 1 对 1 高密度会议 + 书面技术材料。忌讳'销售口吻'开场,偏好以'一个具体问题'切入的专家对话。</p>
+        </div>
+    </section>
+
+    <section class="md-card">
+        <h2 class="section-title">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">forum</span>
+            Customer Verification Questions
+        </h2>
+
+        <div class="p-4 rounded-2xl mb-4" style="background: var(--md-sys-color-surface-container);">
+            <p class="label-large mb-2">Persona Traits Applied</p>
+            <ul class="space-y-1 body-medium" style="color: var(--md-sys-color-on-surface);">
+                <li>1. Ava 审慎决策偏好 → 问题以'数据 + 具体情境'开场,避免宏大叙事</li>
+                <li>2. Alan 的多模态学术偏好 → 第一问以技术细节作为共鸣点</li>
+                <li>3. Alex 对本地化敏感 → 在 DP 类问题中内置合规与本地化语境</li>
+            </ul>
+        </div>
+
+        <div class="mb-4">
+            <p class="title-medium mb-2">
+                E — Economic Buyer
+                <span class="pill-badge" style="background: var(--md-sys-color-error); color: var(--md-sys-color-on-primary);">P0</span>
+            </p>
+            <div class="p-4 rounded-2xl " style="background: var(--md-sys-color-surface-container);">
+                <p class="body-medium" style="color: var(--md-sys-color-on-surface);">
+                    <strong>主问题 1:</strong> "Alan,当我们把多模态座舱的能力提案升到 VP 层讨论时,Ava 通常最先关心的是技术可落地还是合规风险?"
+                </p>
+<p class="body-medium mt-2"><strong>Purpose:</strong> 识别 EB 的核心决策杠杆。</p><p class="body-medium mt-1"><strong>Expected insights:</strong> Ava 的第一性关注点(技术/合规/TCO)+ 决策节奏。</p><p class="body-medium mt-1"><strong>Follow-up:</strong> "她上次类似评估花了多久?"</p>            </div>
+            <div class="p-4 rounded-2xl mt-2" style="background: var(--md-sys-color-surface-container);">
+                <p class="body-medium" style="color: var(--md-sys-color-on-surface);">
+                    <strong>主问题 2:</strong> "我们整理了一份 30 分钟的多模态座舱价值简报 —— 你觉得是直接向 Ava 申请一次独立会议更合适,还是先让我们联审一次再上?"
+                </p>
+<p class="body-medium mt-2"><strong>Purpose:</strong> 解锁 EB 接触路径,尊重 Champion 的引荐节奏。</p><p class="body-medium mt-1"><strong>Expected insights:</strong> Alan 对引荐时机的判断 + 内部向上汇报的常规动作。</p>            </div>
+        </div>
+        <div class="mb-4">
+            <p class="title-medium mb-2">
+                DP — Decision Process
+                <span class="pill-badge" style="background: var(--md-sys-color-warning); color: var(--md-sys-color-on-primary);">P1</span>
+            </p>
+            <div class="p-4 rounded-2xl " style="background: var(--md-sys-color-surface-container);">
+                <p class="body-medium" style="color: var(--md-sys-color-on-surface);">
+                    <strong>主问题 1:</strong> "从技术选型到最终采购审批,你们通常会经过哪些 gate?Alex 在其中的参与点是哪一步?"
+                </p>
+<p class="body-medium mt-2"><strong>Purpose:</strong> 显性化采购路径与阻力点(Alex 对本地化的疑虑)。</p><p class="body-medium mt-1"><strong>Follow-up:</strong> "这次多模态升级预算来自技术线还是战略线?"</p>            </div>
+        </div>
+        <div class="mb-4">
+            <p class="title-medium mb-2">
+                DC — Decision Criteria
+                <span class="pill-badge" style="background: var(--md-sys-color-warning); color: var(--md-sys-color-on-primary);">P1</span>
+            </p>
+            <div class="p-4 rounded-2xl " style="background: var(--md-sys-color-surface-container);">
+                <p class="body-medium" style="color: var(--md-sys-color-on-surface);">
+                    <strong>主问题 1:</strong> "如果 Ava 要做最终拍板,除了技术成熟度,她会希望我们的方案在合规和本地化上满足哪几条硬指标?"
+                </p>
+<p class="body-medium mt-2"><strong>Purpose:</strong> 补齐 DC 的商务半张,提前暴露准入门槛。</p>            </div>
+        </div>
+    </section>
+
+    <section class="md-card-elevated" style="border-left: 4px solid var(--md-sys-color-primary);">
+        <h2 class="section-title">
+            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">flag</span>
+            Phase 6 · Action Plan
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+            <div class="md-card-filled p-5">
+                <p class="label-large">Score</p>
+                <p class="title-medium mt-1">62 / 100</p>
+            </div>
+            <div class="md-card-filled p-5">
+                <p class="label-large">Current Stage</p>
+                <p class="title-medium mt-1">
+                    Qualified · <span style="color: var(--md-sys-color-warning);">Rollback → Prospect</span>                </p>
+            </div>
+            <div class="md-card-filled p-5">
+                <p class="label-large">Qualified Completion</p>
+                <p class="title-medium mt-1">68%</p>
+            </div>
+        </div>
+
+        <div class="mt-4 p-4 rounded-2xl" style="background: var(--md-sys-color-surface-container);">
+            <p class="label-large mb-2">Context · 未完成出口标准</p>
+            <ul class="space-y-1 body-medium" style="color: var(--md-sys-color-on-surface);">
+                <li>• <strong>Prospect</strong>: E = 15% — 初步预算方向未建立</li>
+                <li>• <strong>Qualified</strong>: E = 15% — 未识别最终决策者(Ava 已识别但未接触)</li>
+                <li>• <strong>Qualified</strong>: DP = 60% — 预算审批路径与采购 gate 未显性化</li>
+                <li>• <strong>Qualified</strong>: CP = 67% — 合作伙伴 / 交付策略尚未定稿</li>
+            </ul>
+        </div>
+
+        <p class="label-large mt-5 mb-2">Winning Strategies · 战略概览</p>
+        <div class="space-y-2">
+            <div class="p-4 rounded-2xl"
+                 style="background: var(--md-sys-color-primary-container);">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                    <p class="title-medium" style="color: var(--md-sys-color-on-primary-container);">
+                        <strong>S1</strong> · 建立 EB 接触通道 · <span style="color: var(--md-sys-color-primary);">E ≥ 55%</span>                    </p>
+                    <span class="pill-badge" style="background: var(--md-sys-color-primary); color: white;">Primary Blocker</span>
+                </div>
+                <p class="body-medium mt-1" style="color: var(--md-sys-color-on-primary-container);">
+                    <em>EB Ava 还没接触是当前最大的卡点；Qualified 阶段'已识别最终决策者'这条要做完，必须先把 VP 级别的对话打开。</em>
+                </p>
+            </div>
+            <div class="p-4 rounded-2xl"
+                 style="background: var(--md-sys-color-surface-container-high);">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                    <p class="title-medium" style="color: var(--md-sys-color-on-surface);">
+                        <strong>S2</strong> · 显性化采购路径与合规锚点 · <span style="color: var(--md-sys-color-primary);">DP ≥ 70%</span>                    </p>
+                </div>
+                <p class="body-medium mt-1" style="color: var(--md-sys-color-on-surface-variant);">
+                    <em>Qualified 阶段'预算与时间框架'还没说清楚（DP 60%），同时 Alex 对外资云的本地化和账期有疑虑 — 这些不提前化解，后面合同环节会卡。</em>
+                </p>
+            </div>
+            <div class="p-4 rounded-2xl"
+                 style="background: var(--md-sys-color-surface-container-high);">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                    <p class="title-medium" style="color: var(--md-sys-color-on-surface);">
+                        <strong>S3</strong> · 量化指标获得 EB 背书 · <span style="color: var(--md-sys-color-primary);">M ≥ 70%</span>                    </p>
+                </div>
+                <p class="body-medium mt-1" style="color: var(--md-sys-color-on-surface-variant);">
+                    <em>M 已经 70% 但还差 EB 口头确认 — 修复 E（让 EB 上桌）后，自然带动 M 完成最后一步。</em>
+                </p>
+            </div>
+        </div>
+
+        <p class="label-large mt-5 mb-2">Weekly Plan · 执行视角</p>
+        <div class="space-y-3">
+            <div class="p-4 rounded-2xl" style="background: var(--md-sys-color-surface-container);">
+                <p class="title-medium mb-2" style="color: var(--md-sys-color-on-surface);">
+                    <strong>W1</strong> <span style="color: var(--md-sys-color-on-surface-variant); font-size: 13px;">· 本周</span>                </p>
+                <ul class="space-y-1 body-medium" style="color: var(--md-sys-color-on-surface);">
+                    <li class="flex items-start gap-2">
+                        <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-primary);">arrow_right</span>
+                        <span>向 Alan 正式请求引荐 Ava，附一页多模态座舱价值简报</span>
+                        <span class="ml-auto pill-badge" style="background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container);">S1</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-primary);">arrow_right</span>
+                        <span>整理'外资云 + 本地合规伙伴'的合规路径材料 (PIPL / 数据跨境)</span>
+                        <span class="ml-auto pill-badge" style="background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container);">S2</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="p-4 rounded-2xl" style="background: var(--md-sys-color-surface-container);">
+                <p class="title-medium mb-2" style="color: var(--md-sys-color-on-surface);">
+                    <strong>W2</strong>                </p>
+                <ul class="space-y-1 body-medium" style="color: var(--md-sys-color-on-surface);">
+                    <li class="flex items-start gap-2">
+                        <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-primary);">arrow_right</span>
+                        <span>与 Alan 联审简报，确认技术论点与合规论点的叙事分界</span>
+                        <span class="ml-auto pill-badge" style="background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container);">S1</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="p-4 rounded-2xl" style="background: var(--md-sys-color-surface-container);">
+                <p class="title-medium mb-2" style="color: var(--md-sys-color-on-surface);">
+                    <strong>W3</strong>                </p>
+                <ul class="space-y-1 body-medium" style="color: var(--md-sys-color-on-surface);">
+                    <li class="flex items-start gap-2">
+                        <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-primary);">arrow_right</span>
+                        <span>执行 30 分钟 EB 首次会议，会议中内嵌量化指标提问 (对标华为 HI 27 次/天)</span>
+                        <span class="ml-auto pill-badge" style="background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container);">S1 · S3</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-primary);">arrow_right</span>
+                        <span>约谈 Alex 一次 30 分钟专项会，聚焦账期 + 本地化支持两个议题</span>
+                        <span class="ml-auto pill-badge" style="background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container);">S2</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="p-4 rounded-2xl" style="background: var(--md-sys-color-surface-container);">
+                <p class="title-medium mb-2" style="color: var(--md-sys-color-on-surface);">
+                    <strong>W4</strong>                </p>
+                <ul class="space-y-1 body-medium" style="color: var(--md-sys-color-on-surface);">
+                    <li class="flex items-start gap-2">
+                        <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-primary);">arrow_right</span>
+                        <span>会后 48h 内发送 1 页 follow-up，确认下次接触节奏 + 获取 Ava 对'日均召唤次数'目标的书面回执</span>
+                        <span class="ml-auto pill-badge" style="background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container);">S1 · S3</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="material-symbols-outlined text-base mt-0.5" style="color: var(--md-sys-color-primary);">arrow_right</span>
+                        <span>基于 Alex 反馈出具合规 / 商务答疑文档 v1</span>
+                        <span class="ml-auto pill-badge" style="background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container);">S2</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <p class="label-large mb-2">Key Success Metrics · 30-day targets</p>
+            <div class="space-y-2">
+                <div class="flex items-center gap-3 p-3 rounded-xl" style="background: var(--md-sys-color-surface-container);">
+                    <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">task_alt</span>
+                    <span class="body-medium" style="color: var(--md-sys-color-on-surface);">E ≥ 55% — EB 首次会议完成 + 下次接触节奏已确认</span>
+                    <span class="ml-auto pill-badge" style="background: var(--md-sys-color-primary); color: white;">S1</span>
+                </div>
+                <div class="flex items-center gap-3 p-3 rounded-xl" style="background: var(--md-sys-color-surface-container);">
+                    <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">task_alt</span>
+                    <span class="body-medium" style="color: var(--md-sys-color-on-surface);">DP ≥ 70% — 预算审批路径与采购 gate 已显性化，Alex 专项会已执行</span>
+                    <span class="ml-auto pill-badge" style="background: var(--md-sys-color-primary); color: white;">S2</span>
+                </div>
+                <div class="flex items-center gap-3 p-3 rounded-xl" style="background: var(--md-sys-color-surface-container);">
+                    <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">task_alt</span>
+                    <span class="body-medium" style="color: var(--md-sys-color-on-surface);">M ≥ 70% — 量化指标在 EB 会议上获得口头确认并形成纪要</span>
+                    <span class="ml-auto pill-badge" style="background: var(--md-sys-color-primary); color: white;">S3</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center py-8">
+        <p class="body-medium">Generated by Opportunity Progression Skill · Dali Agent</p>
+        <p class="body-medium mt-1" style="font-size: 12px;">Report Date: 2026-05-13</p>
+    </footer>
+
+</div>
+</body>
+</html>

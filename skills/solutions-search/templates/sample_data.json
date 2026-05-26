@@ -1,0 +1,180 @@
+{
+    "customer_name": "海尔智家 Haier Smart Home",
+    "industry": "消费电子",
+    "date": "2026-05-12",
+    "upstream_source": "business-insight（3 个战略倡议）",
+    "coverage_summary": {
+        "initiatives_count": 3,
+        "references_count": 9
+    },
+    "initiatives": [
+        {
+            "number": 1,
+            "title": "北美供应链 IT 重塑入口",
+            "subtitle": "Tariff-aware forecasting + 供应链 IT 重塑",
+            "potential_opportunity": "4-year platform contract · $8–15M Y1 · $25–40M 3Y [估算]",
+            "queries_executed": [
+                "consumer electronics supply chain AWS forecast tariff",
+                "manufacturing supply chain prescriptive pattern reference architecture",
+                "Oracle ERP migration AWS supply chain modernization",
+                "supply chain CxO executive briefing production case study"
+            ],
+            "references": [
+                {
+                    "title": "AWS Supply Chain Developer Guide",
+                    "url": "https://docs.aws.amazon.com/aws-supply-chain/",
+                    "match_type": "direct",
+                    "match_type_label": "Direct Match",
+                    "match_strength": "Strong",
+                    "freshness_tier": "Current",
+                    "citation_validated": "Yes",
+                    "icon": "rocket_launch",
+                    "description": "Demand planning, supply planning, and tariff impact modeling with end-to-end visibility across supplier tiers.",
+                    "tags": ["docs.aws.amazon.com", "Direct match", "Strong", "Current"]
+                },
+                {
+                    "title": "Amazon Forecast Developer Guide",
+                    "url": "https://docs.aws.amazon.com/forecast/latest/dg/what-is-forecast.html",
+                    "match_type": "direct",
+                    "match_type_label": "Direct Match",
+                    "match_strength": "Strong",
+                    "freshness_tier": "Current",
+                    "citation_validated": "Yes",
+                    "icon": "rocket_launch",
+                    "description": "ML-based demand forecasting with tariff scenario inputs; historical data ingestion + scenario modeling.",
+                    "tags": ["docs.aws.amazon.com", "Direct match", "Strong", "Current"]
+                },
+                {
+                    "title": "Manufacturing Predictive Maintenance on AWS",
+                    "url": "https://aws.amazon.com/solutions/implementations/predictive-maintenance/",
+                    "match_type": "pattern",
+                    "match_type_label": "Pattern Match",
+                    "match_strength": "Moderate",
+                    "freshness_tier": "Recent",
+                    "citation_validated": "Yes",
+                    "icon": "architecture",
+                    "description": "IoT sensor ingestion + ML inference pipeline; same data flow pattern applies to supply chain anomaly detection.",
+                    "tags": ["aws.amazon.com/solutions", "Pattern match", "Moderate", "Recent"]
+                },
+                {
+                    "title": "Oracle to AWS Migration Playbook",
+                    "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/oracle-migration/",
+                    "match_type": "displacement",
+                    "match_type_label": "Displacement",
+                    "match_strength": "Moderate",
+                    "freshness_tier": "Current",
+                    "citation_validated": "Partial",
+                    "icon": "swap_horiz",
+                    "description": "Step-by-step Oracle ERP → AWS migration; covers SCM modules, data replication, and coexistence patterns.",
+                    "tags": ["prescriptive-guidance", "Migration", "Moderate", "Current"]
+                }
+            ],
+            "next_step": "Arrange Supply Chain Immersion Day with Haier NA IT leadership to validate tariff scenario models",
+            "coverage_gap": "Consumer appliance IoT vertical prescriptive pattern missing in ./references/"
+        },
+        {
+            "number": 2,
+            "title": "全屋智能 GenAI 差异化",
+            "subtitle": "Bedrock + IoT Greengrass 边缘推理 · 全屋智能 GenAI",
+            "potential_opportunity": "GenAI platform · $3–6M Y1 · $12–20M 3Y [估算]",
+            "queries_executed": [
+                "consumer electronics GenAI IoT edge Bedrock smart home",
+                "IoT edge inference adjacent industry reference architecture",
+                "Azure OpenAI migration Bedrock GenAI displacement",
+                "GenAI Immersion Day workshop smart home POC"
+            ],
+            "references": [
+                {
+                    "title": "Amazon Bedrock Developer Guide",
+                    "url": "https://docs.aws.amazon.com/bedrock/",
+                    "match_type": "direct",
+                    "match_type_label": "Direct Match",
+                    "match_strength": "Strong",
+                    "freshness_tier": "Current",
+                    "citation_validated": "Yes",
+                    "icon": "rocket_launch",
+                    "description": "Foundation model hosting, fine-tuning, and RAG for enterprise GenAI applications including smart home context understanding.",
+                    "tags": ["docs.aws.amazon.com", "Direct match", "Strong", "Current"]
+                },
+                {
+                    "title": "IoT Greengrass ML Inference at Edge",
+                    "url": "https://docs.aws.amazon.com/greengrass/v2/developerguide/ml-inference.html",
+                    "match_type": "direct",
+                    "match_type_label": "Direct Match",
+                    "match_strength": "Strong",
+                    "freshness_tier": "Current",
+                    "citation_validated": "Yes",
+                    "icon": "rocket_launch",
+                    "description": "Deploy ML models to edge devices for local inference; supports smart home appliance real-time decision making.",
+                    "tags": ["docs.aws.amazon.com", "Direct match", "Strong", "Current"]
+                },
+                {
+                    "title": "Automotive Connected Vehicle Architecture",
+                    "url": "https://aws.amazon.com/solutions/implementations/connected-vehicle/",
+                    "match_type": "pattern",
+                    "match_type_label": "Pattern Match",
+                    "match_strength": "Moderate",
+                    "freshness_tier": "Recent",
+                    "citation_validated": "Yes",
+                    "icon": "architecture",
+                    "description": "Edge-to-cloud data pipeline for connected devices; same IoT ingestion + ML pattern applies to smart home ecosystem.",
+                    "tags": ["aws.amazon.com/solutions", "Pattern match", "Moderate", "Recent"]
+                }
+            ],
+            "next_step": "Schedule GenAI Immersion Day with Haier R&D to prototype Bedrock-powered smart home assistant",
+            "coverage_gap": "No direct smart home GenAI case study in ./references/; closest is automotive connected vehicle (pattern match)"
+        },
+        {
+            "number": 3,
+            "title": "东南亚 D2C 电商云底座",
+            "subtitle": "Multi-region e-commerce platform · 东南亚扩张",
+            "potential_opportunity": "Regional platform · $2–5M Y1 · $8–15M 3Y [估算]",
+            "queries_executed": [
+                "retail e-commerce multi-region Southeast Asia AWS",
+                "e-commerce scalable architecture prescriptive pattern",
+                "Alibaba Cloud migration AWS displacement e-commerce",
+                "e-commerce production case study cross-border retail"
+            ],
+            "references": [
+                {
+                    "title": "AWS Retail Reference Architecture",
+                    "url": "https://aws.amazon.com/retail/partner-solutions/",
+                    "match_type": "direct",
+                    "match_type_label": "Direct Match",
+                    "match_strength": "Strong",
+                    "freshness_tier": "Current",
+                    "citation_validated": "Yes",
+                    "icon": "rocket_launch",
+                    "description": "End-to-end e-commerce architecture covering catalog, cart, checkout, and fulfillment with multi-region deployment.",
+                    "tags": ["aws.amazon.com/retail", "Direct match", "Strong", "Current"]
+                },
+                {
+                    "title": "Multi-Region Application Architecture",
+                    "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-multi-region-architecture/",
+                    "match_type": "pattern",
+                    "match_type_label": "Pattern Match",
+                    "match_strength": "Strong",
+                    "freshness_tier": "Current",
+                    "citation_validated": "Yes",
+                    "icon": "architecture",
+                    "description": "Active-active multi-region patterns for low-latency global applications; directly applicable to SEA expansion.",
+                    "tags": ["whitepapers", "Pattern match", "Strong", "Current"]
+                },
+                {
+                    "title": "Well-Architected Framework — Reliability Pillar",
+                    "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/",
+                    "match_type": "inspirational",
+                    "match_type_label": "Inspirational",
+                    "match_strength": "Moderate",
+                    "freshness_tier": "Current",
+                    "citation_validated": "Yes",
+                    "icon": "check_circle",
+                    "description": "Multi-AZ and multi-region reliability patterns for mission-critical e-commerce workloads.",
+                    "tags": ["Well-Architected", "Lens", "Moderate", "Current"]
+                }
+            ],
+            "next_step": "Conduct Well-Architected Review of current Alibaba Cloud e-commerce stack to identify migration quick wins",
+            "coverage_gap": "none"
+        }
+    ]
+}

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ contact_name }} · {{ purpose_label }} · Contact Profile</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Text:wght@400;500;700&family=Roboto:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        'md-primary':           '#6750A4',
+        'md-primary-container': '#EADDFF',
+        'md-on-primary':        '#FFFFFF',
+        'md-on-primary-container': '#21005D',
+        'md-secondary':         '#625B71',
+        'md-secondary-container': '#E8DEF8',
+        'md-tertiary':          '#7D5260',
+        'md-tertiary-container': '#FFD8E4',
+        'md-surface':           '#FEF7FF',
+        'md-surface-container': '#F3EDF7',
+        'md-surface-container-high': '#ECE6F0',
+        'md-on-surface':        '#1D1B20',
+        'md-on-surface-variant': '#49454F',
+        'md-outline':           '#79747E',
+        'md-outline-variant':   '#CAC4D0',
+        'md-success':           '#2E7D32',
+        'md-success-container': '#C8E6C9',
+        'md-warning':           '#F57C00',
+        'md-warning-container': '#FFE0B2',
+        'md-error':             '#B3261E',
+        'md-error-container':   '#F9DEDC',
+      },
+      borderRadius: {
+        'md-xl': '28px',
+        'md-lg': '16px',
+        'md-md': '12px',
+        'md-sm': '8px',
+      },
+      fontFamily: {
+        'display': ['"Google Sans Text"', '"Noto Sans SC"', 'Roboto', 'sans-serif'],
+        'body': ['"Google Sans Text"', '"Noto Sans SC"', 'Roboto', 'sans-serif'],
+      },
+    }
+  }
+}
+</script>
+
+<style>
+@page {
+  size: A4;
+  margin: 1.8cm;
+  @bottom-center {
+    content: counter(page) " / " counter(pages);
+    font-size: 9pt;
+    color: #79747E;
+  }
+}
+body {
+  font-family: "Google Sans Text", "Noto Sans SC", "PingFang SC", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
+}
+/* Section icon — emoji-style, no external font dependency */
+.icon {
+  display: inline-block;
+  font-style: normal;
+  font-size: 1.1em;
+  line-height: 1;
+  margin-right: 0.4em;
+}
+.profile-section-body { font-size: 15px; line-height: 1.85; color: #1D1B20; }
+.profile-section-body p { margin: 0.6em 0; }
+.profile-section-body strong { color: #21005D; font-weight: 700; }
+.profile-section-body ul, .profile-section-body ol { margin: 0.7em 0; padding-left: 1.4em; }
+.profile-section-body li { margin: 0.35em 0; }
+.profile-section-body li::marker { color: #6750A4; }
+.profile-section-body code { background: #F3EDF7; color: #21005D; padding: 0.1em 0.4em; border-radius: 6px; font-family: "Roboto Mono", monospace; font-size: 0.9em; }
+.profile-section-body blockquote { border-left: 4px solid #6750A4; background: #FEF7FF; padding: 0.6em 1em; margin: 0.8em 0; color: #49454F; border-radius: 0 12px 12px 0; }
+.profile-section-body table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 1em 0; font-size: 0.95em; border: 1px solid #CAC4D0; border-radius: 12px; overflow: hidden; }
+.profile-section-body th { background: #F3EDF7; color: #21005D; font-weight: 600; text-align: left; padding: 0.7em 0.9em; border-bottom: 1px solid #CAC4D0; }
+.profile-section-body td { padding: 0.6em 0.9em; border-bottom: 1px solid #ECE6F0; }
+.profile-section-body tr:last-child td { border-bottom: none; }
+@media print {
+  body { background: white !important; }
+  .hover\:shadow-md:hover { box-shadow: none !important; }
+  section { break-inside: avoid; page-break-inside: avoid; }
+  h1, h2 { break-after: avoid; }
+  .max-w-6xl { max-width: 100% !important; }
+}
+</style>
+</head>
+
+<body class="bg-md-surface font-body text-md-on-surface antialiased">
+
+<div class="max-w-6xl mx-auto px-6 py-10">
+
+  <header class="bg-md-primary text-md-on-primary rounded-md-xl p-8 mb-6 shadow-md">
+    <div class="flex items-center justify-between mb-4 text-sm opacity-90">
+      <div class="flex items-center gap-2">
+        <span class="px-3 py-1 rounded-full bg-white/15 font-medium">{{ purpose_label }}</span>
+      </div>
+      <div class="flex items-center gap-2 text-xs opacity-80">
+        <span>渲染于 {{ rendered_at }}</span>
+      </div>
+    </div>
+
+    <h1 class="font-display text-4xl font-bold leading-tight mb-1">{{ contact_name }}</h1>
+    <div class="text-lg opacity-90">{{ contact_title }} · {{ company }}</div>
+
+    <div class="flex flex-wrap gap-3 mt-5 text-sm">
+      <div class="bg-white/10 px-3 py-1.5 rounded-full">
+        <span>更新于 {{ updated_at }}</span>
+      </div>
+      <div class="bg-white/10 px-3 py-1.5 rounded-full">
+        <span>接触 {{ contact_count }} 次</span>
+      </div>
+      {% if confidence_pct %}
+      <div class="bg-white/15 px-3 py-1.5 rounded-full font-medium">
+        <span>准确度 {{ confidence_pct }}% · {{ confidence_pct_label }}</span>
+      </div>
+      {% endif %}
+    </div>
+  </header>
+
+  {% if confidence_pct %}
+  <section class="bg-md-surface-container rounded-md-xl p-6 mb-6 border border-md-outline-variant">
+    <div class="flex items-start gap-6 flex-wrap">
+      <div class="flex-shrink-0">
+        <svg width="120" height="120" viewBox="0 0 120 120" class="block">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#E7E0EC" stroke-width="12"></circle>
+          <circle cx="60" cy="60" r="50" fill="none"
+                  stroke="{% if confidence_pct_color == 'high' %}#2E7D32{% elif confidence_pct_color == 'medium' %}#F57C00{% elif confidence_pct_color == 'low' %}#B3261E{% else %}#79747E{% endif %}"
+                  stroke-width="12" stroke-linecap="round"
+                  stroke-dasharray="{{ (confidence_pct * 3.14) | round(1) }} 999"
+                  transform="rotate(-90 60 60)"></circle>
+          <text x="60" y="58" text-anchor="middle" font-family="'Google Sans Text', sans-serif"
+                font-size="26" font-weight="700"
+                fill="{% if confidence_pct_color == 'high' %}#2E7D32{% elif confidence_pct_color == 'medium' %}#F57C00{% elif confidence_pct_color == 'low' %}#B3261E{% else %}#49454F{% endif %}">
+            {{ confidence_pct }}%
+          </text>
+          <text x="60" y="78" text-anchor="middle" font-family="'Noto Sans SC', sans-serif"
+                font-size="12" fill="#49454F">准确度</text>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-[260px]">
+        <div class="flex items-center gap-2 mb-3">
+          <h2 class="font-display font-bold text-xl text-md-on-surface">这份报告的准确度</h2>
+        </div>
+        <div class="text-md-on-surface-variant mb-3">
+          <strong class="text-md-primary">{{ confidence_pct }}%</strong>
+          · <span class="font-medium">{{ confidence_pct_label }}</span>
+          · 基于以下信号综合算出 ↓
+        </div>
+        <div class="flex flex-wrap gap-2">
+          {% for item in confidence_basis %}
+          <span class="inline-flex items-center gap-1.5 bg-md-surface-container-high text-md-on-surface-variant px-3 py-1.5 rounded-full text-sm border border-md-outline-variant">
+            <span class="text-md-primary font-bold">→</span>
+            {{ item }}
+          </span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <main class="space-y-5">
+    {% for section in sections %}
+      {% if section.key != 'confidence_narrative' %}
+      <section id="{{ section.key }}" class="bg-md-surface-container rounded-md-xl p-6 border border-md-outline-variant transition-shadow hover:shadow-md">
+        <div class="flex items-center gap-2 mb-4">
+          <h2 class="font-display font-bold text-xl text-md-on-surface">{{ section.title }}</h2>
+        </div>
+        <div class="prose prose-md max-w-none text-md-on-surface profile-section-body">
+          {{ section.html | safe }}
+        </div>
+      </section>
+      {% endif %}
+    {% endfor %}
+  </main>
+
+  <footer class="mt-8 pt-6 border-t border-md-outline-variant text-sm text-md-on-surface-variant">
+    <div class="mb-2">
+      <span>本 Profile 由 Contact Profiling V2.0 渲染。所有判断均为某时点快照,非绝对真相,请结合现场判断使用。</span>
+    </div>
+    <div class="font-mono text-xs opacity-70">
+      Purpose: {{ purpose }} · Schema: 2.0 · Visual: MD3
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDDIC Scorecard</title>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<style>
+  :root {
+    --aws-orange: #ff9900;
+    --aws-dark: #232f3e;
+    --aws-light: #f2f3f3;
+    --border: #d5dbdb;
+    --risk: #d13212;
+    --warn: #eb5f07;
+    --ok: #1d8102;
+    --blue: #0073bb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--aws-light); color: #16191f; line-height: 1.5; }
+
+  .header { background: var(--aws-dark); color: white; padding: 20px 32px; display: flex; align-items: center; gap: 16px; }
+  .header h1 { font-size: 22px; font-weight: 600; }
+  .header .badge { background: var(--aws-orange); color: var(--aws-dark); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 3px; }
+  .header .tier-note { margin-left: auto; font-size: 12px; color: #d5dbdb; }
+
+  .container { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+
+  .tier-banner { background: #e6f2ff; border: 1px solid #99d0ff; border-radius: 6px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: #16191f; }
+  .tier-banner strong { color: var(--blue); }
+
+  .section { background: white; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
+  .section-header { background: var(--aws-dark); color: white; padding: 12px 20px; font-size: 15px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .section-header:hover { background: #37475a; }
+  .section-header .toggle { font-size: 18px; transition: transform 0.2s; }
+  .section-header .toggle.collapsed { transform: rotate(-90deg); }
+  .section-body { padding: 20px; }
+  .section-body.collapsed { display: none; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group label { font-size: 13px; font-weight: 600; color: #545b64; }
+  .form-group label .required { color: var(--risk); }
+  .form-group input, .form-group select, .form-group textarea {
+    padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; font-family: inherit;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none; border-color: var(--blue); box-shadow: 0 0 0 2px rgba(0,115,187,0.15);
+  }
+  .form-group textarea { resize: vertical; min-height: 60px; }
+
+  .exit-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+  .exit-table th { background: var(--aws-dark); color: white; padding: 8px 12px; text-align: left; font-weight: 600; }
+  .exit-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .exit-table tr:hover { background: #fafafa; }
+  .exit-table .stage-label { font-weight: 700; color: var(--aws-dark); white-space: nowrap; }
+  .exit-table select { width: 80px; padding: 4px; font-size: 13px; }
+  .exit-table input[type="text"] { width: 100%; padding: 4px 8px; font-size: 13px; border: 1px solid var(--border); border-radius: 3px; }
+
+  .element-card { border: 1px solid var(--border); border-radius: 6px; margin-bottom: 16px; overflow: hidden; }
+  .element-header { padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; }
+  .element-header .name { font-weight: 700; font-size: 15px; }
+  .element-header .category { font-size: 12px; padding: 2px 8px; border-radius: 3px; font-weight: 600; }
+  .element-header .cat-business { background: #e6f2ff; color: var(--blue); }
+  .element-header .cat-process { background: #fce8e6; color: var(--risk); }
+  .element-header .score-display { font-size: 14px; font-weight: 700; min-width: 60px; text-align: right; }
+
+  .statement-row { display: grid; grid-template-columns: 1fr 70px 70px; gap: 8px; padding: 8px 16px; border-top: 1px solid #f0f0f0; align-items: center; font-size: 13px; }
+  .statement-row:hover { background: #fafafa; }
+  .statement-row .text { color: #16191f; }
+  .statement-row select { padding: 4px; font-size: 13px; border: 1px solid var(--border); border-radius: 3px; text-align: center; }
+  .statement-row select:disabled { background: #f2f3f3; color: #879596; }
+  .statement-labels { display: grid; grid-template-columns: 1fr 70px 70px; gap: 8px; padding: 6px 16px; font-size: 11px; font-weight: 700; color: #545b64; border-top: 1px solid var(--border); background: #fafafa; }
+
+  .score-summary { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+  .score-summary h3 { margin-bottom: 12px; font-size: 16px; }
+  .score-bar-container { display: grid; grid-template-columns: 140px 1fr 50px; gap: 8px; align-items: center; margin-bottom: 8px; font-size: 13px; }
+  .score-bar { height: 20px; background: #eaeded; border-radius: 10px; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 10px; transition: width 0.3s, background 0.3s; }
+
+  .action-plan-row { display: grid; grid-template-columns: 1fr 1fr 1fr 100px 1fr; gap: 8px; padding: 6px 16px; border-top: 1px solid #f0f0f0; font-size: 13px; }
+  .action-plan-row input { padding: 4px 8px; font-size: 13px; border: 1px solid var(--border); border-radius: 3px; width: 100%; }
+  .action-plan-labels { display: grid; grid-template-columns: 1fr 1fr 1fr 100px 1fr; gap: 8px; padding: 6px 16px; font-size: 11px; font-weight: 700; color: #545b64; border-top: 1px solid var(--border); background: #fafafa; }
+
+  .btn-export { background: var(--aws-orange); color: var(--aws-dark); border: none; padding: 12px 32px; font-size: 16px; font-weight: 700; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 24px auto; }
+  .btn-export:hover { background: #ec8b00; }
+  .btn-export:disabled { background: #d5dbdb; color: #879596; cursor: not-allowed; }
+
+  .footer { text-align: center; padding: 20px; font-size: 12px; color: #879596; }
+
+  .score-ok { color: var(--ok); }
+  .score-warn { color: var(--warn); }
+  .score-risk { color: var(--risk); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>EDDIC Scorecard</h1>
+  <span class="badge">English</span>
+  <span class="tier-note">Simple Opportunity — 5 elements</span>
+</div>
+
+<div class="container">
+
+  <div class="tier-banner">
+    <strong>Simple tier (EDDIC)</strong> — 5 elements scored: <strong>E</strong> (Economic Buyer), <strong>DC</strong> (Decision Criteria), <strong>DP</strong> (Decision Process), <strong>I</strong> (Implicate the Pain), <strong>CP</strong> (Competition). M / P / CH are out of scope at this tier. If your opportunity turns strategic, switch to the 8-element MEDDPICC form.
+  </div>
+
+  <!-- SECTION 1: Basic Info -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span>1. Opportunity Basic Information</span>
+      <span class="toggle">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Account Name <span class="required">*</span></label>
+          <input type="text" id="accountName" placeholder="Customer / Account name">
+        </div>
+        <div class="form-group">
+          <label>Opportunity Name <span class="required">*</span></label>
+          <input type="text" id="oppName" placeholder="Opportunity name">
+        </div>
+        <div class="form-group">
+          <label>Opportunity Location <span class="required">*</span></label>
+          <select id="oppLocation">
+            <option value="">-- Select --</option>
+            <option>Hong Kong</option>
+            <option>Taiwan</option>
+            <option>China</option>
+            <option>Singapore</option>
+            <option>Japan</option>
+            <option>Korea</option>
+            <option>India</option>
+            <option>Australia</option>
+            <option>Others</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Opportunity Type <span class="required">*</span></label>
+          <select id="oppType">
+            <option value="">-- Select --</option>
+            <option>GenAI</option>
+            <option>Migration</option>
+            <option>Migration and Modernization</option>
+            <option>Modernization</option>
+            <option>Others</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>For "Others", provide description</label>
+          <input type="text" id="oppTypeOther" placeholder="Description">
+        </div>
+        <div class="form-group">
+          <label>Oppt Stage <span class="required">*</span></label>
+          <select id="oppStage">
+            <option value="">-- Select --</option>
+            <option>Prospect</option>
+            <option>Qualified</option>
+            <option>Tech Validation</option>
+            <option>Business Validation</option>
+            <option>Committed</option>
+            <option>Closed/Launched</option>
+          </select>
+        </div>
+      </div>
+
+      <h4 style="margin-top:20px; margin-bottom:4px; font-size:14px;">Information from the current and all previous stages needs to be entered</h4>
+      <table class="exit-table">
+        <thead>
+          <tr><th>Opp Stage</th><th>Exit Criteria</th><th style="width:100px">Current completion %</th><th>Describe current status (what has been done, what is still missing)</th><th style="width:100px">Remarks</th></tr>
+        </thead>
+        <tbody id="exitCriteriaBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SCORE SUMMARY -->
+  <div class="score-summary" id="scoreSummary">
+    <h3>EDDIC Score Overview: <span id="totalScore">0</span>/63</h3>
+    <div id="scoreBars"></div>
+  </div>
+
+  <!-- SECTION 2: Scorecard -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span>2. EDDIC Scorecard</span>
+      <span class="toggle">▼</span>
+    </div>
+    <div class="section-body" id="scorecardBody"></div>
+  </div>
+
+  <!-- SECTION 3: Competitive Info -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span>3. Competitive Information</span>
+      <span class="toggle">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>Job Title and Department of the Economic Buyer</label>
+          <input type="text" id="ebTitle" placeholder="E.g. VP of Engineering, IT Department">
+        </div>
+        <div class="form-group full">
+          <label>Customer Business Objective</label>
+          <textarea id="bizObjective" placeholder="What is the customer trying to achieve?"></textarea>
+        </div>
+        <div class="form-group full">
+          <label>Potential Obstacles to Winning the Deal or Customer Concerns</label>
+          <textarea id="obstacles" placeholder="Known risks, customer concerns, blockers"></textarea>
+        </div>
+        <div class="form-group full">
+          <label>AWS Solutions and Services</label>
+          <textarea id="awsSolutions" placeholder="E.g. EC2, S3, RDS, Migration Hub"></textarea>
+        </div>
+        <div class="form-group full">
+          <label>AWS Competitor <span class="required">* MUST fill in here</span></label>
+          <input type="text" id="competitor" placeholder="E.g. GCP, Azure, Alibaba Cloud (leave empty if none)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-export" onclick="exportXlsx()">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 13l-4-4h3V3h2v6h3l-4 4zm-7 4h14v-2H3v2z"/></svg>
+    Export as .xlsx
+  </button>
+
+  <div class="footer">EDDIC Scorecard Form v1 &mdash; For use with Opportunity Progression Skill (Simple tier)</div>
+</div>
+
+<script>
+const EXIT_CRITERIA = [
+  { stage: 'Prospect', criteria: [
+    'Customer opportunity identified',
+    'Opportunity has products with a valid estimated value (non-zero-dollar value)',
+    'Initial customer meeting scheduled'
+  ]},
+  { stage: 'Qualified', criteria: [
+    'Customer is willing to pursue a solution',
+    'Customer champion & decision-maker identified',
+    'Delivery partner strategy (Partner and/or ProServe) identified'
+  ]},
+  { stage: 'Tech Validation', criteria: [
+    'Customer and AWS share common understanding of solution architecture, implementation, and process',
+    'Technical solution design finalized and agreed with customer'
+  ]},
+  { stage: 'Business Validation', criteria: [
+    'Relevant customer approvals have been secured',
+    'Deal details, including economics and close plan, have been jointly reviewed and agreed to with customer'
+  ]},
+  { stage: 'Committed', criteria: [
+    'Customer solution has started to move to AWS OR customer usage has spiked by 10% of opportunity MRR value; Customer has signed an agreement (Private Pricing Agreement)',
+    'No commitment from customer to proceed or existing commitment can no longer be honored; Another cloud provider has been selected by the customer'
+  ]},
+  { stage: 'Closed/Launched', criteria: [
+    'Delivery governance implemented; Opportunity has been won'
+  ]}
+];
+
+// EDDIC ordering (acronym E-D-D-I-C). Weights per SKILL.md §Element Score Computation Rules.
+// Total max = 13 + 13 + 13 + 12 + 12 = 63.
+const ELEMENTS = [
+  { code: 'E', name: 'Economic Buyer', category: 'Business Driven', catClass: 'cat-business', max: 13, statements: [
+    { text: 'I have engaged with the Economic Buyer and discussed the initiative.', weight: 4 },
+    { text: 'The Economic Buyer recognizes the business pain points, AWS solutions, and the value (metrics) that the solutions deliver.', weight: 4 },
+    { text: 'The Economic Buyer has given me a verbal \'go\' on the deal.', weight: 5 }
+  ]},
+  { code: 'DC', name: 'Decision Criteria', category: 'Process Driven', catClass: 'cat-process', max: 13, statements: [
+    { text: 'The customer\'s buying decision criteria have been identified.', weight: 3 },
+    { text: 'The internal supporter / decision-maker has confirmed the decision criteria.', weight: 3 },
+    { text: 'The decision criteria are differentiated for AWS.', weight: 3 },
+    { text: 'The customer agrees the pain compels them to act.', weight: 4 }
+  ]},
+  { code: 'DP', name: 'Decision Process', category: 'Process Driven', catClass: 'cat-process', max: 13, statements: [
+    { text: 'The internal supporter has provided me with the steps to close the deal.', weight: 4 },
+    { text: 'Legal, Finance and Economic Buyer/seller are aligned.', weight: 4 },
+    { text: 'We are executing on a mutually aligned close plan.', weight: 5 }
+  ]},
+  { code: 'I', name: 'Implicate the Pain', category: 'Business Driven', catClass: 'cat-business', max: 12, statements: [
+    { text: 'I have identified the customer\'s pain and the implications.', weight: 4 },
+    { text: 'There are sufficient, quantifiable, negative consequences of the pain.', weight: 4 },
+    { text: 'The customer agrees the pain compels them to act.', weight: 4 }
+  ]},
+  { code: 'CP', name: 'Competition', category: 'Process Driven', catClass: 'cat-process', max: 12, statements: [
+    { text: 'Aware that the customer is considering alternatives to AWS. (If "Yes", go to the "Competitive Info" section and fill in the details.)', weight: 4 },
+    { text: 'AWS has advantages that alternatives do not.', weight: 4 },
+    { text: 'The customer\'s decision criteria favor AWS over the alternatives.', weight: 4 }
+  ]}
+];
+
+const TOTAL_MAX = ELEMENTS.reduce((s, el) => s + el.max, 0);
+
+function buildExitCriteria() {
+  const tbody = document.getElementById('exitCriteriaBody');
+  EXIT_CRITERIA.forEach(stage => {
+    stage.criteria.forEach((c, i) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        ${i === 0 ? `<td class="stage-label" rowspan="${stage.criteria.length}">${stage.stage}</td>` : ''}
+        <td>${c}</td>
+        <td><select class="exit-pct" data-stage="${stage.stage}">
+          ${[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1].map(v => `<option value="${v}">${Math.round(v*100)}%</option>`).join('')}
+        </select></td>
+        <td><input type="text" class="exit-status" placeholder="Current status..."></td>
+        <td><input type="text" class="exit-remarks" placeholder=""></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  });
+}
+
+function buildScorecard() {
+  const body = document.getElementById('scorecardBody');
+  ELEMENTS.forEach((el, ei) => {
+    const card = document.createElement('div');
+    card.className = 'element-card';
+    card.innerHTML = `
+      <div class="element-header">
+        <div>
+          <span class="name">${el.code} — ${el.name}</span>
+          <span class="category ${el.catClass}">${el.category}</span>
+        </div>
+        <div class="score-display" id="score_${el.code}">0/${el.max}</div>
+      </div>
+      <div class="statement-labels">
+        <span>Evaluation Statement</span>
+        <span style="text-align:center">Applies?</span>
+        <span style="text-align:center">Score</span>
+      </div>
+      ${el.statements.map((s, si) => `
+        <div class="statement-row">
+          <div class="text">${s.text}</div>
+          <select class="applies" data-el="${ei}" data-st="${si}" data-weight="${s.weight}" onchange="onAppliesChange(this)">
+            <option value="" selected>--</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+          <select class="score-select" data-el="${ei}" data-st="${si}" onchange="updateScores()" disabled>
+            <option value="0" selected>-</option>
+            ${Array.from({length: s.weight}, (_, i) => i + 1).map(v => `<option value="${v}">${v}</option>`).join('')}
+          </select>
+        </div>
+      `).join('')}
+      <div class="action-plan-labels">
+        <span>#OneTeam Role</span>
+        <span>Action/Backup Plan</span>
+        <span>Potential Issues</span>
+        <span>Target Date</span>
+        <span>Remarks</span>
+      </div>
+      <div class="action-plan-row">
+        <input type="text" class="ap-role" data-el="${ei}" placeholder="">
+        <input type="text" class="ap-action" data-el="${ei}" placeholder="">
+        <input type="text" class="ap-issues" data-el="${ei}" placeholder="">
+        <input type="date" class="ap-date" data-el="${ei}">
+        <input type="text" class="ap-remarks" data-el="${ei}" placeholder="">
+      </div>
+    `;
+    body.appendChild(card);
+  });
+}
+
+function buildScoreBars() {
+  const container = document.getElementById('scoreBars');
+  ELEMENTS.forEach(el => {
+    container.innerHTML += `
+      <div class="score-bar-container">
+        <span>${el.code} — ${el.name}</span>
+        <div class="score-bar"><div class="score-bar-fill" id="bar_${el.code}" style="width:0%"></div></div>
+        <span id="pct_${el.code}">0%</span>
+      </div>
+    `;
+  });
+}
+
+function onAppliesChange(appliesSel) {
+  const ei = appliesSel.dataset.el;
+  const si = appliesSel.dataset.st;
+  const weight = parseInt(appliesSel.dataset.weight);
+  const scoreSel = document.querySelector(`.score-select[data-el="${ei}"][data-st="${si}"]`);
+  if (appliesSel.value === 'No' || appliesSel.value === '') {
+    scoreSel.value = '0';
+    scoreSel.disabled = true;
+  } else {
+    scoreSel.disabled = false;
+    scoreSel.value = String(weight);
+  }
+  updateScores();
+}
+
+function updateScores() {
+  let total = 0;
+  ELEMENTS.forEach((el, ei) => {
+    let elScore = 0;
+    el.statements.forEach((_, si) => {
+      const sel = document.querySelector(`.score-select[data-el="${ei}"][data-st="${si}"]`);
+      elScore += parseInt(sel.value) || 0;
+    });
+    if (elScore > el.max) elScore = el.max;
+    total += elScore;
+
+    const pct = Math.round((elScore / el.max) * 100);
+    document.getElementById(`score_${el.code}`).textContent = `${elScore}/${el.max}`;
+    document.getElementById(`pct_${el.code}`).textContent = `${pct}%`;
+
+    const bar = document.getElementById(`bar_${el.code}`);
+    bar.style.width = pct + '%';
+    bar.style.background = pct >= 80 ? 'var(--ok)' : pct >= 60 ? 'var(--warn)' : 'var(--risk)';
+
+    const pctSpan = document.getElementById(`pct_${el.code}`);
+    pctSpan.className = pct >= 80 ? 'score-ok' : pct >= 60 ? 'score-warn' : 'score-risk';
+  });
+  document.getElementById('totalScore').textContent = total;
+}
+
+function toggleSection(header) {
+  const body = header.nextElementSibling;
+  const toggle = header.querySelector('.toggle');
+  body.classList.toggle('collapsed');
+  toggle.classList.toggle('collapsed');
+}
+
+function exportXlsx() {
+  const wb = XLSX.utils.book_new();
+
+  // Sheet 1: Basic Info
+  const basicData = [
+    ['Account Name', 'Opportunity Name', 'Opportunity Location', 'Opportunity Type', 'Others Description', 'Oppt Stage', 'Tier', 'Score', 'Score Max'],
+    [
+      document.getElementById('accountName').value,
+      document.getElementById('oppName').value,
+      document.getElementById('oppLocation').value,
+      document.getElementById('oppType').value,
+      document.getElementById('oppTypeOther').value,
+      document.getElementById('oppStage').value,
+      'Simple (EDDIC)',
+      parseInt(document.getElementById('totalScore').textContent),
+      TOTAL_MAX
+    ],
+    [],
+    [],
+    [],
+    ['Information from the current and all previous stages needs to be entered'],
+    ['Opp Stage', 'Exit Criteria', 'Current completion %', 'Describe current status (what has been done, what is still missing)', 'Remarks']
+  ];
+
+  let ecIdx = 0;
+  const exitPcts = document.querySelectorAll('.exit-pct');
+  const exitStatuses = document.querySelectorAll('.exit-status');
+  const exitRemarks = document.querySelectorAll('.exit-remarks');
+  EXIT_CRITERIA.forEach(stage => {
+    stage.criteria.forEach(c => {
+      basicData.push([
+        stage.stage, c,
+        parseFloat(exitPcts[ecIdx].value),
+        exitStatuses[ecIdx].value,
+        exitRemarks[ecIdx].value
+      ]);
+      ecIdx++;
+    });
+  });
+  const ws1 = XLSX.utils.aoa_to_sheet(basicData);
+  ws1['!cols'] = [{wch:20},{wch:60},{wch:18},{wch:50},{wch:15}];
+  XLSX.utils.book_append_sheet(wb, ws1, 'Opportunity Basic Information');
+
+  // Sheet 2: Scorecard
+  const scData = [['Category', 'Element', 'Evaluation Statement', 'Applies', 'Score', '#OneTeam Role', 'Action/Backup Plan', 'Potential Issues', 'Target Date', 'Remarks']];
+  ELEMENTS.forEach((el, ei) => {
+    el.statements.forEach((s, si) => {
+      const applies = document.querySelector(`.applies[data-el="${ei}"][data-st="${si}"]`).value;
+      const score = document.querySelector(`.score-select[data-el="${ei}"][data-st="${si}"]`).value;
+      const row = [el.category, `${el.code} — ${el.name}`, s.text, applies, parseInt(score)];
+      if (si === 0) {
+        const role = document.querySelector(`.ap-role[data-el="${ei}"]`).value;
+        const action = document.querySelector(`.ap-action[data-el="${ei}"]`).value;
+        const issues = document.querySelector(`.ap-issues[data-el="${ei}"]`).value;
+        const date = document.querySelector(`.ap-date[data-el="${ei}"]`).value;
+        const remarks = document.querySelector(`.ap-remarks[data-el="${ei}"]`).value;
+        row.push(role, action, issues, date, remarks);
+      }
+      scData.push(row);
+    });
+  });
+  const ws2 = XLSX.utils.aoa_to_sheet(scData);
+  ws2['!cols'] = [{wch:16},{wch:24},{wch:60},{wch:8},{wch:6},{wch:16},{wch:30},{wch:25},{wch:12},{wch:20}];
+  XLSX.utils.book_append_sheet(wb, ws2, 'Scorecard English');
+
+  // Sheet 3: Competitive Info
+  const compData = [
+    ['Opportunity Details'],
+    ['1. Account Name', document.getElementById('accountName').value],
+    ['2. Job Title and Department of the Economic Buyer', document.getElementById('ebTitle').value],
+    ['3. Customer Business Objective', document.getElementById('bizObjective').value],
+    ['4. Potential Obstacles to Winning the Deal or Customer Concerns', document.getElementById('obstacles').value],
+    ['5. Current Opportunity Stage', document.getElementById('oppStage').value],
+    ['AWS Solutions and Services', document.getElementById('awsSolutions').value],
+    ['AWS Competitor MUST fill in here (E.g GCP, Ali, Azure)', document.getElementById('competitor').value]
+  ];
+  const ws3 = XLSX.utils.aoa_to_sheet(compData);
+  ws3['!cols'] = [{wch:55},{wch:60}];
+  XLSX.utils.book_append_sheet(wb, ws3, 'Competitive Info');
+
+  const fileName = `EDDIC_Scorecard_${document.getElementById('accountName').value || 'unnamed'}_${new Date().toISOString().slice(0,10)}.xlsx`;
+  XLSX.writeFile(wb, fileName);
+}
+
+// Init
+buildExitCriteria();
+buildScorecard();
+buildScoreBars();
+updateScores();
+</script>
+</body>
+</html>

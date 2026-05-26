@@ -1,0 +1,188 @@
+{
+  "schema_version": "1.0",
+  "metadata": {
+    "session_id": "2026-05-19T14:30:00-pacvue-beijing-dsp-ad-investment",
+    "skill_name": "opportunity-progression",
+    "skill_version": "unversioned",
+    "report_date": "2026-05-19",
+    "snapshot_time": "2026-05-19T14:32:18+08:00",
+    "customer_name": "Pacvue",
+    "opportunity_name": "北京 DSP 广告投放业务",
+    "tier": "Strategic",
+    "scorecard_type": "MEDDPICC",
+    "scorecard_file_hash": "sha256:8f3c1a...",
+    "language": "zh-CN",
+    "phases_completed": ["Phase 1", "Phase 1B", "Phase 2", "Phase 3", "Phase 5", "Phase 6", "Phase 7"]
+  },
+  "session_state": {
+    "alignment_result": "Rollback Recommended",
+    "rollback_recommended": true,
+    "rollback_target": "Qualified",
+    "rollback_reasons": [
+      "Tech Validation 两条核心退出标准合计完成度只有 15%"
+    ],
+    "progression_gate_passed": false,
+    "progression_gate_target": "Business Validation",
+    "progression_gate_failed_conditions": [
+      "I = 67% → 目标 100%",
+      "CH = 33% → 目标 100%"
+    ],
+    "eb_identity": null,
+    "no_persona_mode": true,
+    "phase7_path": "A"
+  },
+  "model_outputs": {
+    "M.3_scorecard_parser": {
+      "language": "zh-CN",
+      "scorecard_type": "MEDDPICC",
+      "parse_status": "ok",
+      "active_sheet": "评估积分卡",
+      "post_class_column_used": true
+    },
+    "M.4_tier_match_validation": {
+      "tier_phase1": "Strategic",
+      "scorecard_type": "MEDDPICC",
+      "match_status": "matched"
+    },
+    "M.5_element_scores": {
+      "I": {"score": 8, "max": 12, "percent": 67, "source": "评估积分卡 / 课后 / I 三条陈述"},
+      "M": {"score": 0, "max": 13, "percent": 0, "source": "评估积分卡 / 课后 / M 四条陈述"},
+      "E": {"score": 13, "max": 13, "percent": 100, "source": "评估积分卡 / 课后 / E 三条陈述"},
+      "DC": {"score": 13, "max": 13, "percent": 100, "source": "评估积分卡 / 课后 / DC 四条陈述"},
+      "DP": {"score": 9, "max": 13, "percent": 69, "source": "评估积分卡 / 课后 / DP 三条陈述"},
+      "P": {"score": 8, "max": 12, "percent": 67, "source": "评估积分卡 / 课后 / P 三条陈述"},
+      "CH": {"score": 4, "max": 12, "percent": 33, "source": "评估积分卡 / 课后 / CH 三条陈述"},
+      "CP": {"score": 12, "max": 12, "percent": 100, "source": "评估积分卡 / 课后 / CP 三条陈述"}
+    },
+    "M.6_total_score": {
+      "total_score": 67,
+      "total_max": 100,
+      "total_percent": 67,
+      "source": "Basic Info Score-After / 100"
+    },
+    "M.7_role_normalization": {
+      "free_text_records": [
+        {
+          "raw_label": "supporter",
+          "raw_text": "确认了 supporter 是 David",
+          "contact_name": "David",
+          "meddpicc_classification": "Coach",
+          "classification_basis": "Champion 元素 33% < 60% 阈值；CH 第 1、2 条 = No"
+        }
+      ]
+    },
+    "M.8_competitive_info": {
+      "competitors": ["GCP", "Ali"],
+      "eb_job_title": null,
+      "customer_business_objective": null,
+      "potential_obstacles": null,
+      "aws_solutions": "EC2，S3"
+    },
+    "M.9_deal_health": {
+      "health_state": "Off Track",
+      "gap_fragments": ["Total 67% < 70% On Plan threshold"]
+    },
+    "M.10_30_day_targets": [
+      {"element": "M", "target_percent": 60, "source": "M current 0% + 4-week realistic improvement"},
+      {"element": "CH", "target_percent": 60, "source": "CH current 33% + 4-week realistic improvement"},
+      {"element": "I", "target_percent": 80, "source": "I current 67% + 4-week realistic improvement"}
+    ],
+    "M.11_stage_aggregates": [
+      {"stage": "Prospect", "completion_percent": 73, "source": "M.11 mean of Prospect Completion %"},
+      {"stage": "Qualified", "completion_percent": 83, "source": "M.11 mean of Qualified Completion %"},
+      {"stage": "Tech Validation", "completion_percent": 15, "source": "M.11 mean of Tech Validation Completion %"}
+    ],
+    "M.12_stage_alignment": {
+      "pass_1_triggered": false,
+      "pass_2_aggregate": 15,
+      "pass_2_result": "Rollback Recommended",
+      "pass_3_passed": false,
+      "pass_3_failed_conditions": ["I < 100%", "CH < 100%"],
+      "rollback_target": "Qualified",
+      "rollback_target_resolution": "recursive lookup: Qualified 83% ≥ 80% threshold"
+    },
+    "M.13_alignment_flags": {
+      "alignment_result": "Rollback Recommended",
+      "rollback_recommended": true,
+      "rollback_target": "Qualified",
+      "rollback_reasons": ["Tech Validation 两条核心退出标准合计完成度只有 15%"],
+      "progression_gate_passed": false,
+      "progression_gate_target": "Business Validation",
+      "progression_gate_failed_conditions": ["I = 67% → 目标 100%", "CH = 33% → 目标 100%"]
+    },
+    "M.14_relationship_status": {
+      "primary_blocker": {
+        "element": "M — Metrics",
+        "score": 0,
+        "rationale_text": "DSP 业务的 4 项基线指标（投放预算 / ROAS / CPM / 续费率）尚未量化。没有这些数字，EB 没法对方案价值做出确认。这一步过不去，商机就停在 Tech Validation 推不动。",
+        "source": "M.5 (M score 0) / M.14 selection rule (P0 first, lowest score)"
+      },
+      "relationship_rows": [
+        {"element": "M", "score_percent": 0, "priority": "P0", "related_elements": ["I", "E"], "related_status_label": "和 I (67%) 一起低，需要共同治理", "source": "M.5 + M.1.4"}
+      ]
+    },
+    "M.15_exit_criteria_evaluation": [
+      {"row_num": 1, "stage": "Prospect", "exit_criterion": "已发现客户机会", "scorecard_completion_percent": 80, "mapped_element": "I", "element_percent": 67, "status": "Needs Improvement", "remarks_override_flag": false, "source": "Basic Info sheet row + M.5 (I)"}
+    ],
+    "M.16_risk_buckets": {
+      "foundation_risks": [
+        {"stage": "Qualified", "element": "CH", "finding": "已确定内部支持者/决策者只完成 50%；David 权力维度未验证", "source": "M.15 + Sheet1 备注"}
+      ],
+      "progression_risks": [
+        {"stage": "Tech Validation", "element": "M", "finding": "客户和 AWS 对方案的共同认识只完成 10%", "source": "M.15"}
+      ],
+      "meddpicc_risks": [
+        {"element": "CH", "finding": "Champion 33% < 60% 阈值；与 Foundation Risk 同源", "source": "M.5 (CH)"}
+      ]
+    },
+    "M.17_element_diagnostic": {
+      "layer_a_rows": [
+        {"element_label": "M — Metrics", "score_display": "0/13 = **0%**", "priority": "P0", "related_status_label": "和 I (67%) 一起低", "source": "M.14"}
+      ],
+      "layer_b_cards": [
+        {
+          "element": "M — Metrics",
+          "diagnostic_evidence_text": "M 4 条陈述全部 = No；E 第 3 条 = Yes 但 M 第 4 条 = No",
+          "root_cause_text": "DSP 广告投放是 Pacvue 的战略性新业务，没有历史运营数据..."
+        }
+      ]
+    },
+    "M.18_eb_identity_resolution": {
+      "eb_identity": null,
+      "no_persona_mode": true,
+      "source": "Scorecard Competitive Info EB Job Title field is empty; no user input"
+    },
+    "M.19_question_generation": [
+      {
+        "element": "M — Metrics",
+        "persona_traits_applied": [],
+        "main_questions": [
+          {
+            "prompt": "Pacvue DSP 广告投放业务作为公司战略新业务启动，最直接关心的 4 个运营指标是什么？...",
+            "purpose": "推进 M 第 1 条（业务痛点量化为指标）",
+            "expected_insights": "客户实际指标语言、是否已有内部基线",
+            "follow_up_suggestions": "这 4 个指标里，哪个是创始人/CTO 在新业务启动会上最关心的？"
+          }
+        ]
+      }
+    ],
+    "M.20_consistency_rules": {
+      "winning_strategies": [
+        {"id": "S1", "title": "量化 DSP 业务基线指标，激活 M 元素", "tag": "Primary Blocker", "target": "M ≥ 60%", "rationale": "M 是当前关键阻塞；本季度 review 的'技术成功指标已建立'这条要求也卡在这里。"}
+      ],
+      "weekly_actions": [
+        {"week": "W1", "label": "本周 (5/19–5/25)", "actions": [
+          {"description": "与 R&D Director 召开 30 分钟基线工作会...", "owner": "AE + SA", "strategy_tags": ["S1", "S3"]}
+        ]}
+      ],
+      "success_metrics": [
+        {"text": "M ≥ 60% — 量化指标在 EB 价值确认会议获得口头确认", "strategy_tag": "S1", "source_week": "W5–W6"}
+      ]
+    },
+    "M.21_weekly_horizon": {
+      "weekly_horizon": 6,
+      "horizon_extension_reason": "Tech Validation 阶段聚合 15% < 30%，Rollback Recommended，需 6 周窗口",
+      "trigger": "rollback_recommended = true AND current-stage aggregate < 30%"
+    }
+  }
+}

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BTTROC · CXO 对话 · Haier CIO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="_shared.css" />
+<style>
+  .dim-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .dim-tile {
+    background: var(--paper); border-radius: 10px; padding: 12px 14px;
+    border-top: 3px solid var(--accent);
+  }
+  .dim-tile.revenue { border-top-color: var(--ok); }
+  .dim-tile.cost { border-top-color: var(--warn); }
+  .dim-tile.efficiency { border-top-color: var(--accent); }
+  .dim-tile.risk { border-top-color: var(--bad); }
+  .dim-tile .ico-tile {
+    width: 28px; height: 28px; border-radius: 6px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--accent-softer); color: var(--accent); margin-bottom: 6px;
+  }
+  .dim-tile.revenue .ico-tile { background: var(--ok-soft); color: var(--ok); }
+  .dim-tile.cost .ico-tile { background: var(--warn-soft); color: var(--warn); }
+  .dim-tile.risk .ico-tile { background: var(--bad-soft); color: var(--bad); }
+  .dim-tile h4 { margin: 0 0 4px; font-size: 12px; color: var(--ink); font-weight: 600; }
+  .dim-tile p { margin: 0; font-size: 11px; color: var(--ink-2); line-height: 1.5; }
+
+  .archetype-ribbon { display: flex; gap: 6px; margin-top: 8px; }
+  .archetype-ribbon .a-opt {
+    flex: 1; padding: 10px 8px; background: var(--paper); border-radius: 8px;
+    text-align: center; opacity: 0.45; border: 2px solid transparent;
+    font-size: 10px; color: var(--muted);
+  }
+  .archetype-ribbon .a-opt.selected {
+    opacity: 1; border-color: var(--accent);
+    background: var(--accent-softer); font-weight: 700; color: var(--accent-dark);
+  }
+  .archetype-ribbon .a-opt .v {
+    display: block; font-size: 11px; font-weight: 700; color: var(--ink); margin-bottom: 2px;
+  }
+  .archetype-ribbon .a-opt.selected .v { color: var(--accent-dark); }
+
+  .script-block {
+    background: var(--paper); border-radius: 10px;
+    padding: 16px 18px; border-left: 3px solid var(--accent);
+  }
+  .script-block.open { border-left-color: var(--ok); }
+  .script-block.mid { border-left-color: var(--warn); }
+  .script-block.close { border-left-color: var(--accent); }
+  .script-block .lab {
+    font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase;
+    font-weight: 700; color: var(--accent); margin-bottom: 8px;
+  }
+  .script-block.open .lab { color: var(--ok); }
+  .script-block.mid .lab { color: var(--warn); }
+  .script-block p {
+    margin: 0 0 8px; font-size: 13px; color: var(--ink);
+    line-height: 1.7; font-style: italic;
+  }
+  .script-block p:last-child { margin-bottom: 0; }
+  .script-block p strong { color: var(--accent-dark); font-style: normal; }
+
+  .bmc-impact { display: grid; grid-template-columns: 120px 1fr 1fr 1fr; gap: 6px; }
+  .bmc-impact .hdr {
+    font-size: 10px; letter-spacing: 1px; font-weight: 700;
+    color: var(--muted); text-transform: uppercase;
+    padding: 6px 10px; text-align: center;
+  }
+  .bmc-impact .row-lab {
+    font-size: 10px; font-weight: 700; color: var(--muted);
+    padding: 8px 10px; text-transform: uppercase; letter-spacing: 1px;
+    text-align: right;
+  }
+  .bmc-impact .cell {
+    background: var(--paper); border-radius: 8px; padding: 10px 12px;
+    font-size: 11.5px; color: var(--ink-2); line-height: 1.5;
+  }
+  .bmc-impact .cell.hit { background: var(--warn-soft); color: var(--coi); }
+  .bmc-impact .cell strong { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="export-bar">
+  <div class="brand">◆ BTTROC · CXO 对话构建器</div>
+  <button onclick="window.print()">
+    <span class="material-icons-outlined" style="font-size:16px;">picture_as_pdf</span>
+    Export PDF
+  </button>
+</div>
+
+<div class="sheet">
+
+  <div class="head">
+    <div>
+      <div class="kicker">BTTROC · Identified Potential Opportunity</div>
+      <h1>李总 · 海尔全球 CIO</h1>
+      <div class="sub">对话构建 · Initiative 02 (2026 AI Vision 全球架构) · 2026-05-12</div>
+    </div>
+    <div class="pill">
+      <span class="material-icons-outlined">record_voice_over</span>
+      3–5 min CXO Script
+    </div>
+  </div>
+
+  <!-- Snapshot -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">account_circle</span>CXO Snapshot · 目标高管</h2>
+    <div class="stat-grid cols-3">
+      <div class="stat"><div class="lab">姓名</div><div class="val">李总（待 Discovery 确认）</div></div>
+      <div class="stat"><div class="lab">角色</div><div class="val">全球 CIO · AI 平台 Owner</div></div>
+      <div class="stat">
+        <div class="lab">买家类型</div>
+        <div class="val accent">Risk-averse · Top-down</div>
+      </div>
+    </div>
+    <div class="kv-grid cols-2" style="margin-top:10px;">
+      <div class="kv-tile">
+        <div class="lab">Dominant Threat · 主导威胁</div>
+        <div class="val">AI 平台落后美的 6–9 个月，Q3 架构选型窗口收窄 — <a href="https://intellectia.ai/news/stock/midea-group-plans-to-invest-rmb60b-in-ai-transformation-over-next-3-yrs" target="_blank">Intellectia · Midea 60B AI</a></div>
+      </div>
+      <div class="kv-tile">
+        <div class="lab">AWS Solution to Weave In</div>
+        <div class="val">Bedrock Agents + Q Business + GenAI Lens — <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html" target="_blank">Bedrock Agents</a> · <a href="https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html" target="_blank">GenAI Lens</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BMC Impact Map -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">grid_view</span>Impact on BMC · 冲击落在画布哪里</h2>
+    <div class="bmc-impact">
+      <div></div>
+      <div class="hdr">Customer-facing</div>
+      <div class="hdr">Internal capability</div>
+      <div class="hdr">Financial</div>
+
+      <div class="row-lab">Primary Hit</div>
+      <div class="cell hit"><strong>CS · VP</strong>Premium Intelligence 无法落地 → 中国一二线高端置换流失给美的 MevoX</div>
+      <div class="cell hit"><strong>KR · KA</strong>AI 平台 / 统一数据面未达 → 跨品牌 UX 统一成本持续高企</div>
+      <div class="cell hit"><strong>RS · Cost</strong>Q1 −6.9% + 美的资本 $2.2B 拉开差距 → 2027 差距进一步扩大</div>
+
+      <div class="row-lab">Secondary Hit</div>
+      <div class="cell">Ch · CR — 品牌矩阵差异化难以支撑 2026 AI 生态叙事</div>
+      <div class="cell">KP — 架构锁定在华为云意味着 AWS / Azure 生态隔离</div>
+      <div class="cell">— —</div>
+    </div>
+    <div class="reason-note on-white" style="margin-top: 10px;">
+      <span class="material-icons-outlined">psychology</span>
+      <div><strong>推理</strong>冲击从 VP → KR / KA → RS / Cost 级联传导；因此切入点必须选在 KR / KA（AI 平台基础）而非 VP（战略抽象）或 RS（直接谈钱）。</div>
+    </div>
+  </div>
+
+  <!-- 4-dim concerns -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">insights</span>4-Dimension Concerns · 4 维度担忧</h2>
+    <div class="dim-grid">
+      <div class="dim-tile revenue">
+        <div class="ico-tile"><span class="material-icons-outlined" style="font-size:16px;">trending_up</span></div>
+        <h4>Revenue</h4>
+        <p>Premium Intelligence 战略能否把消费者对单品家电的认知升级为生态订阅 — 2026 AI 战略成败决定未来 3 年 RS。</p>
+      </div>
+      <div class="dim-tile cost">
+        <div class="ico-tile"><span class="material-icons-outlined" style="font-size:16px;">payments</span></div>
+        <h4>Cost</h4>
+        <p>北美 −6.9% + 关税压力 → 任何新平台 CAPEX 必须可量化、可分段、可回退。不能给 CFO 一次性大票。</p>
+      </div>
+      <div class="dim-tile efficiency">
+        <div class="ico-tile"><span class="material-icons-outlined" style="font-size:16px;">speed</span></div>
+        <h4>Efficiency</h4>
+        <p>多品牌跨地域数据孤岛 — UX 不统一，AI 训练成本重复。效率提升是"能证明"的第一指标。</p>
+      </div>
+      <div class="dim-tile risk">
+        <div class="ico-tile"><span class="material-icons-outlined" style="font-size:16px;">warning_amber</span></div>
+        <h4>Risk</h4>
+        <p>Q3 若选错云，3 年 lock-in — 美的先行使"保守派"成为最大风险。合规 + 下线可控性 &gt; 首创。</p>
+      </div>
+    </div>
+    <div class="reason-note on-white" style="margin-top: 12px;">
+      <span class="material-icons-outlined">psychology</span>
+      <div><strong>推理</strong>Risk 维度分数最高 — 来自 Account Analysis Weaknesses (AI 平台落后) + Porter Rivalry (美的先行) 双来源；因此选 JOLT / Lower the Risk 而非 Challenger。</div>
+    </div>
+  </div>
+
+  <!-- Archetype & Path -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">person_search</span>Archetype &amp; Path · 行为原型与销售路径</h2>
+    <div class="stat-grid cols-2">
+      <div class="kv-tile">
+        <div class="lab">Archetype · 行为原型</div>
+        <div class="val"><strong>Risk-averse (风险规避型)</strong> — 公开声明进入"能力重建期"<a href="https://finimize.com/content/haier-smart-homes-profit-fell-as-us-tariffs-and-weather-hit-demand" target="_blank">[Finimize]</a>，意味着决策者不希望再踩坑；强调可控、可回退、参考案例多。</div>
+      </div>
+      <div class="kv-tile">
+        <div class="lab">Selected Path · 选定路径</div>
+        <div class="val"><span class="pill-chip"><span class="material-icons-outlined">shield</span>LOWER THE RISK</span>用小规模 POC + GenAI Lens 合规锚点降低首次决策风险。</div>
+      </div>
+    </div>
+
+    <div class="sub-card" style="margin-top: 10px;">
+      <div style="font-size:11px; letter-spacing:1.2px; color:var(--muted); font-weight:700; text-transform:uppercase; margin-bottom:8px;">Sales Path Options · 四条路径</div>
+      <div class="archetype-ribbon">
+        <div class="a-opt"><span class="v">Amplify the Pain</span>放大痛点</div>
+        <div class="a-opt selected"><span class="v">Lower the Risk</span>降低风险</div>
+        <div class="a-opt"><span class="v">Hybrid</span>混合</div>
+        <div class="a-opt"><span class="v">Pause</span>暂停观望</div>
+      </div>
+    </div>
+
+    <div class="reason-note on-white" style="margin-top: 12px;">
+      <span class="material-icons-outlined">psychology</span>
+      <div><strong>推理</strong>4 种 archetype — Underestimator（需要 Amplify the Pain）/ Wait-and-see（需要 Amplify）/ Risk-averse（需要 Lower the Risk）/ Path-unclear（需要 Lower the Risk + 路径图）/ Resistant（Pause）。李总公开表述 = Risk-averse，因此 Lower the Risk 为唯一最优路径。</div>
+    </div>
+  </div>
+
+  <!-- Script — 3 parts -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">record_voice_over</span>Stitched CXO Script · CXO 对话稿（3–5 分钟）</h2>
+
+    <div class="script-block open" style="margin-bottom: 10px;">
+      <div class="lab">① Opening · 开场（60 秒）</div>
+      <p>"李总，我知道你这个季度最大的事情，是北美关税和 <strong>Premium Intelligence</strong> 全球战略落地。我今天不来 pitch 云平台，我来分享我们在另外两家中国家电出海客户那里看到的一个具体问题 — 他们在 Q3 末之前锁定了某个 AI 架构，6 个月后发现北美数据驻留和合规没做深，整个 Vision 的落地往后推了 9 个月。"</p>
+    </div>
+
+    <div class="script-block mid" style="margin-bottom: 10px;">
+      <div class="lab">② Middle · 中段（2 分钟）</div>
+      <p>"那时候他们不缺预算 — 缺的是一个<strong>可回退的第一步</strong>。他们最后用 <strong>Amazon Bedrock Agents + Q Business</strong> 先做了一个跨品牌 UX 统一的 POC，12 周 + $300K，跑出 3 个可展示给董事会的指标："</p>
+      <p style="padding-left: 20px; font-size:12.5px;">① 多品牌 UX 统一覆盖率从 32% 升到 78%；<br>② 跨地域 AI 合规审计通过（EU + 北美）；<br>③ 同样场景华为云需要多开一个 Region → 成本 delta 40%。</p>
+      <p>"这三个指标让他们的 CFO 把<strong>主架构决策从 12 个月推到 3 个月</strong>，拿到了 3 年合约。"</p>
+    </div>
+
+    <div class="script-block close">
+      <div class="lab">③ Close · 收尾（30 秒）</div>
+      <p>"我想跟你的团队做一次 <strong>2 小时的架构评估</strong>，不签任何东西。就看三件事：Bedrock Agents + Q Business 的跨品牌 POC 路径、GenAI Lens 的合规锚点、北美 + 欧洲 Region 的数据驻留验证。如果这三点对你们 Q3 锁定架构有帮助，我们谈下一步；如果没有帮助，你们不损失什么。下周二上午你有 2 小时吗？"</p>
+    </div>
+  </div>
+
+  <!-- Watch-outs -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">warning_amber</span>Watch-outs · 风险提醒</h2>
+    <ul class="num-list">
+      <li><span class="ico">①</span><div><strong>不提"美的"名字</strong> — 让客户自己联想，直接提名会变成羞辱对手。</div></li>
+      <li><span class="ico">②</span><div><strong>不要先放 architecture 图</strong> — 李总在风险规避期，视觉复杂度是劝退信号，先用 3 个指标，再谈架构。</div></li>
+      <li><span class="ico">③</span><div><strong>如果李总说"我们已经在华为云上"</strong> → 立刻切换到"北美分区"叙事（见 Compete 分析结果 Objection Handler #1）。</div></li>
+      <li><span class="ico">④</span><div><strong>POC 预算底线 $250–300K</strong> — 低于这个数 CFO 不认为值得架构委员会审查；高于 $500K 风险规避型会逃跑。</div></li>
+      <li><span class="ico">⑤</span><div><strong>不把 Premium Intelligence 战略误读</strong> — 海尔战略是 AI 生态（不是纯 AI 模型），因此不能 pitch Bedrock 作为 LLM 替代品。</div></li>
+      <li><span class="ico">⑥</span><div><strong>CFO 表态可能先于 CIO</strong> — 准备独立 CFO 议程（Lower the Risk 路径同样适用）。</div></li>
+    </ul>
+  </div>
+
+  <!-- Sources -->
+  <div class="card">
+    <h2><span class="material-icons-outlined">link</span>Sources · 引用来源</h2>
+    <div class="sub-card">
+      <ol style="padding-left:20px; margin:0; font-size:12px; color:var(--muted); line-height:1.9;">
+        <li><a href="https://finimize.com/content/haier-smart-homes-profit-fell-as-us-tariffs-and-weather-hit-demand" target="_blank">Finimize · 2026-04-28 · "能力重建期"公开声明</a></li>
+        <li><a href="https://www.tipranks.com/news/company-announcements/haier-smart-home-launches-2026-plan-to-boost-value-global-growth-and-efficiency" target="_blank">Tipranks · 2026-04-27 · Premium Intelligence 战略</a></li>
+        <li><a href="https://intellectia.ai/news/stock/midea-group-plans-to-invest-rmb60b-in-ai-transformation-over-next-3-yrs" target="_blank">Intellectia · Midea 60B AI 转型</a></li>
+        <li><a href="https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html" target="_blank">AWS · Bedrock Agents Developer Guide</a></li>
+        <li><a href="https://docs.aws.amazon.com/amazonq/latest/business-use-dg/what-is.html" target="_blank">AWS · Q Business Developer Guide</a></li>
+        <li><a href="https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html" target="_blank">AWS · GenAI Lens (Well-Architected)</a></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span class="dl">下游 · <strong>Identified Potential Opportunity</strong>（本 CXO 对话）进入 opportunity-progression（MEDDPICC 验证）</span>
+    Generated by Kiro · BTTROC · 2026-05-12
+  </div>
+
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('print') === '1') {
+    window.addEventListener('load', () => setTimeout(() => window.print(), 400));
+  }
+</script>
+</body>
+</html>

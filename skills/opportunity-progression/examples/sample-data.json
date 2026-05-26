@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "lang": "zh-CN",
+    "opportunity_name": "NIO — NOMI 多模态座舱 AI 升级",
+    "customer": "NIO Inc.",
+    "industry": "Automotive",
+    "tier": "Strategic",
+    "framework": "MEDDPICC",
+    "arr": "US$ 4M ARR",
+    "report_date": "2026-05-13",
+    "scorecard_version": "MEDDPICC V3"
+  },
+  "rollback_banner": {
+    "show": true,
+    "current_stage": "Qualified",
+    "target_stage": "Prospect",
+    "reason": "Qualified 阶段 EB 与 Champion 接触完整度合计仅 98%（< 100%），且 EB Ava 实质未接触；商机其实还停在 Prospect；下面的分析按 Qualified 在做，分数容易显得过分乐观。"
+  },
+  "phase2": {
+    "verdict": "🔴 建议回退到 Prospect 阶段",
+    "verdict_color": "warning",
+    "health": "Stalled",
+    "health_color": "error",
+    "total": "62 / 100",
+    "stage": "Qualified",
+    "classification": "Strategic",
+    "stepper": [
+      {"name": "Prospect", "state": "rollback", "sublabel": "Rollback target"},
+      {"name": "Qualified", "state": "current", "sublabel": "Reported · 62%"},
+      {"name": "Technical Validation", "state": "upcoming", "sublabel": "Upcoming"},
+      {"name": "Business Validation", "state": "upcoming", "sublabel": "Upcoming"},
+      {"name": "Committed", "state": "upcoming", "sublabel": "Upcoming"}
+    ],
+    "primary_blocker": {
+      "element": "E — Economic Buyer",
+      "score_pct": "15%",
+      "rationale": "座舱研发 VP Ava 作为 EB 尚未实质接触，仅有 Champion Alan 层级的关系建立。EB 不在场，方案的商务条款、合规审批、价值确认都无法推进。这一步过不去，商机就停在 Qualified 推不动。"
+    },
+    "progression_gaps": {
+      "target_stage": "Tech Validation",
+      "items": [
+        "I = 92% → 目标 100%",
+        "CH = 83% → 目标 100%",
+        "已与 EB 接触并提及该项目"
+      ]
+    },
+    "immediate_action": "向 Alan 正式请求引荐 Ava,目标为 7 天内完成 30 分钟双向介绍会议;携带一份 Alan 已联审的多模态座舱价值简报作为见面材料。",
+    "targets": [
+      {"element": "E", "threshold": "55%", "text": "完成 EB 首次接触并建立后续节奏"},
+      {"element": "M", "threshold": "70%", "text": "量化指标(日均召唤次数 27 次)获得 EB 口头确认"},
+      {"element": "DP", "threshold": "70%", "text": "正式识别预算审批路径与技术选型 gate"}
+    ],
+    "rationale": [
+      "Qualified 阶段'已识别最终决策者'这条还没完成 — Ava 作为 EB 已经识别出来，但接触只到 Champion Alan 这一层，VP 级别的对话还没开始。",
+      "在 Qualified 阶段先补齐 EB 首次接触和基线指标量化，比硬推到 Tech Validation 更稳；接下来要进 Tech Validation 也还差 I 100% / CH 100% / EB 已接触三条。"
+    ]
+  },
+  "phase3": {
+    "stage_aggregates": [
+      {"name": "Prospect", "pct": 92, "is_current": false, "count": 5, "color": "success"},
+      {"name": "Qualified", "pct": 68, "is_current": true, "count": 7, "color": "warning"}
+    ],
+    "rows": [
+      {"num": 1, "stage": "Prospect", "criterion": "已发现客户机会", "completion_pct": 100, "element_label": "I — 识别痛点", "element_pct": 92, "status": "On Track", "status_icon": "✅", "status_color": "success"},
+      {"num": 2, "stage": "Prospect", "criterion": "机会具有有效估计价值", "completion_pct": 80, "element_label": "E — 初步预算方向", "element_pct": 15, "status": "At Risk", "status_icon": "🔴", "status_color": "error"},
+      {"num": 3, "stage": "Prospect", "criterion": "机会具有有效估计价值", "completion_pct": 80, "element_label": "M — 机会价值估算", "element_pct": 70, "status": "Needs Improvement", "status_icon": "⚠️", "status_color": "warning"},
+      {"num": 4, "stage": "Prospect", "criterion": "已安排与客户的初次会面", "completion_pct": 100, "element_label": "DP — 启动对接", "element_pct": 60, "status": "Needs Improvement", "status_icon": "⚠️", "status_color": "warning"},
+      {"num": 5, "stage": "Prospect", "criterion": "已安排与客户的初次会面", "completion_pct": 100, "element_label": "CH — Champion 评估", "element_pct": 83, "status": "On Track", "status_icon": "✅", "status_color": "success"},
+      {"num": 6, "stage": "Qualified", "criterion": "客户愿意寻求解决方案", "completion_pct": 75, "element_label": "I — 已验证痛点", "element_pct": 92, "status": "On Track", "status_icon": "✅", "status_color": "success"},
+      {"num": 7, "stage": "Qualified", "criterion": "客户愿意寻求解决方案", "completion_pct": 75, "element_label": "M — 初始业务成功指标", "element_pct": 70, "status": "Needs Improvement", "status_icon": "⚠️", "status_color": "warning"},
+      {"num": 8, "stage": "Qualified", "criterion": "已确定客户内部支持者/决策者", "completion_pct": 60, "element_label": "E — 已识别最终决策者", "element_pct": 15, "status": "At Risk", "status_icon": "🔴", "status_color": "error"},
+      {"num": 9, "stage": "Qualified", "criterion": "已确定客户内部支持者/决策者", "completion_pct": 60, "element_label": "CH — 内部支持者确认", "element_pct": 83, "status": "On Track", "status_icon": "✅", "status_color": "success"},
+      {"num": 10, "stage": "Qualified", "criterion": "已确定客户内部支持者/决策者", "completion_pct": 60, "element_label": "DP — 预算与时间框架", "element_pct": 60, "status": "Needs Improvement", "status_icon": "⚠️", "status_color": "warning"},
+      {"num": 11, "stage": "Qualified", "criterion": "已确定交付合作伙伴策略", "completion_pct": 50, "element_label": "CP — 竞争策略", "element_pct": 67, "status": "Needs Improvement", "status_icon": "⚠️", "status_color": "warning"},
+      {"num": 12, "stage": "Qualified", "criterion": "已确定交付合作伙伴策略", "completion_pct": 50, "element_label": "DP — 实施方法明确", "element_pct": 60, "status": "Needs Improvement", "status_icon": "⚠️", "status_color": "warning"}
+    ],
+    "risks": [
+      {"kind": "上一阶段未做到位", "bg_color": "error", "text": "Prospect 阶段'机会具有有效估计价值'还需要初步预算方向，但 EB 没接触，预算方向还停留在'CTO/创始人战略层口头同意'，没具体到 VP 层。"},
+      {"kind": "当前阶段卡点", "bg_color": "warning", "text": "Qualified 阶段'已确定交付合作伙伴策略'只完成 50%。CP 评分 67% 看起来还行，但合作伙伴选型实际还在讨论，没定稿。"},
+      {"kind": "关键人物缺位", "bg_color": "error", "text": "EB Ava 还没接触（E = 15%）— Champion Alan 强（83%）也替代不了 EB 的授权信号。VP 级别的对话不打开，商机推不到 Tech Validation。"}
+    ]
+  },
+  "phase4": {
+    "show": true,
+    "current_stack": [
+      {"icon": "cloud", "text": "车联网:腾讯云 + Azure(在位)"},
+      {"icon": "memory", "text": "数据平台:自建 + 阿里云(部分工作负载)"},
+      {"icon": "psychology", "text": "GenAI:早期 POC 阶段,未形成标准栈"}
+    ],
+    "buying_behavior": {
+      "factors": "数据合规、车端延迟、国产算力可替代性",
+      "painpoints": "长账期、本地化服务能力、外资云价格不透明",
+      "cycle": "典型 6–9 个月,涉及 PMO 和供应链",
+      "tech": "边云协同、模型可部署性、国产芯片兼容"
+    },
+    "references": [
+      "BMW — Alexa 车载集成 · Bedrock",
+      "Rivian — 多模态 UX · SageMaker",
+      "Toyota — 客服 AI 助手 · Nova Sonic"
+    ],
+    "competitors": [
+      {"name": "华为 HI 全栈", "threat_level": "Primary Threat", "threat_color": "error",
+       "desc": "Slide 5 标杆(日均交互 27 次)的载体。装机量超 200 万,本土化与国产芯片天然契合。",
+       "aws_diff": "多模态大模型 + 全球跨区域模型更新速度,用 Nova Sonic + Bedrock 封装为国内可交付路径。"},
+      {"name": "腾讯云 + Azure", "threat_level": "Incumbent", "threat_color": "warning",
+       "desc": "在位车联网供应商。切换成本高,但座舱 AI 不是其主打能力线。",
+       "aws_diff": "不触碰车联网底座,聚焦座舱 AI 层的模型差异化,绕开在位替换。"}
+    ]
+  },
+  "phase5": {
+    "elements": [
+      {"code": "E", "name": "Economic Buyer", "score_pct": 15, "priority": "P0", "priority_color": "error",
+       "score_color": "error", "relationship_note": "E 没就位，DC (50%) 和 DP (60%) 都跟着卡",
+       "layer_b_card": {
+         "evidence": "DC S2 标注'技术决策需 VP 背书'为 Yes，但 E 的 EB 接触类语句全部为 No —— DC 的 Yes 评分缺乏 EB 接触佐证，和 E 的实际进展对不上。",
+         "root_cause": "Ava（座舱研发 VP）已经在 Slide 9 组织架构里识别出来，但 AE 的接触路径只停留在 Champion Alan 这一层。Alan 是 Ava 的直属下级，文化和组织惯性下 Alan 倾向于'先把东西做出来再报给 VP'，所以 EB 接触被自然延迟。当前 E 缺的不是信息盲区，是接触节奏没主动打开。"
+       }},
+      {"code": "DC", "name": "Decision Criteria", "score_pct": 50, "priority": "P1", "priority_color": "warning",
+       "score_color": "warning", "relationship_note": "E (15%) 没就位，DC 的商务半张就建不起来",
+       "layer_b_card": {
+         "root_cause": "技术维度的准入标准已经和 Alan 对齐（多模态能力、车端延迟、Nova Sonic 可部署性），但商务维度（合规、定价、本地化服务）需要 VP 级才能确认。E 没接触，DC 的商务半张就缺，所以评分卡在 50% 附近。"
+       }},
+      {"code": "DP", "name": "Decision Process", "score_pct": 60, "priority": "P1", "priority_color": "warning",
+       "score_color": "warning", "relationship_note": "E 和 CH 都跟 DP 挂钩；E 没就位，采购环节也没显性化",
+       "layer_b_card": {
+         "root_cause": "技术选型流程清晰（Alan 主导），但预算审批路径和供应商准入 gate 还没显性化。Slide 12 显示 Alex（采购总监）对外资云的本地化和账期敏感 —— DP 在采购节点有未识别的阻力路径。"
+       }},
+      {"code": "P", "name": "Paper Process", "score_pct": 33, "priority": "P0", "priority_color": "error",
+       "score_color": "error", "relationship_note": "E 和 DP 都没就绪，合同环节自然推不动",
+       "layer_b_card": {
+         "root_cause": "PPA / EDP 合同路径还没讨论。P 跟 E、DP 都挂钩，两个都没就绪，合同环节整体卡死。当前阶段不直接修复 P，先解决 E。"
+       }},
+      {"code": "M", "name": "Metrics", "score_pct": 70, "priority": "P1", "priority_color": "warning",
+       "score_color": "warning", "relationship_note": "E (15%) 没就位，EB 没法对指标做口头确认"},
+      {"code": "I", "name": "Implicate the Pain", "score_pct": 92, "priority": "—", "priority_color": "success",
+       "score_color": "success", "relationship_note": "M 70% / DC 50% 都还在范围内，I 这条已经做好"},
+      {"code": "CH", "name": "Champion", "score_pct": 83, "priority": "P2", "priority_color": "success",
+       "score_color": "success", "relationship_note": "CP 67% 偏低，但 Champion 自身没问题"},
+      {"code": "CP", "name": "Competition", "score_pct": 67, "priority": "P1", "priority_color": "warning",
+       "score_color": "warning", "relationship_note": "DC (50%) 一起低，差异化论据缺商务支撑"}
+    ],
+    "stakeholder_source": "Source: contact-profiling skill · CxO Persona reference: cxo-personas.md",
+    "stakeholders": [
+      {"name": "Ava", "role": "座舱研发 VP", "tag": "Economic Buyer",
+       "tag_bg": "secondary-container", "tag_fg": "on-primary-container",
+       "desc": "决策节奏偏审慎,重数据与风险论证。对外资云有品牌偏好但警惕合规风险。倾向由下属(Alan)先完成技术可行性,再亲自参与商务与合规层。"},
+      {"name": "Alan", "role": "座舱 AI 基础服务总监", "tag": "Champion",
+       "tag_bg": "success-container", "tag_fg": "on-success-container",
+       "desc": "技术判断快、对多模态主题有学术偏好。Ava 直属下级,具备引荐权威但倾向先做内部联审再上报。"},
+      {"name": "Andy", "role": "IT 基础架构总监", "tag": "Coach",
+       "tag_bg": "surface-container-highest", "tag_fg": "on-surface-variant",
+       "desc": "提供算力与基础架构配合视角。对多云与国产算力兼容性敏感。"},
+      {"name": "Alex", "role": "采购总监", "tag": "Skeptic",
+       "tag_bg": "error-container", "tag_fg": "on-error-container",
+       "desc": "对外资云价格透明度、账期、本地化支持持保留态度。需在 Phase 6 Strategy 2 对齐。"}
+    ],
+    "cxo_overlay": {
+      "title": "VP/部门负责人层",
+      "text": "决策逻辑:技术成熟度 → 合规 → 总拥有成本 → 战略一致性。偏好 1 对 1 高密度会议 + 书面技术材料。忌讳'销售口吻'开场,偏好以'一个具体问题'切入的专家对话。"
+    },
+    "questions": {
+      "persona_traits": [
+        "Ava 审慎决策偏好 → 问题以'数据 + 具体情境'开场,避免宏大叙事",
+        "Alan 的多模态学术偏好 → 第一问以技术细节作为共鸣点",
+        "Alex 对本地化敏感 → 在 DP 类问题中内置合规与本地化语境"
+      ],
+      "by_element": [
+        {"element": "E — Economic Buyer", "priority": "P0", "priority_color": "error",
+         "items": [
+           {"prompt": "Alan,当我们把多模态座舱的能力提案升到 VP 层讨论时,Ava 通常最先关心的是技术可落地还是合规风险?",
+            "purpose": "识别 EB 的核心决策杠杆。",
+            "insights": "Ava 的第一性关注点(技术/合规/TCO)+ 决策节奏。",
+            "followup": "她上次类似评估花了多久?"},
+           {"prompt": "我们整理了一份 30 分钟的多模态座舱价值简报 —— 你觉得是直接向 Ava 申请一次独立会议更合适,还是先让我们联审一次再上?",
+            "purpose": "解锁 EB 接触路径,尊重 Champion 的引荐节奏。",
+            "insights": "Alan 对引荐时机的判断 + 内部向上汇报的常规动作。"}
+         ]},
+        {"element": "DP — Decision Process", "priority": "P1", "priority_color": "warning",
+         "items": [
+           {"prompt": "从技术选型到最终采购审批,你们通常会经过哪些 gate?Alex 在其中的参与点是哪一步?",
+            "purpose": "显性化采购路径与阻力点(Alex 对本地化的疑虑)。",
+            "followup": "这次多模态升级预算来自技术线还是战略线?"}
+         ]},
+        {"element": "DC — Decision Criteria", "priority": "P1", "priority_color": "warning",
+         "items": [
+           {"prompt": "如果 Ava 要做最终拍板,除了技术成熟度,她会希望我们的方案在合规和本地化上满足哪几条硬指标?",
+            "purpose": "补齐 DC 的商务半张,提前暴露准入门槛。"}
+         ]}
+      ]
+    }
+  },
+  "phase6": {
+    "score": "62 / 100",
+    "stage": "Qualified",
+    "stage_note": "Rollback → Prospect",
+    "completion_pct": 68,
+    "context": [
+      "<strong>Prospect</strong>: E = 15% — 初步预算方向未建立",
+      "<strong>Qualified</strong>: E = 15% — 未识别最终决策者(Ava 已识别但未接触)",
+      "<strong>Qualified</strong>: DP = 60% — 预算审批路径与采购 gate 未显性化",
+      "<strong>Qualified</strong>: CP = 67% — 合作伙伴 / 交付策略尚未定稿"
+    ],
+    "strategies": [
+      {"id": "S1", "title": "建立 EB 接触通道", "tag": "Primary Blocker", "target": "E ≥ 55%",
+       "rationale": "EB Ava 还没接触是当前最大的卡点；Qualified 阶段'已识别最终决策者'这条要做完，必须先把 VP 级别的对话打开。"},
+      {"id": "S2", "title": "显性化采购路径与合规锚点", "target": "DP ≥ 70%",
+       "rationale": "Qualified 阶段'预算与时间框架'还没说清楚（DP 60%），同时 Alex 对外资云的本地化和账期有疑虑 — 这些不提前化解，后面合同环节会卡。"},
+      {"id": "S3", "title": "量化指标获得 EB 背书", "target": "M ≥ 70%",
+       "rationale": "M 已经 70% 但还差 EB 口头确认 — 修复 E（让 EB 上桌）后，自然带动 M 完成最后一步。"}
+    ],
+    "weekly_actions": [
+      {"week": "W1", "label": "本周", "actions": [
+        {"description": "向 Alan 正式请求引荐 Ava，附一页多模态座舱价值简报", "owner": "AE", "strategy_tags": ["S1"]},
+        {"description": "整理'外资云 + 本地合规伙伴'的合规路径材料 (PIPL / 数据跨境)", "owner": "AE + SA", "strategy_tags": ["S2"]}
+      ]},
+      {"week": "W2", "actions": [
+        {"description": "与 Alan 联审简报，确认技术论点与合规论点的叙事分界", "owner": "AE", "strategy_tags": ["S1"]}
+      ]},
+      {"week": "W3", "actions": [
+        {"description": "执行 30 分钟 EB 首次会议，会议中内嵌量化指标提问 (对标华为 HI 27 次/天)", "owner": "AE", "strategy_tags": ["S1", "S3"]},
+        {"description": "约谈 Alex 一次 30 分钟专项会，聚焦账期 + 本地化支持两个议题", "owner": "AE", "strategy_tags": ["S2"]}
+      ]},
+      {"week": "W4", "actions": [
+        {"description": "会后 48h 内发送 1 页 follow-up，确认下次接触节奏 + 获取 Ava 对'日均召唤次数'目标的书面回执", "owner": "AE", "strategy_tags": ["S1", "S3"]},
+        {"description": "基于 Alex 反馈出具合规 / 商务答疑文档 v1", "owner": "AE + SA", "strategy_tags": ["S2"]}
+      ]}
+    ],
+    "metrics": [
+      {"text": "E ≥ 55% — EB 首次会议完成 + 下次接触节奏已确认", "strategy_tag": "S1", "source_week": "W3–W4"},
+      {"text": "DP ≥ 70% — 预算审批路径与采购 gate 已显性化，Alex 专项会已执行", "strategy_tag": "S2", "source_week": "W3–W4"},
+      {"text": "M ≥ 70% — 量化指标在 EB 会议上获得口头确认并形成纪要", "strategy_tag": "S3", "source_week": "W3–W4"}
+    ]
+  }
+}

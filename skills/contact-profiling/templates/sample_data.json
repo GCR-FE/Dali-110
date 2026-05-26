@@ -1,0 +1,76 @@
+{
+  "contact_name": "张总",
+  "contact_title": "总经理",
+  "company": "海尔卡奥斯",
+  "purpose": "overview",
+  "purpose_label": "总览",
+  "updated_at": "2026-05-19",
+  "rendered_at": "2026-05-19T22:30:00+08:00",
+  "contact_count": 1,
+  "overall_confidence": "只能给方向",
+  "confidence_pct": 33,
+  "confidence_pct_label": "只能给方向",
+  "confidence_pct_color": "low",
+  "confidence_basis": [
+    "你跟他见过 1 次",
+    "一共 3 条具体观察(2 条直接行为 + 1 条客套话)",
+    "都来自同一个会议场景,没看到他在别的场合",
+    "提升准确度:再见 1-2 次 / 在非正式场合见到他"
+  ],
+  "sections": [
+    {
+      "key": "confidence_narrative",
+      "title": "这份报告的准确度",
+      "icon": "verified",
+      "html": "<p><strong>33% · 只能给方向</strong></p><p>这是第一次接触,3 条信号都集中在同一个会议场景,所以下面的判断只能给方向,<strong>不能据此调整重大策略</strong>。等再见 1-2 次、特别是非正式场合(饭局、茶歇),准确度会显著上升。</p>"
+    },
+    {
+      "key": "portrait",
+      "title": "对他的整体描述",
+      "icon": "account_circle",
+      "html": "<p><strong>他在判断清楚之前倾向于少表达。</strong></p><blockquote><p>整场会议他几乎没主动发言;在你陈述时他偏向旁观和倾听;结束前用\"你们这个方向很好\"这一句相对克制的表态收尾,既不是承诺也不是拒绝。</p></blockquote><p>但要注意:<strong>这次表现可能是评估期的姿态,不一定是他默认风格</strong> — 1 次会议室接触不足以下结论。</p>"
+    },
+    {
+      "key": "situation",
+      "title": "他的一些基本信息",
+      "icon": "info",
+      "html": "<ul><li>海尔卡奥斯 · 总经理</li><li>2026-05-16 首次正式接触,之前只通过邮件简短交流</li><li>(海尔卡奥斯当前业务重点暂未补 → 建议读 Account Analysis 后回填)</li></ul>"
+    },
+    {
+      "key": "actions",
+      "title": "他的一些行为记录",
+      "icon": "history",
+      "html": "<ul><li>全程没怎么主动说话,你陈述时偏旁观倾听</li><li>结束时说\"你们这个方向很好\"</li><li>这是双方第一次正式接触</li></ul>"
+    },
+    {
+      "key": "habits_and_reasons",
+      "title": "他的做事习惯和可能的原因",
+      "icon": "psychology",
+      "html": "<p><strong>习惯</strong>:在判断清楚之前少表达,用观察和倾听代替提问。</p><p><strong>原因猜想 — 1 次接触区分不出来,3 种可能并存</strong>:</p><ul><li><strong>可能 1 · 他的默认风格</strong> — 谨慎型,需要时间消化,本来就话少 → 验证方式:饭桌或一对一茶聊时观察</li><li><strong>可能 2 · 评估期的姿态</strong> — 在观察你,先不亮态度 → 验证方式:第二次见面看他是否主动起话题</li><li><strong>可能 3 · 议题没充分准备</strong> — 对今天议题不熟悉 → 验证方式:换议题观察反应差异</li></ul><p>下次见面留意,<strong>别在没区分出来之前就给他贴\"内向\"或\"难推进\"的标签</strong>。</p>"
+    },
+    {
+      "key": "identity",
+      "title": "他可能内心关注的",
+      "icon": "favorite",
+      "html": "<p><strong>他在守护什么</strong>:暂无信号(只接触 1 次,深层观察未启动)</p><p><strong>他想成为什么样的人</strong>:暂无信号</p><p><strong>下一步留意</strong>:当他主动谈某话题时,语气和用词跟其他话题有没有差别 — 那个差别可能藏着他真正在意的东西。</p>"
+    },
+    {
+      "key": "relationship",
+      "title": "和他目前的关系状态",
+      "icon": "handshake",
+      "html": "<p><strong>陌生供应商。</strong></p><blockquote><p>这是双方第一次正式接触,之前只有邮件简短交流。这次见面是关系建立的第 1 步,他对你\"价值是什么\"还没形成判断。</p></blockquote>"
+    },
+    {
+      "key": "action_guidance",
+      "title": "建议做的 / 避免做的(参考)",
+      "icon": "compass_calibration",
+      "html": "<h3>建议做的</h3><ul><li><strong>下次见面前先了解他的具体业务边界</strong>(从公开渠道:海尔卡奥斯官网 / 行业报道 / 财报)→ 让他感觉到你在他的业务问题上做了功课</li><li><strong>准备 1-2 个跟他业务直接相关的具体例子</strong>(不是泛泛的\"我们能做什么\")→ 具体例子能跨过\"评估期\"</li></ul><h3>避免做的</h3><ul><li><strong>避免在他没问的情况下深推方案细节</strong> — 他还在评估\"你是谁\",细节推得太早会让他觉得你在 push</li><li><strong>避免把\"方向很好\"理解为推进意愿</strong> — 这句话在中国销售场景里常作软性退出</li></ul>"
+    },
+    {
+      "key": "next_observations",
+      "title": "下一步的观察建议",
+      "icon": "visibility",
+      "html": "<h3>1. 下次见面前 · 你可以先做这两件</h3><ul><li><strong>看一份海尔卡奥斯最近 6 个月的公开材料</strong>(财报 / 行业访谈 / 张总本人发言)→ 准备 1 个跟他业务直接相关的具体例子</li><li><strong>想清楚这次见面的具体目的</strong> → 不是\"建立关系\",而是:你想从他这里确认到什么具体信息、让他对你形成什么印象</li></ul><h3>2. 见面时 · 留意这 3 个信号(每个都自带探问句)</h3><ul><li><strong>他主动谈到的具体业务问题</strong> — 它可能反映他真正关心的事 → 你可以问:\"您刚才提到 [那个问题],是这部分让您觉得最棘手吗?\"</li><li><strong>轻松场合(饭局/茶歇)的反应</strong> — 它可能跟会议室里很不一样 → 留意他主动谈到的话题(说明他放松后愿意谈什么)</li><li><strong>下次约见面的发起方</strong> — 他主动 vs 你跟进 → 主动约 = 关系往前走;只回应你的跟进 = 仍在评估期</li></ul><h3>3. 见面后 · 跟我同步这 3 件事</h3><ul><li>他<strong>主动起的话题</strong>有哪些?(列 2-3 个)</li><li>他<strong>回避或快速结束</strong>的话题有哪些?(列 1-2 个)</li><li>他用过的<strong>最有个人色彩的一句话</strong>(口头禅 / 反问 / 比喻)— 这一句最有画像价值</li></ul>"
+    }
+  ]
+}
